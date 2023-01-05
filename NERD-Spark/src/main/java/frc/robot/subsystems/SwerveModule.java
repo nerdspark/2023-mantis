@@ -58,30 +58,30 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        return driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveEncoderRot2Meter*ModuleConstants.kDriveEncoderTicks2Rot;
+        return driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveEncoderRot2Meter;
     }
 
     public double getTurningPosition() {
-        return turningMotor.getSelectedSensorPosition() / ModuleConstants.kTurningEncoderRadians2Ticks;
+        return turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurningEncoderRPM2RadPerSec;
     }
 
     public double getDriveVelocity() {
-        return driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveEncoderRPM2MeterPerSec*ModuleConstants.kDriveTicksPer100ms2RPM;
+        return driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveEncoderRPM2MeterPerSec;
     }
 
     public double getTurningVelocity() {
-        return turningMotor.getSelectedSensorVelocity()*ModuleConstants.kTurningEncoderRPM2RadPerSec*ModuleConstants.kDriveEncoderTicks2Rot*10*60;
+        return turningMotor.getSelectedSensorVelocity()*ModuleConstants.kTurningEncoderRPM2RadPerSec*10;
     }
 
     public double getCANCoderRad() {
         double angle = CANCoder.getAbsolutePosition();
-        angle *= 2.0 * Math.PI;
+        angle *= 2.0 * Math.PI / 360;
         angle -= CANCoderOffsetRad;
         return angle * (CANCoderReversed ? -1.0 : 1.0);
     }
 
     public void resetEncoders() {
-        turningMotor.setSelectedSensorPosition(getCANCoderRad() * ModuleConstants.kTurningEncoderRadians2Ticks);
+        turningMotor.setSelectedSensorPosition(getCANCoderRad() / ModuleConstants.kTurningEncoderRPM2RadPerSec);
     }
 
     public SwerveModuleState getState() {
@@ -95,7 +95,7 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, getState().angle);
         driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
-        turningMotor.set(TalonFXControlMode.Position, state.angle.getRadians() * ModuleConstants.kTurningEncoderRadians2Ticks);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        turningMotor.set(TalonFXControlMode.Position, state.angle.getRadians() / ModuleConstants.kTurningEncoderRPM2RadPerSec);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         // SmartDashboard.putString("Swerve[" + CANCoder.getChannel() + "] state", state.toString());
     }
 

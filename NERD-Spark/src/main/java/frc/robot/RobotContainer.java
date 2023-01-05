@@ -30,16 +30,17 @@ public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final Joystick driverJoytick = new Joystick(OIConstants.kDriverControllerPort);
+  private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
       swerveSubsystem,
-      () -> -driverJoytick.getRawAxis(OIConstants.kDriverYAxis),
-      () -> driverJoytick.getRawAxis(OIConstants.kDriverXAxis),
-      () -> driverJoytick.getRawAxis(OIConstants.kDriverRotAxis),
-      () -> !driverJoytick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
+      () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx)));
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -52,7 +53,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(cont, Constants.buttonA).whileHeld(new ExampleCommand(m_exampleSubsystem));
-    new JoystickButton(driverJoytick, Constants.buttonY).whenPressed(() -> swerveSubsystem.zeroHeading());
+    new JoystickButton(driverJoystick, Constants.buttonY).whenPressed(() -> swerveSubsystem.zeroHeading());
 
   }
 

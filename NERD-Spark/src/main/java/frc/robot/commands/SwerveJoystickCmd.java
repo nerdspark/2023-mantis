@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -13,17 +14,19 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
-    private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
+    private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
     private final Supplier<Boolean> fieldOrientedFunction;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
+    private final PIDController targetTurnController = new PIDController(DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
-            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningSpdFunction,
+            Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningTargX, Supplier<Double> turningTargY,
             Supplier<Boolean> fieldOrientedFunction) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
-        this.turningSpdFunction = turningSpdFunction;
+        this.turningTargX = turningTargX;
+        this.turningTargY = turningTargY;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -40,7 +43,8 @@ public class SwerveJoystickCmd extends CommandBase {
         // 1. Get real-time joystick inputs
         double xSpeed = xSpdFunction.get();
         double ySpeed = ySpdFunction.get();
-        double turningSpeed = turningSpdFunction.get();
+        double targetAngle = -Math.atan2(turningTargX.get(), turningTargY.get());
+        double turningSpeed = targetTurnController.calculate(swerveSubsystem.getHeading(), targetAngle) ;
 
         // 2. Apply deadband
         xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;

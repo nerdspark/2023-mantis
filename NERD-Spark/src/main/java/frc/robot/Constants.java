@@ -29,17 +29,17 @@ public final class Constants {
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);//TODO: figure out right number
-        public static final double kDriveMotorGearRatio = 1 / 5.8462;//TODO: figure out right number
-        public static final double kTurningMotorGearRatio = 1 / 18.0;//TODO: figure out right number
+        public static final double kDriveMotorGearRatio = 1 / 2048;//TODO: figure out right number
+        public static final double kTurningMotorGearRatio = 1 / 21.429 / 2048;//TODO: figure out right number
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
         public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
         public static final double kPTurning = 0.5;
 
-        public static final double kTurningEncoderRadians2Ticks = 43008 / 2 / Math.PI;//TODO: figure out right number
-        public static final double kDriveEncoderTicks2Rot = 1/10000; //TODO: figure out right number
-        public static final double kDriveTicksPer100ms2RPM = kDriveEncoderTicks2Rot * 600;
+        // public static final double kTurningEncoderRadians2Ticks = 43008 / 2 / Math.PI;//TODO: figure out right number
+        // public static final double kDriveEncoderTicks2Rot = 1/2048; //TODO: figure out right number
+        // public static final double kDriveTicksPer100ms2RPM = kDriveEncoderTicks2Rot * 600;
     }
 
     public static final class DriveConstants {
@@ -100,6 +100,10 @@ public final class Constants {
 
 
         public static final double kFalconMaxSetSpeed = 50000;
+
+        public static final double kPTargetTurning = 1;
+        public static final double kITargetTurning = 0;
+        public static final double kDTargetTurning = 0;
     }
 
     public static final class AutoConstants {
@@ -123,8 +127,9 @@ public final class Constants {
 
         public static final int kDriverYAxis = 1;
         public static final int kDriverXAxis = 0;
-        public static final int kDriverRotAxis = 4;
-        public static final int kDriverFieldOrientedButtonIdx = buttonY;
+        public static final int kDriverRotXAxis = 4;
+        public static final int kDriverRotYAxis = 3;
+        public static final int kDriverFieldOrientedButtonIdx = 0;
 
         public static final double kDeadband = 0.05;
     }
