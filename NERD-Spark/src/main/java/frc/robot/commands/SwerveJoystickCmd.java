@@ -41,15 +41,20 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
-        double xSpeed = xSpdFunction.get();
-        double ySpeed = ySpdFunction.get();
-        double targetAngle = -Math.atan2(turningTargX.get(), turningTargY.get());
-        double turningSpeed = targetTurnController.calculate(swerveSubsystem.getHeading(), targetAngle) ;
-
+        double xSpeed = (Math.abs(xSpdFunction.get())*xSpdFunction.get()*OIConstants.driverMultiplier);
+        double ySpeed = (Math.abs(ySpdFunction.get())*ySpdFunction.get()*OIConstants.driverMultiplier);
+        double targetAngle = -Math.atan2(-turningTargX.get(), -turningTargY.get());
+        double turningSpeed = targetTurnController.calculate(swerveSubsystem.getHeading()*Math.PI/180, targetAngle) ;
+        if ((Math.abs(targetAngle - swerveSubsystem.getHeading()))<0.1) {
+            turningSpeed = 0;
+        }
         // 2. Apply deadband
-        xSpeed = Math.abs(xSpeed) > OIConstants.kDeadband ? xSpeed : 0.0;
-        ySpeed = Math.abs(ySpeed) > OIConstants.kDeadband ? ySpeed : 0.0;
-        turningSpeed = Math.abs(turningSpeed) > OIConstants.kDeadband ? turningSpeed : 0.0;
+        
+        if (Math.abs(xSpeed) < OIConstants.kDeadbandDrive && Math.abs(ySpeed) < OIConstants.kDeadbandDrive) {
+            xSpeed = 0;
+            ySpeed = 0;
+        }
+        turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) > OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;

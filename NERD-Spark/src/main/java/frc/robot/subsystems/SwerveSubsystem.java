@@ -73,7 +73,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(gyro.getYaw(), 360);
+        return Math.IEEEremainder(-gyro.getYaw(), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -105,9 +105,23 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+ 
+        // if (!((Math.abs(desiredStates[0].angle.getRadians() + frontLeft.getTurningPosition())<0.5) 
+        // && (Math.abs(desiredStates[1].angle.getRadians() + frontRight.getTurningPosition())<0.5)
+        // && (Math.abs(desiredStates[2].angle.getRadians() + backLeft.getTurningPosition())<0.5)
+        // && (Math.abs(desiredStates[3].angle.getRadians() + backRight.getTurningPosition())<0.5)))
+        // {
+        //     desiredStates[0] = new SwerveModuleState(0, desiredStates[0].angle);
+        //     desiredStates[1] = new SwerveModuleState(0, desiredStates[1].angle);
+        //     desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
+        //     desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
+        // }
+
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+            
+        
     }
 }

@@ -35,7 +35,7 @@ public final class Constants {
         public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
         public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
         public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-        public static final double kPTurning = 0.5;
+        public static final double kPTurning = -0.1;
 
         // public static final double kTurningEncoderRadians2Ticks = 43008 / 2 / Math.PI;//TODO: figure out right number
         // public static final double kDriveEncoderTicks2Rot = 1/2048; //TODO: figure out right number
@@ -72,7 +72,7 @@ public final class Constants {
         public static final boolean kFrontLeftDriveEncoderReversed = false;
         public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
-        public static final boolean kBackRightDriveEncoderReversed = false;
+        public static final boolean kBackRightDriveEncoderReversed = true;
 
         public static final int kFrontLeftDriveCANCoderPort = 23;
         public static final int kBackLeftDriveCANCoderPort = 24;
@@ -99,10 +99,10 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
 
-        public static final double kFalconMaxSetSpeed = 50000;
+        public static final double kFalconMaxSetSpeed = 100000;
 
-        public static final double kPTargetTurning = 1;
-        public static final double kITargetTurning = 0;
+        public static final double kPTargetTurning = 0.15d;
+        public static final double kITargetTurning = 0.02d;
         public static final double kDTargetTurning = 0;
     }
 
@@ -125,12 +125,15 @@ public final class Constants {
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
 
-        public static final int kDriverYAxis = 1;
-        public static final int kDriverXAxis = 0;
-        public static final int kDriverRotXAxis = 4;
-        public static final int kDriverRotYAxis = 3;
-        public static final int kDriverFieldOrientedButtonIdx = 0;
+        public static final int kDriverYAxis = 5;
+        public static final int kDriverXAxis = 4;
+        public static final int kDriverRotXAxis = 0;
+        public static final int kDriverRotYAxis = 1;
+        public static final int kDriverFieldOrientedButtonIdx = 2;
 
-        public static final double kDeadband = 0.05;
+        public static final double kDeadbandSteer = 0.5;
+        public static final double kDeadbandDrive = 0.1;
+
+        public static final double driverMultiplier = 0.1;
     }
 }
