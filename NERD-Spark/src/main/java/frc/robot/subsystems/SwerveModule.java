@@ -62,6 +62,7 @@ public class SwerveModule {
     }
 
     public double getTurningPosition() {
+        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveEncoderRot2Meter);
         return turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurningEncoderRot2Rad;
     }
 
@@ -103,7 +104,7 @@ public class SwerveModule {
             state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(getTurningPosition() - (2*Math.PI)));
         } else if ((state.angle.getRadians() - getState().angle.getRadians()) < -Math.PI) {
             state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(getTurningPosition() + (2*Math.PI)));
-        } //maxwell stuff for short spin*/
+        } //short spin for pods
 
         driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
         turningMotor.set(TalonFXControlMode.Position, state.angle.getRadians() / ModuleConstants.kTurningEncoderRot2Rad);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));

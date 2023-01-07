@@ -16,17 +16,25 @@ public class SwerveJoystickCmd extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
     private final Supplier<Boolean> fieldOrientedFunction;
+    private final Supplier<Integer> DPAD;
+    private final Supplier<Double> leftTrigger;
+    private final Supplier<Double> rightTrigger;
     private final SlewRateLimiter xLimiter, yLimiter, turningLimiter;
     private final PIDController targetTurnController = new PIDController(DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
 
+    private double targetAngle;
+
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningTargX, Supplier<Double> turningTargY,
-            Supplier<Boolean> fieldOrientedFunction) {
+            Supplier<Boolean> fieldOrientedFunction, Supplier<Integer> DPAD, Supplier<Double> leftTrigger, Supplier<Double> rightTrigger) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningTargX = turningTargX;
         this.turningTargY = turningTargY;
+        this.DPAD = DPAD;
+        this.rightTrigger = rightTrigger;
+        this.leftTrigger = leftTrigger;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
         this.yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -43,18 +51,35 @@ public class SwerveJoystickCmd extends CommandBase {
         // 1. Get real-time joystick inputs
         double xSpeed = (Math.abs(xSpdFunction.get())*xSpdFunction.get()*OIConstants.driverMultiplier);
         double ySpeed = (Math.abs(ySpdFunction.get())*ySpdFunction.get()*OIConstants.driverMultiplier);
-        double targetAngle = -Math.atan2(-turningTargX.get(), -turningTargY.get());
-        double turningSpeed = targetTurnController.calculate(swerveSubsystem.getHeading()*Math.PI/180, targetAngle) ;
+        double currentAngle = swerveSubsystem.getHeading()*Math.PI/180;
+        if (DPAD.get() != -1) {
+            targetAngle = DPAD.get() * Math.PI / 180;
+        } else 
+        if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
+            targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
+        } else 
+        if ((turningTargX.get() * turningTargX.get()) + (turningTargY.get() * turningTargY.get()) > (OIConstants.kDeadbandSteer * OIConstants.kDeadbandSteer)) {
+            targetAngle = -Math.atan2(-turningTargX.get(), -turningTargY.get());
+            // targetAngle = ((targetAngle - currentAngle) % (2 * Math.PI)) + currentAngle;
+            // if ((targetAngle - currentAngle) > Math.PI) {
+            //     targetAngle -= 2 * Math.PI;
+            // } else if ((targetAngle - currentAngle) < -Math.PI) {
+            //     targetAngle += 2 * Math.PI;
+            // }
+        }
+        targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
+        double turningSpeed = targetTurnController.calculate(currentAngle, targetAngle) ;
         if ((Math.abs(targetAngle - swerveSubsystem.getHeading()))<0.1) {
             turningSpeed = 0;
         }
         // 2. Apply deadband
         
-        if (Math.abs(xSpeed) < OIConstants.kDeadbandDrive && Math.abs(ySpeed) < OIConstants.kDeadbandDrive) {
+        if ((xSpeed * xSpeed) + (ySpeed * ySpeed) < (OIConstants.kDeadbandDrive * OIConstants.kDeadbandDrive)) {//Math.abs(xSpeed) < OIConstants.kDeadbandDrive && Math.abs(ySpeed) < OIConstants.kDeadbandDrive) {
             xSpeed = 0;
             ySpeed = 0;
         }
-        turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) > OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
+
+        // turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) > OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
         xSpeed = xLimiter.calculate(xSpeed) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;

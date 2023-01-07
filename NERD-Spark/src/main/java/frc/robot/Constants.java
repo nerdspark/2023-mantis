@@ -29,13 +29,13 @@ public final class Constants {
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4);//TODO: figure out right number
-        public static final double kDriveMotorGearRatio = 1 / 2048;//TODO: figure out right number
-        public static final double kTurningMotorGearRatio = 1 / 21.429 / 2048;//TODO: figure out right number
+        public static final double kDriveMotorGearRatio = 1d / 2048d;//TODO: figure out right number
+        public static final double kTurningMotorGearRatio = 1d / 21.429d / 2048d;//TODO: figure out right number
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * Math.PI;
-        public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60;
-        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60;
-        public static final double kPTurning = -0.1;
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2d * Math.PI;
+        public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60d;
+        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60d;
+        public static final double kPTurning = -0.1d;
 
         // public static final double kTurningEncoderRadians2Ticks = 43008 / 2 / Math.PI;//TODO: figure out right number
         // public static final double kDriveEncoderTicks2Rot = 1/2048; //TODO: figure out right number
@@ -72,7 +72,7 @@ public final class Constants {
         public static final boolean kFrontLeftDriveEncoderReversed = false;
         public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
-        public static final boolean kBackRightDriveEncoderReversed = true;
+        public static final boolean kBackRightDriveEncoderReversed = false;
 
         public static final int kFrontLeftDriveCANCoderPort = 23;
         public static final int kBackLeftDriveCANCoderPort = 24;
@@ -87,7 +87,7 @@ public final class Constants {
         public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
         public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        public static final double kBackRightDriveCANCoderOffsetRad = -6.4*Math.PI/180;
+        public static final double kBackRightDriveCANCoderOffsetRad = 173.6*Math.PI/180;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
@@ -112,8 +112,8 @@ public final class Constants {
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPXController = 1.5;
-        public static final double kPYController = 1.5;
+        public static final double kPXController = 0.15d;
+        public static final double kPYController = 0.15d;
         public static final double kPThetaController = 3;
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
@@ -130,10 +130,16 @@ public final class Constants {
         public static final int kDriverRotXAxis = 0;
         public static final int kDriverRotYAxis = 1;
         public static final int kDriverFieldOrientedButtonIdx = 2;
+        public static final int kDriverLeftTrigger = 2;
+        public static final int kDriverRightTrigger = 3;
 
         public static final double kDeadbandSteer = 0.5;
         public static final double kDeadbandDrive = 0.1;
 
         public static final double driverMultiplier = 0.1;
+
+        public static final double triggerMultiplier = 10;
+        public static final double triggerDeadband = 0.1;
+
     }
 }
