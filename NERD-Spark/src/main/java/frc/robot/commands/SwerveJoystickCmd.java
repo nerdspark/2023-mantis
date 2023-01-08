@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -44,16 +45,17 @@ public class SwerveJoystickCmd extends CommandBase {
 
     @Override
     public void initialize() {
+        // swerveSubsystem.setGains();
     }
 
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
-        double xSpeed = (Math.abs(xSpdFunction.get())*xSpdFunction.get()*OIConstants.driverMultiplier);
-        double ySpeed = (Math.abs(ySpdFunction.get())*ySpdFunction.get()*OIConstants.driverMultiplier);
+        double xSpeed = (Math.abs(xSpdFunction.get()*xSpdFunction.get())*xSpdFunction.get()*OIConstants.driverMultiplier);
+        double ySpeed = (Math.abs(ySpdFunction.get()*ySpdFunction.get())*ySpdFunction.get()*OIConstants.driverMultiplier);
         double currentAngle = swerveSubsystem.getHeading()*Math.PI/180;
         if (DPAD.get() != -1) {
-            targetAngle = DPAD.get() * Math.PI / 180;
+            targetAngle =  (DPAD.get() * Math.PI / 180d);
         } else 
         if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
             targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
@@ -69,7 +71,7 @@ public class SwerveJoystickCmd extends CommandBase {
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         double turningSpeed = targetTurnController.calculate(currentAngle, targetAngle) ;
-        if ((Math.abs(targetAngle - swerveSubsystem.getHeading()))<0.1) {
+        if ((Math.abs(targetAngle - swerveSubsystem.getHeading()))<DriveConstants.kTargetTurningDeadband) {
             turningSpeed = 0;
         }
         // 2. Apply deadband
