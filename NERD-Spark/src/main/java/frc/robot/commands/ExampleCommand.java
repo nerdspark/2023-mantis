@@ -31,6 +31,7 @@ public class ExampleCommand extends CommandBase {
   @Override
   public void execute() {
     m_subsystem.runMotor(0.1);
+    SmartDashboard.putNumber("Sensor Abs Pos", m_subsystem.returnSensorOutput());
     // m_subsystem.printSensor();
   }
 
@@ -45,4 +46,5 @@ public class ExampleCommand extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
 }
