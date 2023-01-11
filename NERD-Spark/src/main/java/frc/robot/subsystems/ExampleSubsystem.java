@@ -41,11 +41,11 @@ public class ExampleSubsystem extends SubsystemBase {
   }
 
   public void resetSensor() {
-    sensor1.setAbsolutePosition(0);
+    sensor1.setPosition(0);
   }
 
-  public void returnSensorOutput() {
-    sensor1.getAbsolutePosition();
+  public double returnSensorOutput() {
+    return sensor1.getAbsolutePosition();
   }
 
 }

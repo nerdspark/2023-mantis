@@ -106,9 +106,9 @@ public final class Constants {
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
 
-        public static final double kFalconMaxSetSpeed = 60000;
+        public static final double kFalconMaxSetSpeed = 50000;
 
-        public static final double kPTargetTurning = 0d;
+        public static final double kPTargetTurning = 1d;
         public static final double kITargetTurning = 0d;
         public static final double kDTargetTurning = 0d;
         public static final double kTargetTurningDeadband = 1;
@@ -116,6 +116,11 @@ public final class Constants {
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
+
+        public static final double kPDriveMotor = 0.1d;
+        public static final double kIDriveMotor = 0.0001d;
+        public static final double kDDriveMotor = 2.5d;
+        public static final double kFDriveMotor = 0.048d;
     }
 
     public static final class AutoConstants {
@@ -124,15 +129,22 @@ public final class Constants {
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
-        public static final double kPXController = 0.3d;
-        public static final double kPYController = 0.3d;
-        public static final double kPThetaController = 2;
+        public static final double kPXController = 2.5d;
+        public static final double kIXController = 0d;
+        public static final double kDXController = 0d;
+        public static final double kPYController = 2.5d;
+        public static final double kIYController = 0d;
+        public static final double kDYController = 0d;
+        public static final double kPThetaController = 1d;
+    
 
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
                 new TrapezoidProfile.Constraints(
                         kMaxAngularSpeedRadiansPerSecond,
                         kMaxAngularAccelerationRadiansPerSecondSquared);
     }
+
+
 
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;
@@ -146,11 +158,11 @@ public final class Constants {
         public static final int kDriverRightTrigger = 3;
 
         public static final double kDeadbandSteer = 0.75;
-        public static final double kDeadbandDrive = 0.0;
+        public static final double kDeadbandDrive = 0.01;
 
-        public static final double driverMultiplier = 0.8;
+        public static final double driverMultiplier = 0.03;
 
-        public static final double triggerMultiplier = 2;
+        public static final double triggerMultiplier = 1;
         public static final double triggerDeadband = 0.1;
 
     }

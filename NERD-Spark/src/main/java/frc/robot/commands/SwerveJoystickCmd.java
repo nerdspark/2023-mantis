@@ -51,8 +51,8 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
-        double xSpeed = (Math.abs(xSpdFunction.get()*xSpdFunction.get())*xSpdFunction.get()*OIConstants.driverMultiplier);
-        double ySpeed = (Math.abs(ySpdFunction.get()*ySpdFunction.get())*ySpdFunction.get()*OIConstants.driverMultiplier);
+        double xSpeed = (/*Math.abs(xSpdFunction.get()*xSpdFunction.get()*xSpdFunction.get())**/xSpdFunction.get()*OIConstants.driverMultiplier);
+        double ySpeed = (/*Math.abs(ySpdFunction.get()*ySpdFunction.get()*ySpdFunction.get())**/ySpdFunction.get()*OIConstants.driverMultiplier);
         double currentAngle = swerveSubsystem.getHeading()*Math.PI/180;
         if (DPAD.get() != -1) {
             targetAngle =  (DPAD.get() * Math.PI / 180d);

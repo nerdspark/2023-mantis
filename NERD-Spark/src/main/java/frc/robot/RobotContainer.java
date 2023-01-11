@@ -92,14 +92,16 @@ public class RobotContainer {
     Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
-                    new Translation2d(1, 0),
-                    new Translation2d(1, 1)),
-            new Pose2d(0, 1, Rotation2d.fromDegrees(0)),
+                    new Translation2d(0.3, 0),
+                    new Translation2d(0.7, 0)),
+            new Pose2d(1, 0, Rotation2d.fromDegrees(0)),
             trajectoryConfig);
 
     // 3. Define PID controllers for tracking trajectory
-    PIDController xController = new PIDController(AutoConstants.kPXController, 0, 0);
-    PIDController yController = new PIDController(AutoConstants.kPYController, 0, 0);
+    PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
+    PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
+    xController.setTolerance(0.03);
+    yController.setTolerance(0.03);
     ProfiledPIDController thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
