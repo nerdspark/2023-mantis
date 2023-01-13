@@ -83,10 +83,10 @@ public class SwerveModule {
         return turningMotor.getMotorOutputPercent();
     }
 
-    public double getPIDSetpoint() {
-        SmartDashboard.putNumber("PID setpoint", turningMotor.getClosedLoopTarget());
-        return turningMotor.getClosedLoopTarget();
-    }
+    // public double getPIDSetpoint() {
+    //     SmartDashboard.putNumber("PID setpoint", turningMotor.getClosedLoopTarget());
+    //     return turningMotor.getClosedLoopTarget();
+    // }
 
     public double getDriveAcceleration() {
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond;
@@ -120,7 +120,7 @@ public class SwerveModule {
         SmartDashboard.putNumber("I", DriveConstants.kITurningMotor);
         SmartDashboard.putNumber("D", DriveConstants.kDTurningMotor);
         SmartDashboard.putNumber("PID output", getPIDTurningMotor());
-        SmartDashboard.putNumber("PID setpoint", getPIDSetpoint());
+        // SmartDashboard.putNumber("PID setpoint", getPIDSetpoint());
 
     }
 
@@ -137,23 +137,30 @@ public class SwerveModule {
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
+        turningMotor.selectProfileSlot(1, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
         // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
         // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
         driveMotor.selectProfileSlot(0, 0);
+        // turningMotor.selectProfileSlot(0, 0);
+        driveMotor.configClosedloopRamp(0.2);
+        turningMotor.configClosedloopRamp(0.1);
     }
 
     public void setGains() {
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
+        turningMotor.selectProfileSlot(1, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
         // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
         // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
         driveMotor.selectProfileSlot(0, 0);
-
+        // turningMotor.selectProfileSlot(0, 0);
+        driveMotor.configClosedloopRamp(0.05);
+        turningMotor.configClosedloopRamp(0.05);
     }
 
     public SwerveModuleState getState() {
@@ -163,7 +170,7 @@ public class SwerveModule {
     public void setDesiredState(SwerveModuleState state) {
         if (Math.abs(state.speedMetersPerSecond) < 0.001) {
             stop();
-            return;
+            // return;
         }
         state = SwerveModuleState.optimize(state, getState().angle);
 
@@ -183,6 +190,6 @@ public class SwerveModule {
 
     public void stop() {
         driveMotor.set(TalonFXControlMode.PercentOutput, 0);
-        turningMotor.set(TalonFXControlMode.PercentOutput, 0);
+        // turningMotor.set(TalonFXControlMode.PercentOutput, 0);
     }
 }

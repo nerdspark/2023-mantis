@@ -53,7 +53,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderPort,
             DriveConstants.kBackRightDriveCANCoderOffsetRad,
             DriveConstants.kBackRightDriveCANCoderReversed);
-
+    public static boolean driveTurning = false;
     private final Pigeon2 gyro = new Pigeon2(Constants.pigeonPort);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
@@ -110,6 +110,10 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putString("Robot Location (broken)", getPose().getTranslation().toString());
         SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
+        frontLeft.outputStatsSmartDashboard();
+        backLeft.outputStatsSmartDashboard();
+        frontRight.outputStatsSmartDashboard();
+        backRight.outputStatsSmartDashboard();
     }
 
     public void stopModules() {
@@ -128,16 +132,33 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
- 
-        if (false)//((Math.abs(desiredStates[0].angle.getRadians() - frontLeft.getTurningPosition())>15*Math.PI/180) 
-        // || (Math.abs(desiredStates[1].angle.getRadians() -frontRight.getTurningPosition())>15*Math.PI/180)
-        // || (Math.abs(desiredStates[2].angle.getRadians() - backLeft.getTurningPosition())>15*Math.PI/180)
-        // || (Math.abs(desiredStates[3].angle.getRadians() - backRight.getTurningPosition())>15*Math.PI/180)))
+        double error0 = Math.abs(desiredStates[0].angle.getRadians() - frontLeft.getTurningPosition())%(Math.PI);
+        error0 = error0 > 0.5*Math.PI ? error0 - Math.PI : error0;
+        double error1 = Math.abs(desiredStates[1].angle.getRadians() - frontRight.getTurningPosition())%(Math.PI);
+        error1 = error1 > 0.5*Math.PI ? error1 - Math.PI : error1;
+        double error2 = Math.abs(desiredStates[2].angle.getRadians() - backLeft.getTurningPosition())%(Math.PI);
+        error2 = error2 > 0.5*Math.PI ? error2 - Math.PI : error2;
+        double error3 = Math.abs(desiredStates[3].angle.getRadians() - backRight.getTurningPosition())%(Math.PI);
+        error3 = error3 > 0.5*Math.PI ? error3 - Math.PI : error3;
+        SmartDashboard.putString("asdf", "good");
+        if ((error0 > (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error1 > (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error2 > (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error3 > (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)))
         {
+            SmartDashboard.putNumber("desiredstates", desiredStates[0].angle.getRadians());
+            SmartDashboard.putNumber("FLpos", frontLeft.getTurningPosition());
+            SmartDashboard.putString("asdf", "bad");
             desiredStates[0] = new SwerveModuleState(0, desiredStates[0].angle);
             desiredStates[1] = new SwerveModuleState(0, desiredStates[1].angle);
             desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
             desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
+            driveTurning = true;
+        } else if (((error0 > (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error1 > (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error2 > (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error3 > (DriveConstants.kExitDriveTurningDeadband*Math.PI/180))) && !driveTurning) {
+            driveTurning = true;
+            desiredStates[0] = new SwerveModuleState(0, desiredStates[0].angle);
+            desiredStates[1] = new SwerveModuleState(0, desiredStates[1].angle);
+            desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
+            desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
+        } else {
+            driveTurning = false;
         }
 
         frontLeft.setDesiredState(desiredStates[0]);

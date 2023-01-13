@@ -102,7 +102,7 @@ public final class Constants {
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond / 7;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 3;
+        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 10;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
 
@@ -116,11 +116,15 @@ public final class Constants {
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
+        // public static final double kMaxSpeedTurningMotor = 100;
 
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
         public static final double kFDriveMotor = 0.048d;
+
+        public static final int kEnterDriveTurningDeadband = 20; //degrees for robot not driving until pod is at target position
+        public static final int kExitDriveTurningDeadband = 40; //deg
     }
 
     public static final class AutoConstants {
@@ -160,7 +164,7 @@ public final class Constants {
         public static final double kDeadbandSteer = 0.75;
         public static final double kDeadbandDrive = 0.01;
 
-        public static final double driverMultiplier = 0.03;
+        public static final double driverMultiplier = 0.1;
 
         public static final double triggerMultiplier = 1;
         public static final double triggerDeadband = 0.1;

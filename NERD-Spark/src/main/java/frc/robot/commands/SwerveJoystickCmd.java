@@ -71,7 +71,7 @@ public class SwerveJoystickCmd extends CommandBase {
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         double turningSpeed = targetTurnController.calculate(currentAngle, targetAngle) ;
-        if ((Math.abs(targetAngle - swerveSubsystem.getHeading()))<DriveConstants.kTargetTurningDeadband) {
+        if (((Math.abs(targetAngle - swerveSubsystem.getHeading()))<DriveConstants.kTargetTurningDeadband) && !SwerveSubsystem.driveTurning) {
             turningSpeed = 0;
         }
         // 2. Apply deadband
