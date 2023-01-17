@@ -113,11 +113,14 @@ public final class Constants {
         public static final double kDTargetTurning = 0d;
         public static final double kTargetTurningDeadband = 1;
 
+        public static final double kRampRateTurningMotor = 0.05d;
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
         // public static final double kMaxSpeedTurningMotor = 100;
+        public static final double kMaxAccelTurningMotor = 1;
 
+        public static final double kRampRateDriveMotor = 0.05d;
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
@@ -164,7 +167,7 @@ public final class Constants {
         public static final double kDeadbandSteer = 0.75;
         public static final double kDeadbandDrive = 0.01;
 
-        public static final double driverMultiplier = 0.1;
+        public static final double driverMultiplier = 0.05;
 
         public static final double triggerMultiplier = 1;
         public static final double triggerDeadband = 0.1;
