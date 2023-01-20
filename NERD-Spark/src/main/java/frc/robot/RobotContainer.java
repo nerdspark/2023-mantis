@@ -86,6 +86,12 @@ public class RobotContainer {
     chooser.addOption("zigzag but angle change", loadPathplannerTrajectoryToSwerveController(
       "pathplanner/generatedJSON/zigzag but angle change.wpilib.json",
       true));
+      chooser.addOption("short line", loadPathplannerTrajectoryToSwerveController(
+      "pathplanner/generatedJSON/short line.wpilib.json",
+      true));
+      chooser.addOption("short L", loadPathplannerTrajectoryToSwerveController(
+      "pathplanner/generatedJSON/short L.wpilib.json",
+      true));
 
     Shuffleboard.getTab("Autonomous").add(chooser);
     
