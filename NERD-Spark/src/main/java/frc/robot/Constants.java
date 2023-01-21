@@ -101,26 +101,26 @@ public final class Constants {
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond *0.17;
+                kPhysicalMaxAngularSpeedRadiansPerSecond *0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 20;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
         public static final double kFalconMaxSetSpeed = 10000d;
 
-        public static final double kPTargetTurning = 2d;
+        public static final double kPTargetTurning = 2.5d;
         public static final double kITargetTurning = 0d;    
         public static final double kDTargetTurning = 0d;
-        public static final double kTargetTurningDeadband = 2;
+        public static final double kTargetTurningDeadband = 1*Math.PI/180;
 
-        public static final double kRampRateTurningMotor = 0.3d;
+        public static final double kRampRateTurningMotor = 0.25d;
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
         // public static final double kMaxSpeedTurningMotor = 100;
         public static final double kMaxAccelTurningMotor = 1;
 
-        public static final double kRampRateDriveMotor = 0.3d;
+        public static final double kRampRateDriveMotor = 0.125d;
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
@@ -165,17 +165,24 @@ public final class Constants {
         public static final int kDriverFieldOrientedButtonIdx = 2;
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
+        public static final int kDriverLeftBumper = 5;
 
-        public static final double kDeadbandSteer = 0.75d;
+        public static final double kDeadbandSteer = 0.1d;
         public static final double kDeadbandDrive = 0.03d;
 
-        public static final double driverMultiplier = 3;
-        public static final double driverPower = 2.5;
-        public static final double driverBaseSpeedMetersPerSecond = 0.25;
+        public static final double driverMultiplier = 0.8;
+        public static final double driverPower = 3.5;//2.5 faster but clicks
+        public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double targetTurnGainScheduleSpeed = 70;
+        public static final double driverEPower = 3;
+        public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
+        public static final double driverEXPJoyMultiplier = driverEPower;
+
+        public static final double targetTurnGainScheduleSpeed = 40;
+
+        public static final double joystickTurningGain = 2;
 
     }
 }

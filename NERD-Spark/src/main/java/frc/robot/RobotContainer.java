@@ -59,7 +59,8 @@ public class RobotContainer {
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(Constants.buttonY)));
+      () -> driverJoystick.getRawButton(Constants.buttonY), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverLeftBumper)));
       // Configure the button bindings
     configureButtonBindings();
   }
