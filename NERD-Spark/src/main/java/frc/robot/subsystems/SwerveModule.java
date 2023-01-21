@@ -62,19 +62,19 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveTicks2Meters);
+        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " drive pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveTicks2Meters);
         return driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveTicks2Meters;
     }
     public double getTurningPosition() {
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kTurnTicks2Radians);
+        SmartDashboard.putNumber("pod " + turningMotor.getDeviceID() + " turn pos", turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurnTicks2Radians);
         return turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurnTicks2Radians;
     }
     public double getDriveVelocity() {
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveTicks2MeterPerSecond);
+        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " drive vel", driveMotor.getSelectedSensorVelocity()*ModuleConstants.kDriveTicks2MeterPerSecond);
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond;
     }
     public double getTurningVelocity() {
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kTurnTicks2RadiansPerSecond);
+        SmartDashboard.putNumber("pod " + turningMotor.getDeviceID() + " turn vel", turningMotor.getSelectedSensorVelocity()*ModuleConstants.kTurnTicks2RadiansPerSecond);
         return turningMotor.getSelectedSensorVelocity()*ModuleConstants.kTurnTicks2RadiansPerSecond;
     }
 
@@ -97,29 +97,29 @@ public class SwerveModule {
     } 
 
     public void outputStatsSmartDashboard(){
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", CANCoder.getAbsolutePosition());
-        SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " vel", CANCoder.getVelocity());
-        SmartDashboard.putNumber("Field to Robot Angle", getCANCoderRad());
-        SmartDashboard.putNumber("X", getDrivePosition());;
-        SmartDashboard.putNumber("Y", getTurningPosition());
-        SmartDashboard.putNumber("X Velocity", getDriveVelocity());
-        SmartDashboard.putNumber("Y Velocity", getTurningVelocity());
-        //accelerometer in g
-        SmartDashboard.putNumber("X Acceleration", getDriveAcceleration());
-        //gyro in degrees per second
-        SmartDashboard.putNumber("Y Acceleration", getTurningAcceleration());
-        //encoder, distance and speed
-        SmartDashboard.putNumber("Distance", getDrivePosition());
-        SmartDashboard.putNumber("Speed", getDriveVelocity());
-        SmartDashboard.putNumber("Gyro", getTurningPosition());
-        //voltage
-        SmartDashboard.putNumber("drive volt", driveMotor.getMotorOutputVoltage());
-        SmartDashboard.putNumber("turn volt", turningMotor.getMotorOutputVoltage());
-        //PID
-        SmartDashboard.putNumber("P", DriveConstants.kPTurningMotor);
-        SmartDashboard.putNumber("I", DriveConstants.kITurningMotor);
-        SmartDashboard.putNumber("D", DriveConstants.kDTurningMotor);
-        SmartDashboard.putNumber("PID output", getPIDTurningMotor());
+        // SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", CANCoder.getAbsolutePosition());
+        // SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " vel", CANCoder.getVelocity());
+        // SmartDashboard.putNumber("Field to Robot Angle", getCANCoderRad());
+        // SmartDashboard.putNumber("X", getDrivePosition());;
+        // SmartDashboard.putNumber("Y", getTurningPosition());
+        // SmartDashboard.putNumber("X Velocity", getDriveVelocity());
+        // SmartDashboard.putNumber("Y Velocity", getTurningVelocity());
+        // //accelerometer in g
+        // SmartDashboard.putNumber("X Acceleration", getDriveAcceleration());
+        // //gyro in degrees per second
+        // SmartDashboard.putNumber("Y Acceleration", getTurningAcceleration());
+        // //encoder, distance and speed
+        // SmartDashboard.putNumber("Distance", getDrivePosition());
+        // SmartDashboard.putNumber("Speed", getDriveVelocity());
+        // SmartDashboard.putNumber("Gyro", getTurningPosition());
+        // //voltage
+        // SmartDashboard.putNumber("drive volt", driveMotor.getMotorOutputVoltage());
+        // SmartDashboard.putNumber("turn volt", turningMotor.getMotorOutputVoltage());
+        // //PID
+        // SmartDashboard.putNumber("P", DriveConstants.kPTurningMotor);
+        // SmartDashboard.putNumber("I", DriveConstants.kITurningMotor);
+        // SmartDashboard.putNumber("D", DriveConstants.kDTurningMotor);
+        // SmartDashboard.putNumber("PID output", getPIDTurningMotor());
         // SmartDashboard.putNumber("PID setpoint", getPIDSetpoint());
 
     }
@@ -144,8 +144,8 @@ public class SwerveModule {
         // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
         driveMotor.selectProfileSlot(0, 0);
         // turningMotor.selectProfileSlot(0, 0);
-        driveMotor.configClosedloopRamp(0.2);
-        turningMotor.configClosedloopRamp(0.1);
+        driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
+        turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
     }
 
     public void setGains() {
@@ -159,8 +159,9 @@ public class SwerveModule {
         // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
         driveMotor.selectProfileSlot(0, 0);
         // turningMotor.selectProfileSlot(0, 0);
-        driveMotor.configClosedloopRamp(0.05);
-        turningMotor.configClosedloopRamp(0.05);
+        driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
+        turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
+        
     }
 
     public SwerveModuleState getState() {
@@ -172,19 +173,39 @@ public class SwerveModule {
             stop();
             // return;
         }
-        state = SwerveModuleState.optimize(state, getState().angle);
+        // state = SwerveModuleState.optimize(state, getState().angle);
 
-        if (Math.abs(state.angle.getRadians() - getTurningPosition()) > 2* Math.PI) {
-            state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(((state.angle.getRadians() - getTurningPosition()) % (2*Math.PI)) + getTurningPosition()));
+        double target = state.angle.getRadians();
+        double current = getTurningPosition();
+        if (Math.abs(target - current) > (2* Math.PI)) {
+            target = (target - current) % (2*Math.PI) + current;
         }
-        if ((state.angle.getRadians() - getTurningPosition() > Math.PI)) { //getState().angle.getRadians = getTurningPosition() = current; state.angle.getRadians() = target
-            state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(getTurningPosition() - (2*Math.PI)));
-        } else if ((state.angle.getRadians() - getState().angle.getRadians()) < -Math.PI) {
-            state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(getTurningPosition() + (2*Math.PI)));
-        } //short spin for pods
+        if ((target - current > Math.PI)) { //getState().angle.getRadians = getTurningPosition() = current; state.angle.getRadians() = target
+            target -= (2*Math.PI);
+        } else if ((target - current) < -Math.PI) {
+            target += (2*Math.PI);
+        }
+        boolean backward = false;
+        if ((target - current) > Math.PI/2) {
+            target -= (Math.PI);
+            backward = true;
+        } else if ((target - current) < -Math.PI/2) {
+            target += (Math.PI);
+            backward = true;
+        } 
+            //short spin for pods
+        state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(target));
 
-        driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
-        turningMotor.set(TalonFXControlMode.Position, state.angle.getRadians() / ModuleConstants.kTurnTicks2Radians);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        SmartDashboard.putNumber("driveMotorSet" + driveMotor.getDeviceID(), state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
+        SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
+        if (Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
+            SmartDashboard.putString("drive mode", "velocity");
+            driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1));
+        } else {
+            SmartDashboard.putString("drive mode", "VBUS");
+            driveMotor.set(TalonFXControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1) / DriveConstants.kFalconMaxSetSpeed);
+        }
+        turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
     }
 

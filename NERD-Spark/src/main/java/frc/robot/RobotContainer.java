@@ -50,7 +50,7 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 	private static final XboxController cont = new XboxController(Constants.controllerPort);
 
-  private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+  private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
   private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -67,7 +67,8 @@ public class RobotContainer {
       () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger)));
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
+      () -> driverJoystick.getRawButton(Constants.buttonY)));
       // Configure the button bindings
     configureButtonBindings();
 
@@ -149,8 +150,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     new JoystickButton(cont, Constants.buttonA).whileHeld(new ExampleCommand(m_exampleSubsystem));
-    new JoystickButton(driverJoystick, Constants.buttonY).whenPressed(() -> swerveSubsystem.zeroHeading());
-
   }
 
   /**

@@ -96,42 +96,47 @@ public final class Constants {
         public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
         public static final double kBackRightDriveCANCoderOffsetRad = (173.6-180)*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
-                kPhysicalMaxAngularSpeedRadiansPerSecond / 7;
-        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 10;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
+                kPhysicalMaxAngularSpeedRadiansPerSecond *0.17;
+        public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 20;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
 
-        public static final double kFalconMaxSetSpeed = 50000;
+        public static final double kFalconMaxSetSpeed = 10000d;
 
-        public static final double kPTargetTurning = 1d;
-        public static final double kITargetTurning = 0d;
+        public static final double kPTargetTurning = 2d;
+        public static final double kITargetTurning = 0d;    
         public static final double kDTargetTurning = 0d;
-        public static final double kTargetTurningDeadband = 1;
+        public static final double kTargetTurningDeadband = 2;
 
+        public static final double kRampRateTurningMotor = 0.3d;
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
         // public static final double kMaxSpeedTurningMotor = 100;
+        public static final double kMaxAccelTurningMotor = 1;
 
+        public static final double kRampRateDriveMotor = 0.3d;
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
         public static final double kFDriveMotor = 0.048d;
 
-        public static final int kEnterDriveTurningDeadband = 20; //degrees for robot not driving until pod is at target position
-        public static final int kExitDriveTurningDeadband = 40; //deg
+        public static final int kEnterDriveTurningDeadband = 90; //degrees for robot not driving until pod is at target position
+        public static final int kExitDriveTurningDeadband = 90; //deg
+
+        public static final double driveSpeedConvertMode = 4000d; 
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 10;
+        public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8;
         public static final double kMaxAngularSpeedRadiansPerSecond = //
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 0.5;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
         public static final double kPXController = 2.5d;
         public static final double kIXController = 0d;
@@ -161,13 +166,16 @@ public final class Constants {
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
 
-        public static final double kDeadbandSteer = 0.75;
-        public static final double kDeadbandDrive = 0.01;
+        public static final double kDeadbandSteer = 0.75d;
+        public static final double kDeadbandDrive = 0.03d;
 
-        public static final double driverMultiplier = 0.1;
-
-        public static final double triggerMultiplier = 1;
+        public static final double driverMultiplier = 3;
+        public static final double driverPower = 2.5;
+        public static final double driverBaseSpeedMetersPerSecond = 0.25;
+        public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
+
+        public static final double targetTurnGainScheduleSpeed = 70;
 
     }
 }
