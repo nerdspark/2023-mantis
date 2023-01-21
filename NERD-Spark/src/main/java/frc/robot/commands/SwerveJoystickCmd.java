@@ -18,7 +18,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
-    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, leftBumper;
+    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed;
     private final Supplier<Integer> DPAD;
     private final Supplier<Double> leftTrigger;
     private final Supplier<Double> rightTrigger;
@@ -29,7 +29,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningTargX, Supplier<Double> turningTargY,
-            Supplier<Boolean> fieldOrientedFunction, Supplier<Integer> DPAD, Supplier<Double> leftTrigger, Supplier<Double> rightTrigger, Supplier<Boolean> resetGyroButton, Supplier<Boolean> leftBumper) {
+            Supplier<Boolean> fieldOrientedFunction, Supplier<Integer> DPAD, Supplier<Double> leftTrigger, Supplier<Double> rightTrigger, Supplier<Boolean> resetGyroButton, Supplier<Boolean> cancelTurn, Supplier<Boolean> topSpeed) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -38,7 +38,8 @@ public class SwerveJoystickCmd extends CommandBase {
         this.DPAD = DPAD;
         this.rightTrigger = rightTrigger;
         this.leftTrigger = leftTrigger;
-        this.leftBumper = leftBumper;
+        this.cancelTurn = cancelTurn;
+        this.topSpeed = topSpeed;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.resetGyroButton = resetGyroButton;
         this.speedLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -56,7 +57,9 @@ public class SwerveJoystickCmd extends CommandBase {
         // 1. Get real-time joystick inputs
         double driveAngle = Math.atan2(ySpdFunction.get(), xSpdFunction.get());
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
-        double driveSpeed = speedLimiter.calculate(OIConstants.driverEXPMultiplier*Math.pow(Math.E, 
+        double driveSpeed = speedLimiter.calculate((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : 
+        ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.7 : OIConstants.driverEXPMultiplier))
+        *Math.pow(Math.E, 
         Math.abs(
             (Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get())
             *OIConstants.driverEXPJoyMultiplier)))
@@ -87,7 +90,7 @@ public class SwerveJoystickCmd extends CommandBase {
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
         SmartDashboard.putString("PID turning?", "yes");
-        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband)/* && !SwerveSubsystem.driveTurning*/) || leftBumper.get()) {
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband)/* && !SwerveSubsystem.driveTurning*/) || cancelTurn.get()) {
             turningSpeed = 0;
             SmartDashboard.putString("PID turning?", "disabled");
         }

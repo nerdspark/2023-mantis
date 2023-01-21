@@ -165,19 +165,22 @@ public final class Constants {
         public static final int kDriverFieldOrientedButtonIdx = 2;
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
-        public static final int kDriverLeftBumper = 5;
+        public static final int kDriverCancelTurn = 7;//back button
+        public static final int kDriverTopSpeed = 5;//left bumper
 
         public static final double kDeadbandSteer = 0.1d;
         public static final double kDeadbandDrive = 0.03d;
 
-        public static final double driverMultiplier = 0.8;
+        public static final double driverMultiplier = 0.75;
+        public static final double driverTopMultiplier = 1.5;
         public static final double driverPower = 3.5;//2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3;
+        public static final double driverEPower = 3.5;
         public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
+        public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
 
         public static final double targetTurnGainScheduleSpeed = 40;
