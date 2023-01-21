@@ -75,6 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.setYaw(0);
+
     }
 
     public double getHeading() {
@@ -132,6 +133,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+
+
         double error0 = Math.abs(desiredStates[0].angle.getRadians() - frontLeft.getTurningPosition())%(Math.PI);
         error0 = error0 > 0.5*Math.PI ? error0 - Math.PI : error0;
         double error1 = Math.abs(desiredStates[1].angle.getRadians() - frontRight.getTurningPosition())%(Math.PI);

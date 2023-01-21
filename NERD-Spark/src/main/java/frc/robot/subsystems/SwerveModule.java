@@ -198,7 +198,13 @@ public class SwerveModule {
 
         SmartDashboard.putNumber("driveMotorSet" + driveMotor.getDeviceID(), state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
         SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
-        driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1));
+        if (Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
+            SmartDashboard.putString("drive mode", "velocity");
+            driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1));
+        } else {
+            SmartDashboard.putString("drive mode", "VBUS");
+            driveMotor.set(TalonFXControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1) / DriveConstants.kFalconMaxSetSpeed);
+        }
         turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
         SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
     }
