@@ -208,5 +208,11 @@ public class SwerveModule {
             driveMotor.set(TalonFXControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1) / DriveConstants.kFalconMaxSetSpeed);
         }
         turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
+    }
+
+    public void stop() {
+        driveMotor.set(TalonFXControlMode.PercentOutput, 0);
+        // turningMotor.set(TalonFXControlMode.PercentOutput, 0);
     }
 }
