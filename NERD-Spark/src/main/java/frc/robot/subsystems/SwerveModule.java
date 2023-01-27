@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.OIConstants;
 
 public class SwerveModule {
 
@@ -137,7 +139,7 @@ public class SwerveModule {
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
-        turningMotor.selectProfileSlot(1, 0);
+        turningMotor.selectProfileSlot(0, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
         // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
@@ -152,7 +154,7 @@ public class SwerveModule {
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
-        turningMotor.selectProfileSlot(1, 0);
+        turningMotor.selectProfileSlot(0, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
         // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
@@ -169,10 +171,10 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) < 0.001) {
-            stop();
-            // return;
-        }
+        // if (Math.abs(state.speedMetersPerSecond) < 0.001) {
+        //     stop();
+        //     // return;
+        // }
         // state = SwerveModuleState.optimize(state, getState().angle);
 
         double target = state.angle.getRadians();
@@ -194,7 +196,7 @@ public class SwerveModule {
             backward = true;
         } 
             //short spin for pods
-        state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(target));
+        state = new SwerveModuleState(state.speedMetersPerSecond, new Rotation2d(target));//(Math.abs(state.speedMetersPerSecond)/state.speedMetersPerSecond)*Math.abs(Math.pow(state.speedMetersPerSecond, OIConstants.driverPower)), new Rotation2d(target));
 
         SmartDashboard.putNumber("driveMotorSet" + driveMotor.getDeviceID(), state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
         SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
@@ -206,11 +208,5 @@ public class SwerveModule {
             driveMotor.set(TalonFXControlMode.PercentOutput, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1) / DriveConstants.kFalconMaxSetSpeed);
         }
         turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);//turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
-    }
-
-    public void stop() {
-        driveMotor.set(TalonFXControlMode.PercentOutput, 0);
-        // turningMotor.set(TalonFXControlMode.PercentOutput, 0);
     }
 }
