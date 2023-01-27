@@ -76,7 +76,7 @@ public final class Constants {
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
-        public static final boolean kFrontLeftDriveEncoderReversed = false;
+        public static final boolean kFrontLeftDriveEncoderReversed = false; //made it true before, didn't work?
         public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = true;
@@ -94,7 +94,7 @@ public final class Constants {
         public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
         public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        public static final double kBackRightDriveCANCoderOffsetRad = (173.6-180)*Math.PI/180;
+        public static final double kBackRightDriveCANCoderOffsetRad = (173.6)*Math.PI/180;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
@@ -134,8 +134,7 @@ public final class Constants {
 
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 8;
-        public static final double kMaxAngularSpeedRadiansPerSecond = //
-                DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
+        public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10;
         public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularAccelerationRadiansPerSecondSquared = Math.PI / 4;
         public static final double kPXController = 2.5d;
@@ -145,12 +144,12 @@ public final class Constants {
         public static final double kIYController = 0d;
         public static final double kDYController = 0d;
         public static final double kPThetaController = 1d;
+        public static final double kIThetaController = 0d;
+        public static final double kDThetaController = 0d;
     
 
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = //
-                new TrapezoidProfile.Constraints(
-                        kMaxAngularSpeedRadiansPerSecond,
-                        kMaxAngularAccelerationRadiansPerSecondSquared);
+        public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+            kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
     }
 
 

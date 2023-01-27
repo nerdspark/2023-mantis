@@ -93,11 +93,20 @@ public class RobotContainer {
       chooser.addOption("short L", loadPathplannerTrajectoryToSwerveController(
       "pathplanner/generatedJSON/short L.wpilib.json",
       true));
+      chooser.addOption("twist", loadPathplannerTrajectoryToSwerveController(
+        "pathplanner/generatedJSON/twist.wpilib.json",
+        true));
+  
 
     Shuffleboard.getTab("Autonomous").add(chooser);
     
   }
 
+  /**
+   * @param filename
+   * @param resetOdomtry
+   * @return
+   */
   public Command loadPathplannerTrajectoryToSwerveController(String filename, boolean resetOdomtry) { 
     Trajectory trajectory;
 
@@ -113,10 +122,12 @@ public class RobotContainer {
     // 3. Define PID controllers for tracking trajectory
     PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
     PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
-    xController.setTolerance(0.03);
-    yController.setTolerance(0.03);
+    // xController.setTolerance(0.03);
+    // yController.setTolerance(0.03);
+    // PIDController thetaController = new PIDController (AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController);
+    // thetaController.enableContinuousInput(-Math.PI, Math.PI);
     ProfiledPIDController thetaController = new ProfiledPIDController(
-            AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
+            AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   
     // 4. Construct command to follow trajectory
