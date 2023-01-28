@@ -76,10 +76,10 @@ public final class Constants {
         public static final boolean kFrontRightTurningEncoderReversed = false;
         public static final boolean kBackRightTurningEncoderReversed = false;
 
-        public static final boolean kFrontLeftDriveEncoderReversed = false; //made it true before, didn't work?
+        public static final boolean kFrontLeftDriveEncoderReversed = false; 
         public static final boolean kBackLeftDriveEncoderReversed = false;
         public static final boolean kFrontRightDriveEncoderReversed = false;
-        public static final boolean kBackRightDriveEncoderReversed = true;
+        public static final boolean kBackRightDriveEncoderReversed = false;
 
         public static final int kFrontLeftDriveCANCoderPort = 23;
         public static final int kBackLeftDriveCANCoderPort = 24;
@@ -143,7 +143,7 @@ public final class Constants {
         public static final double kPYController = 2.5d;
         public static final double kIYController = 0d;
         public static final double kDYController = 0d;
-        public static final double kPThetaController = 1d;
+        public static final double kPThetaController = -1d;
         public static final double kIThetaController = 0d;
         public static final double kDThetaController = 0d;
     

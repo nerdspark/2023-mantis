@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
@@ -76,6 +77,7 @@ public class SwerveJoystickCmd extends CommandBase {
         double turningSpeed = 0;
         if (resetGyroButton.get()) {
             zeroHeading();
+            swerveSubsystem.resetOdometry(new Pose2d());
         } else 
         if (DPAD.get() != -1) {
             targetAngle =  ((DPAD.get()-90) * Math.PI / 180d);

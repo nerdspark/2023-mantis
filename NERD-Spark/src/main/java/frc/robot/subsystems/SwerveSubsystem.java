@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -87,7 +88,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return odometer.getPoseMeters();
+        return new Pose2d(odometer.getPoseMeters().getTranslation(), new Rotation2d(-odometer.getPoseMeters().getRotation().getRadians()));
+        // return odometer.getPoseMeters();
     }
 
     public void resetOdometry(Pose2d pose) {
