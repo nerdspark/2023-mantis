@@ -1,18 +1,13 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.constraint.SwerveDriveKinematicsConstraint;
-import edu.wpi.first.wpilibj.SPI;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -80,7 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public double getHeading() {
-        return Math.IEEEremainder(-gyro.getYaw(), 360);
+        return Math.IEEEremainder(gyro.getYaw(), 360);
     }
 
     public Rotation2d getRotation2d() {
@@ -88,7 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return new Pose2d(odometer.getPoseMeters().getTranslation(), new Rotation2d(-odometer.getPoseMeters().getRotation().getRadians()));
+        return new Pose2d(odometer.getPoseMeters().getTranslation(), new Rotation2d(odometer.getPoseMeters().getRotation().getRadians()));
         // return odometer.getPoseMeters();
     }
 
@@ -109,7 +104,12 @@ public class SwerveSubsystem extends SubsystemBase {
                 backLeft.getSwerveModulePosition(),
                 backRight.getSwerveModulePosition()
         });
+
+        // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+
+
         SmartDashboard.putNumber("Robot Heading", getHeading());
+        SmartDashboard.putNumber("Rotation2d", odometer.getPoseMeters().getRotation().getDegrees());
         SmartDashboard.putString("Robot Location (broken)", getPose().getTranslation().toString());
         SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
         SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
@@ -173,4 +173,5 @@ public class SwerveSubsystem extends SubsystemBase {
             
         
     }
+    
 }

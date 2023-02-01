@@ -1,24 +1,15 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.OIConstants;
 
 public class SwerveModule {
 
@@ -59,7 +50,7 @@ public class SwerveModule {
         resetEncoders();
     }
     public SwerveModulePosition getSwerveModulePosition() {
-        // SmartDashboard.putNumber("pod " + driveMotor.getDeviceID() + " pos", driveMotor.getSelectedSensorPosition()*ModuleConstants.kDriveEncoderRot2Meter);
+        // SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "CANCoder pos", CANCoder.getAbsolutePosition());
         return new SwerveModulePosition (getDrivePosition(), new Rotation2d(getTurningPosition()));
     }
 
@@ -128,6 +119,7 @@ public class SwerveModule {
 
     public double getCANCoderRad() {
         double angle = CANCoder.getAbsolutePosition();
+        SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "CANCoder pos", angle);
         angle *= 2.0 * Math.PI / 360;
         angle -= CANCoderOffsetRad;
         return angle * (CANCoderReversed ? -1.0 : 1.0);
@@ -215,4 +207,5 @@ public class SwerveModule {
         driveMotor.set(TalonFXControlMode.PercentOutput, 0);
         // turningMotor.set(TalonFXControlMode.PercentOutput, 0);
     }
+    
 }
