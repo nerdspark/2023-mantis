@@ -137,7 +137,7 @@ public final class Constants {
 
       public static final double kFalconMaxSetSpeed = 10000d;
 
-      public static final double kPTargetTurning = 2.5d;
+      public static final double kPTargetTurning = -2.5d;
       public static final double kITargetTurning = 0d;    
       public static final double kDTargetTurning = 0d;
       public static final double kTargetTurningDeadband = 1*Math.PI/180;

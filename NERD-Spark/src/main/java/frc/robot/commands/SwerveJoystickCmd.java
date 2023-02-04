@@ -7,11 +7,9 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -73,7 +71,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get()))) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
-        double currentAngle = swerveSubsystem.getHeading()*Math.PI/180;
+        double currentAngle = -swerveSubsystem.getHeading()*Math.PI/180;
         double turningSpeed = 0;
         if (resetGyroButton.get()) {
             zeroHeading();
@@ -157,4 +155,5 @@ public class SwerveJoystickCmd extends CommandBase {
         swerveSubsystem.zeroHeading();
         targetAngle = 0;
     }
+    
 }

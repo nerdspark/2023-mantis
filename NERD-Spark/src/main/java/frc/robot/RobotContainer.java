@@ -8,6 +8,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -103,6 +104,18 @@ public class RobotContainer {
       true));
     chooser.addOption("L_withTwist", loadPathplannerTrajectoryToSwerveController(
       "L_withTwist",
+      true));
+    chooser.addOption("ShortL2_withTwist", loadPathplannerTrajectoryToSwerveController(
+      "ShortL2_withTwist",
+      true));
+    chooser.addOption("ShortR2_withTwist", loadPathplannerTrajectoryToSwerveController(
+      "ShortR2_withTwist",
+      true));
+    chooser.addOption("ShortR2", loadPathplannerTrajectoryToSwerveController(
+      "ShortR2",
+      true));
+    chooser.addOption("straight_twist", loadPathplannerTrajectoryToSwerveController(
+      "straight_twist",
       true));
   
 
