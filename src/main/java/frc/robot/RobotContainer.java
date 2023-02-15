@@ -16,11 +16,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
@@ -42,8 +46,10 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -56,19 +62,19 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
-  private static final XboxController cont = new XboxController(Constants.controllerPort);
+    private static final XboxController cont = new XboxController(Constants.controllerPort);
 
-  private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
-  private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
-    
-  SendableChooser<Command> chooser = new SendableChooser<>();
+    private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
+      
+    SendableChooser<Command> chooser = new SendableChooser<>();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -90,37 +96,172 @@ public class RobotContainer {
     configureButtonBindings();
 
 
-    chooser.addOption("line4mTwist", loadPathplannerTrajectoryToSwerveController(
-      "line4mTwist",
+    // chooser.addOption("line4mTwist", loadPathplannerTrajectoryToSwerveController(
+    //   "line4mTwist",
+    //   true));
+    chooser.addOption("line2meters", loadPathplannerTrajectoryToSwerveController(
+      "line2meters",
       true));
-    chooser.addOption("line3meters", loadPathplannerTrajectoryToSwerveController(
-      "line3meters",
-      true));
-    chooser.addOption("ShortL2", loadPathplannerTrajectoryToSwerveController(
-      "ShortL2",
-      true));
-    chooser.addOption("square", loadPathplannerTrajectoryToSwerveController(
-      "square",
-      true));
-    chooser.addOption("L_withTwist", loadPathplannerTrajectoryToSwerveController(
-      "L_withTwist",
-      true));
+    // chooser.addOption("ShortL2", loadPathplannerTrajectoryToSwerveController(
+    //   "ShortL2",
+    //   true));
+    // chooser.addOption("square", loadPathplannerTrajectoryToSwerveController(
+    //   "square",
+    //   true));
+    // chooser.addOption("L_withTwist", loadPathplannerTrajectoryToSwerveController(
+    //   "L_withTwist",
+    //   true));
     chooser.addOption("ShortL2_withTwist", loadPathplannerTrajectoryToSwerveController(
       "ShortL2_withTwist",
       true));
-    chooser.addOption("ShortR2_withTwist", loadPathplannerTrajectoryToSwerveController(
-      "ShortR2_withTwist",
-      true));
-    chooser.addOption("ShortR2", loadPathplannerTrajectoryToSwerveController(
-      "ShortR2",
-      true));
-    chooser.addOption("straight_twist", loadPathplannerTrajectoryToSwerveController(
-      "straight_twist",
-      true));
-  
+    // chooser.addOption("ShortR2_withTwist", loadPathplannerTrajectoryToSwerveController(
+    //   "ShortR2_withTwist",
+    //   true));
+    // chooser.addOption("ShortR2", loadPathplannerTrajectoryToSwerveController(
+    //   "ShortR2",
+    //   true));
+    // chooser.addOption("straight_twist", loadPathplannerTrajectoryToSwerveController(
+    //   "straight_twist",
+    //   true));
+    // chooser.addOption("DriveRectangle", loadPathplannerTrajectoryToSwerveController(
+    //   "DriveRectangle",
+    //   true));
+    // chooser.addOption("ShortR2_withTwist", loadPathplannerTrajectoryToSwerveController(
+    //   "pathplanner/generatedJSON/ShortR2_withTwist.wpilib.json",
+    //   true));
+
+    //Pathgroup
+    chooser.addOption("threeCone", followTrajectoryCommand(
+      PathPlanner.loadPath("threeConePathOne", new PathConstraints(3, 2)), 
+      PathPlanner.loadPath("threeConePathTwo", new PathConstraints(3, 2)), 
+      PathPlanner.loadPath("threeConePathThree", new PathConstraints(3, 2)),
+      PathPlanner.loadPath("threeConePathFour", new PathConstraints(3, 2),false), true));
+
+    //Pathgroup with markers
+    // chooser.addOption("DriveRectanglePathGroupWithEvents", followTrajectoryCommandMarker(
+    //   "DriveRectangleWithEvents"));  
 
     Shuffleboard.getTab("Autonomous").add(chooser);
   }
+
+
+  //Full auto command...includes markers
+
+// public Command followTrajectoryCommandMarker(String filename){
+
+//   // This will load the file "FullAuto.path" and generate it with a max velocity of 4 m/s and a max acceleration of 3 m/s^2
+// // for every path in the group
+// List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("DriveRectanglePathGroupWithEvents",
+//  new PathConstraints(1, 0.5),
+//  new PathConstraints(2, 1));
+
+// // This is just an example event map. It would be better to have a constant, global event map
+// // in your code that will be used by all path following commands.
+// HashMap<String, Command> eventMap = new HashMap<>();
+// eventMap.put("Vision1", new PrintCommand("Passed marker 1"));
+// eventMap.put("PositionArm2", new PrintCommand("Passed marker 2"));
+
+// // Create the AutoBuilder. This only needs to be created once when robot code starts, not every time you want to create an auto command. A good place to put this is in RobotContainer along with your subsystems.
+
+// SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+//     swerveSubsystem::getPose, // Pose2d supplier
+//     swerveSubsystem.resetOdometry(pathGroup.getInitialHolonomicPose), // Pose2d consumer, used to reset odometry at the beginning of auto
+//     DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+//     new PIDController(2.5, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+//     new PIDController(2.5, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+//     swerveSubsystem::setModuleStates, // Module states consumer used to output to the drive subsystem
+//     eventMap,
+//     true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+//     swerveSubsystem // The drive subsystem. Used to properly set the requirements of path following commands
+// );
+
+// Command driveRectanglePathGroupWithEvents = autoBuilder.driveRectanglePathGroupWithEvents(pathGroup);
+// // Command fullAuto = autoBuilder.fullAuto(pathGroup);
+
+
+//   return new SequentialCommandGroup(
+//     new FollowPathWithEvents(autoBuilder(pathGroup), null, eventMap)
+//   )
+
+    // new FollowPathWithEvents(
+    //   new autoBuilder(pathGroup.get(0)), pathGroup.getMarkers(0), eventMap),
+    // new WaitCommand(3),
+    // ;
+
+  //  new FollowPathWithEvents(
+  //     new autoBuilder(pathGroup.get(0), swerveSubsystem, true),
+  //     pathGroup.get(0).getMarkers(),
+  //     eventMap),
+  //   new WaitCommand(3),
+  //   new FollowPathWithEvents(
+  //     new FollowPath(pathGroup.get(1), swerveSubsystem, false),
+  //     pathGroup.get(1).getMarkers(),
+  //     eventMap));
+
+
+// }
+
+//Follow Pathgroup Command.
+
+
+  public Command followTrajectoryCommand(PathPlannerTrajectory traj, PathPlannerTrajectory traj2, PathPlannerTrajectory traj3,
+  PathPlannerTrajectory traj4, boolean isFirstPath) {
+
+    return new SequentialCommandGroup(
+         new InstantCommand(() -> {
+           // Reset odometry for the first path you run during auto
+           if(isFirstPath){
+               swerveSubsystem.resetOdometry(traj.getInitialHolonomicPose());
+           }
+         }),
+         new PPSwerveControllerCommand(
+             traj, 
+             swerveSubsystem::getPose, // Pose supplier
+             DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+             new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
+             new PIDController(1.0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+             swerveSubsystem::setModuleStates, // Module states consumer
+             false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+             swerveSubsystem // Requires this drive subsystem
+         ),
+        //  new WaitCommand(1),
+         new PPSwerveControllerCommand(
+            traj2, 
+            swerveSubsystem::getPose, // Pose supplier
+            DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+            new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
+            new PIDController(1.0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            swerveSubsystem::setModuleStates, // Module states consumer
+            false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            swerveSubsystem // Requires this drive subsystem
+          ),
+          // new WaitCommand(1),
+          new PPSwerveControllerCommand(
+            traj3, 
+            swerveSubsystem::getPose, // Pose supplier
+            DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+            new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
+            new PIDController(1.0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            swerveSubsystem::setModuleStates, // Module states consumer
+            false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            swerveSubsystem // Requires this drive subsystem
+          ),
+          // new WaitCommand(1),
+          new PPSwerveControllerCommand(
+            traj4, 
+            swerveSubsystem::getPose, // Pose supplier
+            DriveConstants.kDriveKinematics, // SwerveDriveKinematics
+            new PIDController(2.5, 0, 0), // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            new PIDController(2.5, 0, 0), // Y controller (usually the same values as X controller)
+            new PIDController(1.0, 0, 0), // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+            swerveSubsystem::setModuleStates, // Module states consumer
+            false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+            swerveSubsystem // Requires this drive subsystem
+          ));
+ }
 
   public Command loadPathplannerTrajectoryToSwerveController(String filename, boolean resetOdomtry) { 
     // Trajectory trajectory;
@@ -136,58 +277,74 @@ public class RobotContainer {
     // }
 
     // 3. Define PID controllers for tracking trajectory
-    // PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
-    // PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
-    // ProfiledPIDController thetaController = new ProfiledPIDController(
-    //         AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
-    // thetaController.enableContinuousInput(-Math.PI, Math.PI); // -Math.PI or -180?
-  
-    // // 4. Construct command to follow trajectory with WPILIB trajectory follower
-    // SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-    //         trajectory,
-    //         swerveSubsystem::getPose,
-    //         DriveConstants.kDriveKinematics,
-    //         xController,
-    //         yController,
-    //         thetaController,
-    //         swerveSubsystem::setModuleStates,
-    //         swerveSubsystem);
-
-    // if (resetOdomtry) {
-    //   return new SequentialCommandGroup(
-    //       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())), swerveControllerCommand);
-    // } else {
-    //   return swerveControllerCommand;
-    // }
-
-
-    // // 5. Construct command to follow trajectory using the Path Planner trajectory follower
-
     PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
     PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
-    PIDController thetaController = new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController);
+    ProfiledPIDController thetaController = new ProfiledPIDController(
+            AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
     thetaController.enableContinuousInput(-Math.PI, Math.PI); // -Math.PI or -180?
+  
+    // 4. Construct command to follow trajectory with WPILIB trajectory follower
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+            trajectory,
+            swerveSubsystem::getPose,
+            DriveConstants.kDriveKinematics,
+            xController,
+            yController,
+            thetaController,
+            swerveSubsystem::setModuleStates,
+            swerveSubsystem);
 
-    PPSwerveControllerCommand ppSwerveControllerCommand = new PPSwerveControllerCommand(
-          trajectory, 
-          swerveSubsystem::getPose, // Pose supplier
-          DriveConstants.kDriveKinematics,// SwerveDriveKinematics
-          xController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-          yController, // Y controller (usually the same values as X controller)
-          thetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
-          swerveSubsystem::setModuleStates, // Module states consumer
-          false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
-          swerveSubsystem // Requires this drive subsystem
-        );
-    
     if (resetOdomtry) {
       return new SequentialCommandGroup(
-          new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())), ppSwerveControllerCommand);
+          new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+          swerveControllerCommand);
     } else {
-      return ppSwerveControllerCommand;
+      return swerveControllerCommand;
     }
 
   }
+    // // 5. Construct command to follow trajectory using the Path Planner trajectory follower
+
+  //   PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
+  //   PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
+  //   PIDController thetaController = new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController);
+  //   thetaController.enableContinuousInput(-Math.PI, Math.PI); // -Math.PI or -180?
+
+  //   PPSwerveControllerCommand ppSwerveControllerCommand = new PPSwerveControllerCommand(
+  //         trajectory, 
+  //         swerveSubsystem::getPose, // Pose supplier
+  //         DriveConstants.kDriveKinematics,// SwerveDriveKinematics
+  //         xController, // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+  //         yController, // Y controller (usually the same values as X controller)
+  //         thetaController, // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+  //         swerveSubsystem::setModuleStates, // Module states consumer
+  //         false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+  //         swerveSubsystem // Requires this drive subsystem
+  //       );
+
+  //   return new SequentialCommandGroup(
+  //         new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())), 
+  //         ppSwerveControllerCommand, 
+  //         new InstantCommand(() -> swerveSubsystem.stopModules()));
+
+
+  //   // )
+        
+    
+  //   // if (resetOdomtry) {
+  //   //   return new SequentialCommandGroup(
+  //   //       new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())), ppSwerveControllerCommand,
+  //   //       new InstantCommand(() -> swerveSubsystem.stopModules()));
+  //   // } else {
+  //   //   return ppSwerveControllerCommand;
+  //   // }
+
+  // }
+
+
+
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -199,7 +356,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(cont, Constants.buttonA).whileHeld(new ExampleCommand(m_exampleSubsystem));
+    // new JoystickButton(cont, Constants.buttonA).whileHeld(new ExampleCommand(m_exampleSubsystem));
 
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
@@ -252,10 +409,10 @@ public class RobotContainer {
     //           swerveSubsystem);
 
     //   // 5. Add some init and wrap-up, and return everything
-    //   return new SequentialCommandGroup(
-    //           new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
-    //           swerveControllerCommand,
-    //           new InstantCommand(() -> swerveSubsystem.stopModules()));
+      // return new SequentialCommandGroup(
+      //         new InstantCommand(() -> swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+      //         swerveControllerCommand,
+      //         new InstantCommand(() -> swerveSubsystem.stopModules()));
 
   }
 }
