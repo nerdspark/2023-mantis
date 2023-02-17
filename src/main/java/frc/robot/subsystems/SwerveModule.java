@@ -30,10 +30,10 @@ public class SwerveModule {
 
         this.CANCoderOffsetRad = CANCoderOffset;
         this.CANCoderReversed = CANCoderReversed;
-        CANCoder = new CANCoder(CANCoderId);
+        CANCoder = new CANCoder(CANCoderId, DriveConstants.canBusName);
 
-        driveMotor = new TalonFX(driveMotorId);
-        turningMotor = new TalonFX(turningMotorId);
+        driveMotor = new TalonFX(driveMotorId, DriveConstants.canBusName);
+        turningMotor = new TalonFX(turningMotorId, DriveConstants.canBusName);
 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
@@ -143,18 +143,18 @@ public class SwerveModule {
     }
 
     public void setGains() {
-        turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
-        turningMotor.config_kI(1, DriveConstants.kITurningMotor);
-        turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
-        turningMotor.selectProfileSlot(0, 0);
+        // turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
+        // turningMotor.config_kI(1, DriveConstants.kITurningMotor);
+        // turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
+        // turningMotor.selectProfileSlot(0, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
         // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
         // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
-        driveMotor.selectProfileSlot(0, 0);
+        // driveMotor.selectProfileSlot(0, 0);
         // turningMotor.selectProfileSlot(0, 0);
-        driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
-        turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
+        // driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
+        // turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
         
     }
 

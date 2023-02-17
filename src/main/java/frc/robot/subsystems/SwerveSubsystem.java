@@ -50,7 +50,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderOffsetRad,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
-    private final Pigeon2 gyro = new Pigeon2(Constants.pigeonPort);
+    private final Pigeon2 gyro = new Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(), 
