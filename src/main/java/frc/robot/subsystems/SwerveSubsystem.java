@@ -173,5 +173,23 @@ public class SwerveSubsystem extends SubsystemBase {
             
         
     }
+
+    public SwerveModulePosition[] getModulePositions (){
+        return new SwerveModulePosition[] {
+            frontLeft.getSwerveModulePosition(), frontRight.getSwerveModulePosition(),
+            backLeft.getSwerveModulePosition(), backRight.getSwerveModulePosition()
+            };
+        }
+
+        public void resetGyro(){
+            zeroHeading();
+        }
+    
+        //May need to change
+        //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
+    
+        public Rotation2d getGyroRotation(){
+            return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
+        }
     
 }

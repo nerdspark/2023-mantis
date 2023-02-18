@@ -8,10 +8,18 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.Autos;
+import frc.robot.commands.ChaseTagCommand;
+import frc.robot.commands.ConeVisionCommand;
+import frc.robot.commands.CubeVisionCommand;
+import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.FindMultipleAprilTags;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import java.io.IOException;
@@ -40,6 +48,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -47,6 +56,9 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import org.photonvision.PhotonCamera;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,6 +81,30 @@ public class RobotContainer {
   private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
     
   SendableChooser<Command> chooser = new SendableChooser<>();
+
+
+  //Vision
+  private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
+
+  private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
+  private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+
+  private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
+
+  private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
+
+  private final FindMultipleAprilTags aprTagCommandMultiple = new FindMultipleAprilTags(photonCamera,m_exampleSubsystem,1);
+
+  private final ExampleCommand exampleCommand = new ExampleCommand(m_exampleSubsystem);
+  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,1);
+
+
+  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(swerveSubsystem, photonCamera);
+  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose);
+  // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
+
+
+  //Vision
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -199,15 +235,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(cont, Constants.buttonA).whileHeld(new ExampleCommand(m_exampleSubsystem));
 
-    // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    // new Trigger(m_exampleSubsystem::exampleCondition)
-    //     .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // // cancelling on release.
-    // m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    SmartDashboard.putString("Config", "Button Bindings");
+    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
+    // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(estimatePoseCommand);
+    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
   }
 
   /**
