@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -58,6 +59,8 @@ public class SwerveSubsystem extends SubsystemBase {
                 backLeft.getSwerveModulePosition(),
                 backRight.getSwerveModulePosition()
             });
+
+    SwerveDriveKinematics kinematics;
 
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -132,6 +135,42 @@ public class SwerveSubsystem extends SubsystemBase {
         backLeft.setGains();
         backRight.setGains();
     }
+
+    public void enableBrakeMode(boolean enable) {
+        frontLeft.enableBrakeMode(enable);
+        frontRight.enableBrakeMode(enable);
+        backLeft.enableBrakeMode(enable);
+        backRight.enableBrakeMode(enable);
+    }
+
+    public void driveSwerveDrive(ChassisSpeeds chassisSpeeds) {
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+
+        SwerveModuleState currenStateFL = frontLeft.getState();
+        SwerveModuleState.optimize(moduleStates[0], currenStateFL.angle);
+        frontLeft.setDesiredState(moduleStates[0]);
+
+        SwerveModuleState currenStateFR = frontRight.getState();
+        SwerveModuleState.optimize(moduleStates[1], currenStateFR.angle);
+        frontRight.setDesiredState(moduleStates[1]);
+
+        SwerveModuleState currenStateBL = backLeft.getState();
+        SwerveModuleState.optimize(moduleStates[2], currenStateBL.angle);
+        backLeft.setDesiredState(moduleStates[2]);
+
+        SwerveModuleState currenStateBR = backRight.getState();
+        SwerveModuleState.optimize(moduleStates[3], currenStateBR.angle);
+        backRight.setDesiredState(moduleStates[3]);
+
+        // for (int i = 0; i < 4; i++) {
+        //     SwerveModuleState currentState = swerveModules[i].getSwerveModuleState();
+        //     SwerveModuleState.optimize(moduleStates[i], currentState.angle);
+        //     swerveModules[i].setSwerveModuleState(moduleStates[i]);
+        // }
+    }
+
+
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

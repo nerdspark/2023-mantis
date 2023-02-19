@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -206,6 +207,14 @@ public class SwerveModule {
     public void stop() {
         driveMotor.set(TalonFXControlMode.PercentOutput, 0);
         // turningMotor.set(TalonFXControlMode.PercentOutput, 0);
+    }
+
+    public void enableBrakeMode(boolean enable) {
+        if (enable) {
+            driveMotor.setNeutralMode(NeutralMode.Brake);
+        } else {
+            driveMotor.setNeutralMode(NeutralMode.Coast);
+        }
     }
     
 }
