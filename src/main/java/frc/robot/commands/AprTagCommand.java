@@ -4,24 +4,22 @@
 
 package frc.robot.commands;
 
-import java.lang.annotation.Target;
-import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.BooleanSubscriber;
-import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -34,20 +32,27 @@ public class AprTagCommand extends CommandBase {
   private Pose2d goalPose = null;
   private PhotonTrackedTarget lastTarget;
   int count;
-  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0, 0), Rotation2d.fromDegrees(180.0));
+  private final Supplier<Pose2d> poseProvider;
 
+  // private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1, 0), Rotation2d.fromDegrees(180.0));
 
+  private static final Transform3d TAG_TO_GOAL = 
+      new Transform3d(
+          new Translation3d(1, 0.0, 0.0),
+          new Rotation3d(0.0, 0.0, Math.PI));
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AprTagCommand(PhotonCamera photonCamera, ExampleSubsystem subsystem, int tagToChase) {
+  public AprTagCommand(PhotonCamera photonCamera, ExampleSubsystem subsystem, int tagToChase, Supplier<Pose2d> poseProvider) {
     m_subsystem = subsystem;
     SmartDashboard.putNumber("AprTagPipeLine Constructor", tagToChase);
     // Use addRequirements() here to declare subsystem dependencies.
     this.tagToChase = tagToChase;
     this.photonCamera = photonCamera;
+    this.poseProvider = poseProvider;
+
     addRequirements(subsystem);
   }
 
@@ -65,7 +70,19 @@ public class AprTagCommand extends CommandBase {
 
      SmartDashboard.putNumber( photonCamera.getName(),count++);
 
-    var robotPose = new Pose2d(0,0,new Rotation2d(0)); // Dummy Pose
+     var robotPose2d = poseProvider.get();
+
+    var robotPose = 
+    new Pose3d(
+        robotPose2d.getX(),
+        robotPose2d.getY(),
+        0.0, 
+        new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
+
+        SmartDashboard.putNumber("AprTagPipeLine RobotPose X", robotPose.getX());
+        SmartDashboard.putNumber("AprTagPipeLine RobotPose Y", robotPose.getY());
+        SmartDashboard.putNumber("AprTagPipeLine RobotPose Angle", robotPose.getRotation().toRotation2d().getDegrees());
+
     var photonRes = photonCamera.getLatestResult();
     if (photonRes.hasTargets()) {
       SmartDashboard.putNumber("AprTagPipeLine TargetFound", this.tagToChase);
@@ -96,33 +113,38 @@ public class AprTagCommand extends CommandBase {
           SmartDashboard.putNumber("AprTagPipeLine Target Yaw", yaw);
 
 
-          // Get the transformation from the camera to the tag (in 2d)
+          // // Get the transformation from the camera to the tag (in 2d)
+          // var camToTarget = target.getBestCameraToTarget();
+          // var transform = new Transform2d(
+          //   camToTarget.getTranslation().toTranslation2d(),
+          //   camToTarget.getRotation().toRotation2d().minus(Rotation2d.fromDegrees(90)));
+            
+          //   // Transform the robot's pose to find the tag's pose
+          //   var cameraPose = robotPose.transformBy(Constants.VisionConstants.CAMERA_TO_ROBOT.inverse());
+          //   Pose2d targetPose = cameraPose.transformBy(transform);
+            
+          //   // Transform the tag's pose to set our goal
+          //   goalPose = targetPose.transformBy(TAG_TO_GOAL);
+
+          var cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
+
+          // Trasnform the camera's pose to the target's pose
           var camToTarget = target.getBestCameraToTarget();
-          var transform = new Transform2d(
-            camToTarget.getTranslation().toTranslation2d(),
-            camToTarget.getRotation().toRotation2d().minus(Rotation2d.fromDegrees(90)));
-            
-            // Transform the robot's pose to find the tag's pose
-            var cameraPose = robotPose.transformBy(Constants.VisionConstants.CAMERA_TO_ROBOT.inverse());
-            Pose2d targetPose = cameraPose.transformBy(transform);
-            
-            // Transform the tag's pose to set our goal
-            goalPose = targetPose.transformBy(TAG_TO_GOAL);
-        }
-
-        if (null != goalPose) {
-
-         // Drive
+          var targetPose = cameraPose.transformBy(camToTarget);
+          
+          // Transform the tag's pose to set our goal
+          var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
           SmartDashboard.putNumber("AprTagPipeLine goalPoseX", goalPose.getX());
           SmartDashboard.putNumber("AprTagPipeLine goalPoseY", goalPose.getY());
           SmartDashboard.putNumber("AprTagPipeLine goalPoseAngle", goalPose.getRotation().getDegrees());
-        }
-      }
-  }
-  else{
-    SmartDashboard.putNumber("AprTagPipeLine No targets found Appa", count++);
-  }
+
+        }            
+      
+      }else{
+        SmartDashboard.putNumber("AprTagPipeLine No targets found Appa", count++);
+     }
 }
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import static frc.robot.Constants.VisionConstants.CAMERA_TO_ROBOT;
-
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
@@ -9,9 +7,10 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -19,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 
@@ -29,8 +29,12 @@ public class ChaseTagCommand extends CommandBase {
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = 
       new TrapezoidProfile.Constraints(4, 4);
   
-  private static final int TAG_TO_CHASE = 1;
-  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
+  private  int tagToChase;
+  //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
+  private static final Transform3d TAG_TO_GOAL = 
+      new Transform3d(
+          new Translation3d(1, 0.0, 0.0),
+          new Rotation3d(0.0, 0.0, Math.PI));
 
   private final PhotonCamera photonCamera;
   private final SwerveSubsystem drivetrainSubsystem;
@@ -40,32 +44,29 @@ public class ChaseTagCommand extends CommandBase {
   private final ProfiledPIDController yController = new ProfiledPIDController(2.5, 0, 0, Y_CONSTRAINTS);
   private final ProfiledPIDController omegaController = new ProfiledPIDController(1, 0, 0, OMEGA_CONSTRATINTS);
 
-  private Pose2d goalPose;
   private PhotonTrackedTarget lastTarget;
 
   boolean goalReached  = false;
-  int count;
 
   public ChaseTagCommand(
         PhotonCamera photonCamera, 
         SwerveSubsystem drivetrainSubsystem,
-        Supplier<Pose2d> poseProvider) {
+        Supplier<Pose2d> poseProvider, int tagToChase) {
     this.photonCamera = photonCamera;
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.poseProvider = poseProvider;
+    this.tagToChase=tagToChase;
 
-    xController.setTolerance(0.1);
-    yController.setTolerance(0.1);
-    omegaController.setTolerance(Units.degreesToRadians(3));
-    omegaController.enableContinuousInput(-1, 1);
+    xController.setTolerance(0.2);
+    yController.setTolerance(0.2);
+    omegaController.setTolerance(Units.degreesToRadians(5));
+    omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(drivetrainSubsystem);
   }
 
   @Override
   public void initialize() {
-    count=0;
-    goalPose = null;
     lastTarget = null;
     var robotPose = poseProvider.get();
 
@@ -82,90 +83,78 @@ public class ChaseTagCommand extends CommandBase {
 
   @Override
   public void execute() {
-    var robotPose = poseProvider.get();
-    SmartDashboard.putNumber("TagChase Count",count);
+    var robotPose2d = poseProvider.get();
+
+    var robotPose = 
+    new Pose3d(
+        robotPose2d.getX(),
+        robotPose2d.getY(),
+        0.0, 
+        new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
     SmartDashboard.putNumber("TagChase robotPose.X", robotPose.getX());
     SmartDashboard.putNumber("TagChase robotPose.Y", robotPose.getY());
-    SmartDashboard.putNumber("TagChase robotPose.Angle", robotPose.getRotation().getRadians());
+    SmartDashboard.putNumber("TagChase robotPose.Angle", robotPose2d.getRotation().getRadians());
     var photonRes = photonCamera.getLatestResult();
     if (photonRes.hasTargets()) {
       // Find the tag we want to chase
       var targetOpt = photonRes.getTargets().stream()
-          .filter(t -> t.getFiducialId() == TAG_TO_CHASE)
+          .filter(t -> t.getFiducialId() == this.tagToChase)
+          .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
           .findFirst();
-      if (targetOpt.isPresent() && count < 1) {
+      if (targetOpt.isPresent()) {
         var target = targetOpt.get();
         if (!target.equals(lastTarget)) {
           // This is new target data, so recalculate the goal
           lastTarget = target;
 
-          count++;
+          // Transform the robot's pose to find the camera's pose
+          var cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
 
-          // Get the transformation from the camera to the tag (in 2d)
+          // Trasnform the camera's pose to the target's pose
           var camToTarget = target.getBestCameraToTarget();
+          var targetPose = cameraPose.transformBy(camToTarget);
+          
+          // Transform the tag's pose to set our goal
+          var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
 
-          double X = target.getBestCameraToTarget().getX();
-          double Y = target.getBestCameraToTarget().getY();
-          double yaw = target.getYaw();
-          SmartDashboard.putNumber("TagChase Target getFiducialId", target.getFiducialId());
-          SmartDashboard.putNumber("TagChase Target X", X);
-          SmartDashboard.putNumber("TagChase Target Y", Y);
-          SmartDashboard.putNumber("TagChase Target Yaw", yaw);
-
-
-          var transform = new Transform2d(
-            camToTarget.getTranslation().toTranslation2d(),
-            camToTarget.getRotation().toRotation2d().minus(Rotation2d.fromDegrees(90)));
-            
-            // Transform the robot's pose to find the tag's pose
-            var cameraPose = robotPose.transformBy(CAMERA_TO_ROBOT.inverse());
-            Pose2d targetPose = cameraPose.transformBy(transform);
-            
-            // Transform the tag's pose to set our goal
-            goalPose = targetPose.transformBy(TAG_TO_GOAL);
-        }
-
-        if (null != goalPose) {
           // Drive
-
-          SmartDashboard.putNumber("TagChase goal Pose X", goalPose.getX());
-          SmartDashboard.putNumber("TagChase goal Pose Y", goalPose.getY());
-          SmartDashboard.putNumber("TagChase goal Pose Omega", goalPose.getRotation().getRadians());
-
-    
           xController.setGoal(goalPose.getX());
           yController.setGoal(goalPose.getY());
           omegaController.setGoal(goalPose.getRotation().getRadians());
-        }
+          SmartDashboard.putNumber("TagChase goal Pose X", goalPose.getX());
+          SmartDashboard.putNumber("TagChase goal Pose Y", goalPose.getY());
+          SmartDashboard.putNumber("TagChase goal Pose Omega", goalPose.getRotation().getRadians());
+        }      
       }
     }
    
-    if(goalPose != null){
-    var xSpeed = xController.calculate(robotPose.getX());
-    if (xController.atGoal()) {
-      xSpeed = 0;
-    }
-    
-    var ySpeed = yController.calculate(robotPose.getY());
-    if (yController.atGoal()) {
-      ySpeed = 0;
-    }
+    if (lastTarget == null) {
+      // No target has been visible
+      drivetrainSubsystem.stopModules();
+    } else{   
+      
+      var xSpeed = xController.calculate(robotPose.getX());
+      if (xController.atGoal()) {
+        xSpeed = 0;
+      }
 
-    var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
-    if (omegaController.atGoal()) {
-      omegaSpeed = 0;
-    }
+      var ySpeed = yController.calculate(robotPose.getY());
+      if (yController.atGoal()) {
+        ySpeed = 0;
+      }
 
-    ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-        xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
-    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-    drivetrainSubsystem.setModuleStates(moduleStates);
+      var omegaSpeed = omegaController.calculate(robotPose2d.getRotation().getRadians());
+      if (omegaController.atGoal()) {
+        omegaSpeed = 0;
+      }
 
-    if(xController.atGoal() && yController.atGoal() && omegaController.atGoal()){
-      goalReached = true;
+      ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+          xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
+      SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+      drivetrainSubsystem.setModuleStates(moduleStates);
     }
-  }
+  
   }
 
   @Override
@@ -173,11 +162,11 @@ public class ChaseTagCommand extends CommandBase {
     drivetrainSubsystem.stopModules();
   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return goalReached;
+
+  // // Returns true when the command should end.
+  // @Override
+  // public boolean isFinished() {
+  //   return xController.atGoal() && yController.atGoal() && omegaController.atGoal();
+  // };
 
   }
-
-}

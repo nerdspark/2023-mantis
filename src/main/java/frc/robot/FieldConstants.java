@@ -193,8 +193,7 @@ public final class FieldConstants {
       Map.of(
           1,
           new Pose3d(
-              // Units.inchesToMeters(610.77),
-              Units.inchesToMeters(78.74), //2 mtrs for testing
+              Units.inchesToMeters(610.77),
               Units.inchesToMeters(42.19),
               Units.inchesToMeters(18.22),
               new Rotation3d(0.0, 0.0, Math.PI)),

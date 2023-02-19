@@ -185,11 +185,11 @@ public class SwerveSubsystem extends SubsystemBase {
             zeroHeading();
         }
     
-        //May need to change
-        //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
+        // //May need to change
+        // //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
     
-        public Rotation2d getGyroRotation(){
-            return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
-        }
+        // public Rotation2d getGyroRotation(){
+        //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
+        // }
     
 }

@@ -96,11 +96,12 @@ public class RobotContainer {
   private final FindMultipleAprilTags aprTagCommandMultiple = new FindMultipleAprilTags(photonCamera,m_exampleSubsystem,1);
 
   private final ExampleCommand exampleCommand = new ExampleCommand(m_exampleSubsystem);
-  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,1);
 
 
-  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(swerveSubsystem, photonCamera);
-  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose);
+  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
+  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
+  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,1,poseEstimator::getCurrentPose);
+
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
 
@@ -122,6 +123,7 @@ public class RobotContainer {
       () -> driverJoystick.getRawButton(Constants.buttonY), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
+
       // Configure the button bindings
     configureButtonBindings();
 
@@ -240,7 +242,8 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
     new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
     // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(estimatePoseCommand);
-    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
+    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
+      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
   }
 
   /**

@@ -4,32 +4,17 @@
 
 package frc.robot.commands;
 
-import java.lang.annotation.Target;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.BooleanSubscriber;
-import edu.wpi.first.networktables.DoubleArraySubscriber;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
@@ -37,6 +22,10 @@ public class DriveToPoseCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final SwerveSubsystem drivetrainSubsystem;
   private final Supplier<Pose2d> poseProvider;
+  private final Pose2d goalPose;
+
+  private static final double TRANSLATION_TOLERANCE = 0.2;
+  private static final double OMEGA_TOLERANCE = Units.degreesToRadians(5);
 
   private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
   private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
@@ -54,19 +43,57 @@ public class DriveToPoseCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider) {
+  public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider, Pose2d goalPose) {
     this.drivetrainSubsystem = subsystem;
     this.poseProvider = poseProvider;
+    this.goalPose = goalPose;
     SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
     // Use addRequirements() here to declare subsystem dependencies.
     
+    xController.setTolerance(TRANSLATION_TOLERANCE);
+    yController.setTolerance(TRANSLATION_TOLERANCE);
+    omegaController.setTolerance(Units.degreesToRadians(OMEGA_TOLERANCE));
+    omegaController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(subsystem);
   }
+
+    /**
+   * Creates a new ExampleCommand.
+   *
+   * @param subsystem The subsystem used by this command.
+   */
+  public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider) {
+    this.drivetrainSubsystem = subsystem;
+    this.poseProvider = poseProvider;
+    this.goalPose = new Pose2d(poseProvider.get().getX()+1, poseProvider.get().getY()+2, poseProvider.get().getRotation());
+    SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
+    // Use addRequirements() here to declare subsystem dependencies.
+    
+    xController.setTolerance(TRANSLATION_TOLERANCE);
+    yController.setTolerance(TRANSLATION_TOLERANCE);
+    omegaController.setTolerance(Units.degreesToRadians(OMEGA_TOLERANCE));
+    omegaController.enableContinuousInput(-Math.PI, Math.PI);
+    addRequirements(subsystem);
+  }
+
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
       SmartDashboard.putNumber("AprTagPipeLine INIT", 0); 
+
+      var robotPose = poseProvider.get();
+      omegaController.reset(robotPose.getRotation().getRadians());
+      xController.reset(robotPose.getX());
+      yController.reset(robotPose.getY());
+  
+      omegaController.setTolerance(OMEGA_TOLERANCE);
+      xController.setTolerance(TRANSLATION_TOLERANCE);
+      yController.setTolerance(TRANSLATION_TOLERANCE);
+  
+      omegaController.setGoal(goalPose.getRotation().getRadians());
+      xController.setGoal(goalPose.getX());
+      yController.setGoal(goalPose.getY());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -74,20 +101,19 @@ public class DriveToPoseCommand extends CommandBase {
   public void execute() {
 
     var robotPose = poseProvider.get();
-    SmartDashboard.putNumber("PoseEstimation robotPose.X", robotPose.getX());
-    SmartDashboard.putNumber("PoseEstimation robotPose.Y", robotPose.getY());
-    SmartDashboard.putNumber("PoseEstimation robotPose.Angle", robotPose.getRotation().getRadians());
+    SmartDashboard.putNumber("DriveToPoseCommand robotPose.X", robotPose.getX());
+    SmartDashboard.putNumber("DriveToPoseCommand robotPose.Y", robotPose.getY());
+    SmartDashboard.putNumber("DriveToPoseCommand robotPose.Angle", robotPose.getRotation().getRadians());
 
-    if(goalSet == false){
-    xController.setGoal(robotPose.getX()+2);
-    yController.setGoal(robotPose.getY()+0.5);
-    omegaController.setGoal(robotPose.getRotation().getRadians());
-    goalSet=true;
-  }
+    SmartDashboard.putNumber("DriveToPoseCommand goalPose.X", goalPose.getX());
+    SmartDashboard.putNumber("DriveToPoseCommand goalPose.Y", goalPose.getY());
+    SmartDashboard.putNumber("DriveToPoseCommand goalPose.Angle", goalPose.getRotation().getRadians());
+
 
       var xSpeed = xController.calculate(robotPose.getX());
       if (xController.atGoal()) {
         xSpeed = 0;
+        
       }
       
       var ySpeed = yController.calculate(robotPose.getY());
@@ -103,21 +129,19 @@ public class DriveToPoseCommand extends CommandBase {
       ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
       SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-      drivetrainSubsystem.setModuleStates(moduleStates);
+       drivetrainSubsystem.setModuleStates(moduleStates);
     
-      if(xController.atGoal() && yController.atGoal() && omegaController.atGoal()){
-        targetReached = true;
-      }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrainSubsystem.stopModules();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return targetReached;
-
+       return xController.atGoal() && yController.atGoal() && omegaController.atGoal();
   }
 }
