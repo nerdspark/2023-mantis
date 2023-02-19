@@ -16,6 +16,7 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.FindMultipleAprilTags;
+import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -160,6 +161,28 @@ public class RobotContainer {
     Shuffleboard.getTab("Autonomous").add(chooser);
   }
 
+    /**
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+   * predicate, or via the named factories in {@link
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}.
+   */
+  private void configureButtonBindings() {
+
+    SmartDashboard.putString("Config", "Button Bindings");
+    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
+    // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(estimatePoseCommand);
+    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
+      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
+    
+      new JoystickButton(driverJoystick, Constants.buttonY).onTrue(
+        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,5));    
+  }
+
   public Command loadPathplannerTrajectoryToSwerveController(String filename, boolean resetOdomtry) { 
     // Trajectory trajectory;
     PathPlannerTrajectory trajectory = PathPlanner.loadPath(filename, new PathConstraints(1, 0.5));
@@ -227,24 +250,7 @@ public class RobotContainer {
 
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureButtonBindings() {
 
-    SmartDashboard.putString("Config", "Button Bindings");
-    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
-    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
-    // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(estimatePoseCommand);
-    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
-      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
-  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
