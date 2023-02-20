@@ -50,7 +50,6 @@ public class SwerveJoystickCmd extends CommandBase {
     public void initialize() {
         // swerveSubsystem.setGains();
         zeroHeading();
-        zeroHeading();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ChaseTagCommand extends CommandBase {
   //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
   private static final Transform3d TAG_TO_GOAL = 
       new Transform3d(
-          new Translation3d(1, 0.0, 0.0),
+          new Translation3d(0.5, 0.0, 0.0),
           new Rotation3d(0.0, 0.0, Math.PI));
 
   private final PhotonCamera photonCamera;
@@ -78,6 +78,10 @@ public class ChaseTagCommand extends CommandBase {
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
 
+    xController.setTolerance(0.2);
+    yController.setTolerance(0.2);
+    omegaController.setTolerance(Units.degreesToRadians(5));
+    omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
   }
 

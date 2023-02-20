@@ -49,10 +49,7 @@ public class DriveToPoseCommand extends CommandBase {
     this.goalPose = goalPose;
     SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
     // Use addRequirements() here to declare subsystem dependencies.
-    
-    xController.setTolerance(TRANSLATION_TOLERANCE);
-    yController.setTolerance(TRANSLATION_TOLERANCE);
-    omegaController.setTolerance(Units.degreesToRadians(OMEGA_TOLERANCE));
+       
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(subsystem);
   }
@@ -65,13 +62,17 @@ public class DriveToPoseCommand extends CommandBase {
   public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider) {
     this.drivetrainSubsystem = subsystem;
     this.poseProvider = poseProvider;
-    this.goalPose = new Pose2d(poseProvider.get().getX()+1, poseProvider.get().getY()+2, poseProvider.get().getRotation());
+    // this.goalPose = new Pose2d(poseProvider.get().getX()+2, poseProvider.get().getY()-1, poseProvider.get().getRotation());
+    
+    //Goto Origin, not working?
+    this.goalPose = new Pose2d(0, 0, poseProvider.get().getRotation());
+
     SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
     // Use addRequirements() here to declare subsystem dependencies.
     
+    omegaController.setTolerance(OMEGA_TOLERANCE);
     xController.setTolerance(TRANSLATION_TOLERANCE);
     yController.setTolerance(TRANSLATION_TOLERANCE);
-    omegaController.setTolerance(Units.degreesToRadians(OMEGA_TOLERANCE));
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
     addRequirements(subsystem);
   }
@@ -90,6 +91,8 @@ public class DriveToPoseCommand extends CommandBase {
       omegaController.setTolerance(OMEGA_TOLERANCE);
       xController.setTolerance(TRANSLATION_TOLERANCE);
       yController.setTolerance(TRANSLATION_TOLERANCE);
+      omegaController.enableContinuousInput(-Math.PI, Math.PI);
+
   
       omegaController.setGoal(goalPose.getRotation().getRadians());
       xController.setGoal(goalPose.getX());

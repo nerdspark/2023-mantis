@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.photonvision.PhotonCamera;
@@ -24,10 +25,10 @@ import frc.robot.Constants.DriveConstants;
 
 public class GoToTagCommand extends CommandBase {
   
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 1);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 1);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = 
-      new TrapezoidProfile.Constraints(4, 4);
+      new TrapezoidProfile.Constraints(8, 8);
   
   private  int tagToChase;
   //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
@@ -46,7 +47,9 @@ public class GoToTagCommand extends CommandBase {
 
   private PhotonTrackedTarget lastTarget;
 
-  boolean goalReached  = false;
+  boolean targetFound = false;
+
+
 
   public GoToTagCommand(
         PhotonCamera photonCamera, 
@@ -62,6 +65,7 @@ public class GoToTagCommand extends CommandBase {
     omegaController.setTolerance(Units.degreesToRadians(5));
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
+
     addRequirements(drivetrainSubsystem);
   }
 
@@ -74,15 +78,22 @@ public class GoToTagCommand extends CommandBase {
     SmartDashboard.putNumber("TagChaseInit robotPose.Y", robotPose.getY());
     SmartDashboard.putNumber("TagChaseInit robotPose.Angle", robotPose.getRotation().getRadians());
 
+
     omegaController.reset(robotPose.getRotation().getRadians());
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
 
+    xController.setTolerance(0.2);
+    yController.setTolerance(0.2);
+    omegaController.setTolerance(Units.degreesToRadians(5));
+    omegaController.enableContinuousInput(-Math.PI, Math.PI);
+    targetFound = false;
 
   }
 
   @Override
   public void execute() {
+
     var robotPose2d = poseProvider.get();
 
     var robotPose = 
@@ -92,17 +103,24 @@ public class GoToTagCommand extends CommandBase {
         0.0, 
         new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-    SmartDashboard.putNumber("TagChase robotPose.X", robotPose.getX());
-    SmartDashboard.putNumber("TagChase robotPose.Y", robotPose.getY());
-    SmartDashboard.putNumber("TagChase robotPose.Angle", robotPose2d.getRotation().getRadians());
+    SmartDashboard.putNumber("GoToTagCommand robotPose.X", robotPose.getX());
+    SmartDashboard.putNumber("GoToTagCommand robotPose.Y", robotPose.getY());
+    SmartDashboard.putNumber("GoToTagCommand robotPose.Angle", robotPose2d.getRotation().getRadians());
     var photonRes = photonCamera.getLatestResult();
+
     if (photonRes.hasTargets()) {
       // Find the tag we want to chase
-      var targetOpt = photonRes.getTargets().stream()
+
+      Optional<PhotonTrackedTarget> targetOpt = null;
+      if(targetFound == false) {
+        targetOpt = photonRes.getTargets().stream()
           .filter(t -> t.getFiducialId() == this.tagToChase)
           .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
           .findFirst();
+      }
+      if(targetOpt != null){
       if (targetOpt.isPresent()) {
+        targetFound = true;
         var target = targetOpt.get();
         if (!target.equals(lastTarget)) {
           // This is new target data, so recalculate the goal
@@ -119,14 +137,16 @@ public class GoToTagCommand extends CommandBase {
           var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
 
           // Drive
-          xController.setGoal(goalPose.getX());
-          yController.setGoal(goalPose.getY());
-          omegaController.setGoal(goalPose.getRotation().getRadians());
-          SmartDashboard.putNumber("TagChase goal Pose X", goalPose.getX());
-          SmartDashboard.putNumber("TagChase goal Pose Y", goalPose.getY());
-          SmartDashboard.putNumber("TagChase goal Pose Omega", goalPose.getRotation().getRadians());
+            xController.setGoal(goalPose.getX());
+            yController.setGoal(goalPose.getY());
+            omegaController.setGoal(goalPose.getRotation().getRadians());
+            SmartDashboard.putNumber("GoToTagCommand goal Pose X", goalPose.getX());
+            SmartDashboard.putNumber("GoToTagCommand goal Pose Y", goalPose.getY());
+            SmartDashboard.putNumber("GoToTagCommand goal Pose Omega", goalPose.getRotation().getRadians());
+          
         }      
       }
+    }
     }
    
     if (lastTarget == null) {
@@ -140,18 +160,25 @@ public class GoToTagCommand extends CommandBase {
       }
 
       var ySpeed = yController.calculate(robotPose.getY());
+
       if (yController.atGoal()) {
         ySpeed = 0;
       }
 
       var omegaSpeed = omegaController.calculate(robotPose2d.getRotation().getRadians());
+
       if (omegaController.atGoal()) {
         omegaSpeed = 0;
       }
 
+      SmartDashboard.putNumber("GoToTagCommand  X Speed", xSpeed);
+      SmartDashboard.putNumber("GoToTagCommand  Y Speed", ySpeed);
+      SmartDashboard.putNumber("GoToTagCommand Omega Speed", omegaSpeed);
+
       ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
           xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
       SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
       drivetrainSubsystem.setModuleStates(moduleStates);
     }
   
@@ -166,7 +193,12 @@ public class GoToTagCommand extends CommandBase {
   // // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+ 
     return xController.atGoal() && yController.atGoal() && omegaController.atGoal();
-  };
+    
+    
+    }
+
+  
 
   }

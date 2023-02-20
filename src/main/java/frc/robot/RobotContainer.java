@@ -6,18 +6,15 @@ package frc.robot;
 
 
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.AprTagCommand;
-import frc.robot.commands.Autos;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.ConeVisionCommand;
 import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.FindMultipleAprilTags;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
@@ -30,7 +27,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import org.photonvision.PhotonCamera;
@@ -55,10 +54,12 @@ public class RobotContainer {
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
+
+    public static final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+
       
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
-
 
   //Vision
   private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
@@ -69,12 +70,6 @@ public class RobotContainer {
   private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
   private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-
-  private final FindMultipleAprilTags aprTagCommandMultiple = new FindMultipleAprilTags(photonCamera,m_exampleSubsystem,1);
-
-  private final ExampleCommand exampleCommand = new ExampleCommand(m_exampleSubsystem);
-
-
   private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
   private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
   private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,1,poseEstimator::getCurrentPose);
@@ -108,7 +103,9 @@ public class RobotContainer {
     chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
     chooser.addOption("Line 2 Meters Command", new line2metersCommand());
-
+    chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
+                                              new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+                                              new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose)));
 
     Shuffleboard.getTab("Autonomous").add(chooser);
   }
@@ -125,28 +122,18 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     SmartDashboard.putString("Config", "Button Bindings");
+
+    //Print April tag info to Smart dashboard - Button A
     new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
-    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
-    // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(estimatePoseCommand);
+    //Chase Aril Tag Continuous - Button B
+    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
+    //Go to Origin -  Button X
     new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
       new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
-    
-      new JoystickButton(driverJoystick, Constants.buttonY).onTrue(
-        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,5));    
+    //Go to April Tag and Stop - Button Y
+      new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
+        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1));    
   }
-
-
-
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureButtonBindings() {}
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

@@ -5,7 +5,6 @@
 package frc.robot.commands.Auton;
 
 import frc.robot.commands.DriveFollowPath;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
@@ -15,7 +14,6 @@ public class line2metersCommand extends SequentialCommandGroup {
 
     addCommands(
       new DriveFollowPath("line2meters", 1, 0.5)
-      
     );
   }
 }
