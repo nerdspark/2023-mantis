@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -24,16 +25,13 @@ public class DriveToPoseCommand extends CommandBase {
   private final Supplier<Pose2d> poseProvider;
   private final Pose2d goalPose;
 
-  private static final double TRANSLATION_TOLERANCE = 0.2;
-  private static final double OMEGA_TOLERANCE = Units.degreesToRadians(5);
-
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 0.5);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = 
-      new TrapezoidProfile.Constraints(4, 4);
-  private final ProfiledPIDController xController = new ProfiledPIDController(2.5, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(2.5, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(1, 0, 0, OMEGA_CONSTRATINTS);
+      new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY_ROTATION, VisionConstants.MAX_ACCELARATION_ROTATION);
+  private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kPXController,VisionConstants.kIXController,VisionConstants.kIXController, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kPYController, VisionConstants.kIYController, VisionConstants.kDYController, Y_CONSTRAINTS);
+  private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kPThetaController,VisionConstants.kIThetaController,VisionConstants.kDThetaController, OMEGA_CONSTRATINTS);
 
   boolean targetReached = false;
   boolean goalSet;
@@ -43,40 +41,18 @@ public class DriveToPoseCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider, Pose2d goalPose) {
-    this.drivetrainSubsystem = subsystem;
+  public DriveToPoseCommand(SwerveSubsystem drivetrainSubsystem, Supplier<Pose2d> poseProvider, Pose2d goalPose) {
+    this.drivetrainSubsystem = drivetrainSubsystem;
     this.poseProvider = poseProvider;
     this.goalPose = goalPose;
     SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
-    // Use addRequirements() here to declare subsystem dependencies.
-       
+   
+    xController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
+    yController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
+    omegaController.setTolerance(VisionConstants.ROTATION_TOLERANCE);
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
-    addRequirements(subsystem);
+    addRequirements(drivetrainSubsystem);
   }
-
-    /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public DriveToPoseCommand(SwerveSubsystem subsystem, Supplier<Pose2d> poseProvider) {
-    this.drivetrainSubsystem = subsystem;
-    this.poseProvider = poseProvider;
-    // this.goalPose = new Pose2d(poseProvider.get().getX()+2, poseProvider.get().getY()-1, poseProvider.get().getRotation());
-    
-    //Goto Origin, not working?
-    this.goalPose = new Pose2d(0, 0, poseProvider.get().getRotation());
-
-    SmartDashboard.putNumber("FindEstimatedPoseCommand Constructor", 0);
-    // Use addRequirements() here to declare subsystem dependencies.
-    
-    omegaController.setTolerance(OMEGA_TOLERANCE);
-    xController.setTolerance(TRANSLATION_TOLERANCE);
-    yController.setTolerance(TRANSLATION_TOLERANCE);
-    omegaController.enableContinuousInput(-Math.PI, Math.PI);
-    addRequirements(subsystem);
-  }
-
 
   // Called when the command is initially scheduled.
   @Override
@@ -88,12 +64,7 @@ public class DriveToPoseCommand extends CommandBase {
       xController.reset(robotPose.getX());
       yController.reset(robotPose.getY());
   
-      omegaController.setTolerance(OMEGA_TOLERANCE);
-      xController.setTolerance(TRANSLATION_TOLERANCE);
-      yController.setTolerance(TRANSLATION_TOLERANCE);
-      omegaController.enableContinuousInput(-Math.PI, Math.PI);
-
-  
+       
       omegaController.setGoal(goalPose.getRotation().getRadians());
       xController.setGoal(goalPose.getX());
       yController.setGoal(goalPose.getY());

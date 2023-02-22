@@ -234,12 +234,12 @@ public final class Constants {
   }
 
   public static class VisionConstants {
-    public static final Transform3d robotToCam =
-            new Transform3d(
-                    new Translation3d(0.2, 0.0, 0.4),
-                    new Rotation3d(
-                            0, 0.524,
-                            0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+    // public static final Transform3d robotToCam =
+    //         new Transform3d(
+    //                 new Translation3d(0.2, 0.0, 0.4),
+    //                 new Rotation3d(
+    //                         0, 0.524,
+    //                         0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
    public static final String aprTagCameraName = "photonvision";
    public static final String coneCameraName = "USB_Web_Camera";
@@ -260,12 +260,29 @@ public final class Constants {
             new Transform2d(new Translation2d(0.2, 0.0), new Rotation2d(0.0));
 
                 /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
-    public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-    new Transform3d(new Translation3d(0.2, 0, -.90), new Rotation3d(0.0, 0.0, -0.10));
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+        new Transform3d(new Translation3d(0.2, 0, -0.90), new Rotation3d(0.0, 0.0, -0.1));
 
+      // Vision Drive Constants
 
-public static final double FIELD_LENGTH_METERS = 16.54175;
-public static final double FIELD_WIDTH_METERS = 8.0137;
+        public static final double TRANSLATION_TOLERANCE = 0.2;
+        public static final double ROTATION_TOLERANCE =5;
+
+        public static final double MAX_VELOCITY = 2;
+        public static final double MAX_ACCELARATION = 1;
+        public static final double MAX_VELOCITY_ROTATION = 8;
+        public static final double MAX_ACCELARATION_ROTATION = 8;
+
+        public static final double kPXController = 2.5d;
+        public static final double kIXController = 0d;
+        public static final double kDXController = 0d;
+        public static final double kPYController = 2.5d;
+        public static final double kIYController = 0d;
+        public static final double kDYController = 0d;
+        public static final double kPThetaController = 1d;
+        public static final double kIThetaController = 0d;
+        public static final double kDThetaController = 0d; 
+
 
       }
 

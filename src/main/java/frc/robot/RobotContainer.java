@@ -20,7 +20,8 @@ import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -105,7 +106,7 @@ public class RobotContainer {
     chooser.addOption("Line 2 Meters Command", new line2metersCommand());
     chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
                                               new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
-                                              new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose)));
+                                              new DriveToPoseCommand(swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
 
     Shuffleboard.getTab("Autonomous").add(chooser);
   }
@@ -129,7 +130,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
     //Go to Origin -  Button X
     new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
-      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose));
+      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d())));
     //Go to April Tag and Stop - Button Y
       new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
         new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1));    
@@ -137,7 +138,7 @@ public class RobotContainer {
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
+   * 
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
