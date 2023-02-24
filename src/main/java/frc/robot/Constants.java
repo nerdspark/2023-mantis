@@ -197,7 +197,29 @@ public final class Constants {
           kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
   }
 
+  public static class ArmConstants {
+    public static final int ElevatorMotor1ID = 0000;
+    public static final int ElevatorMotor2ID = 0000;
+    public static final int ArmMotor1ID = 0000;
+    public static final int ArmMotor2ID = 0000;
+    public static final int WristMotorID = 0000;
+    public static final int GripperMotor1ID = 0000;
+    public static final int GripperMotor2ID = 0000;
+    // Precalculated positions (in motor ticks):
+    // {Extension , angle between arm and hand, wrist rotation}
+    int[] intakeHopperPosition = {0000, 0000, 0000};
+    int[] intakeGroundPosition = {0000, 0000, 0000};
+    int[] intakeShelfPosition = {0000, 0000, 0000};
+    int[] scoreHighPosition = {0000, 0000, 0000};
+    int[] scoreMidPosition = {0000, 0000, 0000};
+    int[] scoreLowPosition = {0000, 0000, 0000};
 
+    static int gripBoxTicks = 0000;
+    static int gripConeTicks = 0000;
+    static int microAdjustArmTicks = 0000;
+    static int microAdjustElevatorTicks = 0000;
+    static int microAdjustWristTicks = 0000;
+  }
 
   public static final class OIConstants {
       public static final int kDriverControllerPort = 0;
