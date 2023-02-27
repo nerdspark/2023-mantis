@@ -12,7 +12,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /** An example command that uses an example subsystem. */
-public class ThreeElement extends SequentialCommandGroup {
+public class threeMeterVisionTest extends SequentialCommandGroup {
 
   public Command loadPathPlannerTrajectoryCommand(String filename, boolean resetOdometry){
           // 1. Load file and apply constraints
@@ -35,7 +34,6 @@ public class ThreeElement extends SequentialCommandGroup {
     PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
     ProfiledPIDController thetaController = new ProfiledPIDController(
             AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
-    // PIDController thetaController = new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController);
     thetaController.enableContinuousInput(-Math.PI, Math.PI); // -Math.PI or -180?
   
     // 3. Construct command to follow trajectory with WPILIB trajectory follower
@@ -49,22 +47,10 @@ public class ThreeElement extends SequentialCommandGroup {
             RobotContainer.getSwerveSubsystem()::setModuleStates,
             RobotContainer.getSwerveSubsystem());
 
-    // PPSwerveControllerCommand ppSwerveControllerCommand = new PPSwerveControllerCommand(
-    //     trajectory,
-    //     RobotContainer.getSwerveSubsystem()::getPose(),
-    //     DriveConstants.kDriveKinematics,
-    //     xController, 
-    //     yController, 
-    //     thetaController, 
-    //     RobotContainer.getSwerveSubsystem()::setModuleStates,
-    //     RobotContainer.getSwerveSubsystem());
-
-
-
     // 4. Run path following command and stop at the end.
     if (resetOdometry) {
       return new SequentialCommandGroup(
-          new InstantCommand(() -> RobotContainer.getSwerveSubsystem().resetOdometry(trajectory.getInitialHolonomicPose())),
+          new InstantCommand(() -> RobotContainer.getSwerveSubsystem().resetOdometry(trajectory.getInitialPose())),
           swerveControllerCommand);
     } else {
       return swerveControllerCommand;
@@ -72,13 +58,11 @@ public class ThreeElement extends SequentialCommandGroup {
 
   }
 
-  public ThreeElement(SwerveSubsystem swerveSubsystem){
+  public threeMeterVisionTest(SwerveSubsystem swerveSubsystem){
 
     addCommands(
-      loadPathPlannerTrajectoryCommand("threeConePathOne", true),
-      loadPathPlannerTrajectoryCommand("threeConePathTwo", false),
-      loadPathPlannerTrajectoryCommand("threeConePathThree", false),
-      loadPathPlannerTrajectoryCommand("threeConePathFour", false)
+      loadPathPlannerTrajectoryCommand("threeMeterVisionTest", true)
+      
     );
   }
 }

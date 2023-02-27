@@ -9,15 +9,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
-public class line2metersCommand extends SequentialCommandGroup {
+public class threeMeterVisionTestCommand extends SequentialCommandGroup {
 
   // public line2metersCommand(SwerveSubsystem swervesubsystem) {
   // }
 
-  public line2metersCommand(SwerveSubsystem swerveSubsystem){
+  public threeMeterVisionTestCommand(SwerveSubsystem swerveSubsystem){
 
     addCommands(
-      new DriveFollowPath("line2meters", 1, 0.5, true)
+      new DriveFollowPath("threeMeterVisionTest", 1, 0.5)
     );
   }
 
