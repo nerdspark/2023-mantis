@@ -214,11 +214,11 @@ public final class Constants {
     int[] scoreMidPosition = {0000, 0000, 0000};
     int[] scoreLowPosition = {0000, 0000, 0000};
 
-    static int gripBoxTicks = 0000;
-    static int gripConeTicks = 0000;
-    static int microAdjustArmTicks = 0000;
-    static int microAdjustElevatorTicks = 0000;
-    static int microAdjustWristTicks = 0000;
+    public static int gripBoxTicks = 0000;
+    public static int gripConeTicks = 0000;
+    public static int microAdjustArmTicks = 0000;
+    public static int microAdjustElevatorTicks = 0000;
+    public static int microAdjustWristTicks = 0000;
   }
 
   public static final class OIConstants {
