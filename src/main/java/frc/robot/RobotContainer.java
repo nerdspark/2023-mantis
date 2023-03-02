@@ -22,6 +22,7 @@ import frc.robot.commands.Auton.line2metersTurn;
 import frc.robot.commands.Auton.threeElementCommand;
 import frc.robot.commands.Auton.threeMeterVisionTest;
 import frc.robot.commands.Auton.threeMeterVisionTestCommand;
+import frc.robot.commands.Auton.twoConeWithVision;
 import frc.robot.commands.Auton.visionTest5M;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -115,6 +116,9 @@ public class RobotContainer {
     chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
 
     chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+
+
+    chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
     // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
     //     new visionTest5M(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
 
