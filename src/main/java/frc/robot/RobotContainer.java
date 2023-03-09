@@ -13,6 +13,7 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.ArmJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
@@ -20,6 +21,7 @@ import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -51,9 +53,15 @@ public class RobotContainer {
 
     private static final XboxController cont = new XboxController(Constants.controllerPort);
 
+    private static final XboxController cont2 = new XboxController(Constants.controllerPort2);
+
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
+    public static final ArmSubsystem armSubsystem = new ArmSubsystem();
+
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
+
+    private final Joystick coDriverJoystick = new Joystick(OIConstants.kCoDriverControllerPort);
 
     public static final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -96,9 +104,22 @@ public class RobotContainer {
       () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
-      // Configure the button bindings
+    // Configure the button bindings
     configureButtonBindings();
 
+    armSubsystem.setDefaultCommand(new ArmJoystickCmd(
+      armSubsystem,
+      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis),
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverXAxis),
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
+      () -> !coDriverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
+      () -> coDriverJoystick.getPOV(), 
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
+      () -> coDriverJoystick.getRawButton(Constants.buttonY), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
     chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
@@ -146,5 +167,9 @@ public class RobotContainer {
 
   public static SwerveSubsystem getSwerveSubsystem(){
     return swerveSubsystem;
+  }
+
+  public static ArmSubsystem getArmSubsystem(){
+    return armSubsystem;
   }
 }

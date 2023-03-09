@@ -8,6 +8,7 @@ import frc.robot.Constants.ArmConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.*;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
@@ -96,5 +97,7 @@ public class ArmSubsystem {
         WristMotorPIDController.setReference(EncoderWristMotor.getPosition() + multiplier * ArmConstants.microAdjustWristTicks, CANSparkMax.ControlType.kPosition);
     }
 
+    public void setArmSpeed(double speed) {
+    }
 
 }

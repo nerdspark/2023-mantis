@@ -32,6 +32,7 @@ public final class Constants {
   public static final int sensor1ID = 21;
   public static final int motorr1ID = 12;
   public static final int controllerPort = 0;
+  public static final int controllerPort2 = 1;
   public static final int pigeonPort = 25;
 
   //JoyStick buttons
@@ -223,6 +224,7 @@ public final class Constants {
 
   public static final class OIConstants {
       public static final int kDriverControllerPort = 0;
+      public static final int kCoDriverControllerPort = 1;
 
       public static final int kDriverYAxis = 5;
       public static final int kDriverXAxis = 4;
