@@ -21,14 +21,15 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.VisionConstants;
 
 
 public class GoToTagCommand extends CommandBase {
   
-  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 1);
-  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(2, 1);
+  private static final TrapezoidProfile.Constraints X_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
+  private static final TrapezoidProfile.Constraints Y_CONSTRAINTS = new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = 
-      new TrapezoidProfile.Constraints(8, 8);
+      new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY_ROTATION, VisionConstants.MAX_ACCELARATION_ROTATION);
   
   private  int tagToChase;
   //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
@@ -41,14 +42,13 @@ public class GoToTagCommand extends CommandBase {
   private final SwerveSubsystem drivetrainSubsystem;
   private final Supplier<Pose2d> poseProvider;
 
-  private final ProfiledPIDController xController = new ProfiledPIDController(2.5, 0, 0, X_CONSTRAINTS);
-  private final ProfiledPIDController yController = new ProfiledPIDController(2.5, 0, 0, Y_CONSTRAINTS);
-  private final ProfiledPIDController omegaController = new ProfiledPIDController(1, 0, 0, OMEGA_CONSTRATINTS);
+  private final ProfiledPIDController xController = new ProfiledPIDController(VisionConstants.kPXController,VisionConstants.kIXController,VisionConstants.kIXController, X_CONSTRAINTS);
+  private final ProfiledPIDController yController = new ProfiledPIDController(VisionConstants.kPYController, VisionConstants.kIYController, VisionConstants.kDYController, Y_CONSTRAINTS);
+  private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kPThetaController,VisionConstants.kIThetaController,VisionConstants.kDThetaController, OMEGA_CONSTRATINTS);
 
   private PhotonTrackedTarget lastTarget;
 
   boolean targetFound = false;
-
 
 
   public GoToTagCommand(
@@ -60,9 +60,9 @@ public class GoToTagCommand extends CommandBase {
     this.poseProvider = poseProvider;
     this.tagToChase=tagToChase;
 
-    xController.setTolerance(0.2);
-    yController.setTolerance(0.2);
-    omegaController.setTolerance(Units.degreesToRadians(5));
+    xController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
+    yController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
+    omegaController.setTolerance(VisionConstants.ROTATION_TOLERANCE);
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
 
@@ -83,10 +83,6 @@ public class GoToTagCommand extends CommandBase {
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
 
-    xController.setTolerance(0.2);
-    yController.setTolerance(0.2);
-    omegaController.setTolerance(Units.degreesToRadians(5));
-    omegaController.enableContinuousInput(-Math.PI, Math.PI);
     targetFound = false;
 
   }
@@ -117,8 +113,7 @@ public class GoToTagCommand extends CommandBase {
           .filter(t -> t.getFiducialId() == this.tagToChase)
           .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
           .findFirst();
-      }
-      if(targetOpt != null){
+      }if(targetOpt != null){
       if (targetOpt.isPresent()) {
         targetFound = true;
         var target = targetOpt.get();

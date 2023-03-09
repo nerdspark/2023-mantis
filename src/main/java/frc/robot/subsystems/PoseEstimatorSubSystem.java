@@ -1,10 +1,6 @@
 package frc.robot.subsystems;
 
 import static frc.robot.Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT;
-import static frc.robot.Constants.VisionConstants.FIELD_LENGTH_METERS;
-import static frc.robot.Constants.VisionConstants.FIELD_WIDTH_METERS;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.photonvision.PhotonCamera;
@@ -151,8 +147,8 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
         var estimatedPose = estimatedRobotPose.estimatedPose;
         // Make sure we have a new measurement, and that it's on the field
         if (estimatedRobotPose.timestampSeconds != previousPipelineTimestamp
-            && estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FIELD_LENGTH_METERS
-            && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FIELD_WIDTH_METERS) {
+            && estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FieldConstants.fieldLength
+            && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FieldConstants.fieldWidth) {
           previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
           poseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
         }
@@ -208,7 +204,7 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
    */
   private Pose2d flipAlliance(Pose2d poseToFlip) {
     return poseToFlip.relativeTo(new Pose2d(
-      new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS),
+      new Translation2d(FieldConstants.fieldLength, FieldConstants.fieldWidth),
       new Rotation2d(Math.PI)));
   }
 
