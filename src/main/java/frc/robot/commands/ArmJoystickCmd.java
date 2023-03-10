@@ -4,42 +4,52 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ArmSubsystem;
+
 
 public class ArmJoystickCmd extends CommandBase {
-    private final SwerveSubsystem armSubsystem;
-    private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
-    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed;
+
+    private final ArmSubsystem armSubsystem;
+    private final Supplier<Double> ArmMicroAdjust, WristMicroAdjust;
+    private final Supplier<Boolean> isBucketPickup, isGroundPickup, isShelfPickup, isGroundDrop, isMidDrop, isHighDrop;
     private final Supplier<Integer> DPAD;
-    private final Supplier<Double> leftTrigger;
-    private final Supplier<Double> rightTrigger;
-    private final SlewRateLimiter speedLimiter, turningLimiter;
     private final PIDController targetTurnController = new PIDController(DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
 
-    public ArmJoystickCmd() {
-            
+    public ArmJoystickCmd(ArmSubsystem armSubsystem,
+            Supplier<Double> ArmMicroAdjust, Supplier<Double> WristMicroAdjust,
+            Supplier<Boolean> isBucketPickup, Supplier<Boolean> isGroundDrop, Supplier<Boolean> isMidDrop, Supplier<Boolean> isHighDrop, Supplier<Integer> DPAD, Supplier<Boolean> isGroundPickup, Supplier<Boolean> isShelfPickup) {
+        this.armSubsystem = armSubsystem;
+        this.ArmMicroAdjust = ArmMicroAdjust;
+        this.WristMicroAdjust = WristMicroAdjust;
+        this.isBucketPickup = isBucketPickup;
+        this.isGroundDrop = isGroundDrop;
+        this.isMidDrop = isMidDrop;
+        this.isHighDrop = isHighDrop;
+        this.DPAD = DPAD;
+        this.isGroundPickup = isGroundPickup;
+        this.isShelfPickup = isShelfPickup;
+        addRequirements(armSubsystem);
     }
 
+    @Override
+    public void initialize() {
+        
+    }
 
-    private double targetAngle;
+    @Override
+    public void execute() {
+        
+    }
 
-    public SwerveJoystickCmd(ArmSubsystem armSubsystem, Joystick joystick) {
-        xSpdFunction = () -> joystick.getRawAxis(0);
-        ySpdFunction = () -> joystick.getRawAxis(1);
-        turningTargX = () -> joystick.getRawAxis(4);
-        turningTargY = () -> joystick.getRawAxis(5);
-        fieldOrientedFunction = () -> joystick.getRawButton(1);
-        resetGyroButton = () -> joystick.getRawButton(2);
-        cancelTurn = () -> joystick.getRawButton(3);
-        topSpeed = () -> joystick.getRawButton(4);
-        DPAD = () -> joystick.getPOV();
-        leftTrigger = () -> joystick.getRawAxis(2);
-        rightTrigger = () -> joystick.getRawAxis(3);
-        this.armSubsystem = armSubsystem;
-        addRequirements(armSubsystem);
-
-        speedLimiter = new SlewRateLimiter(DriveConstants.kMaxSpeedChange);
-        turningLimiter = new SlewRateLimiter(DriveConstants.kMaxTurningChange);
-    };
+    @Override
+    public void end(boolean interrupted) {
+        // swerveSubsystem.stopModules();
+    }
+    
+}

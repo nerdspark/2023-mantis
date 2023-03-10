@@ -35,19 +35,6 @@ public final class Constants {
   public static final int controllerPort2 = 1;
   public static final int pigeonPort = 25;
 
-  //JoyStick buttons
-  public static final int buttonA = 1;
-  public static final int buttonB = 2;
-  public static final int buttonX = 3;
-  public static final int buttonY = 4;
-  public static final int leftBumper = 5;
-  public static final int rightBumper = 6;
-  public static final int back = 7;
-  public static final int start = 8;
-  public static final int leftStick = 9;
-  public static final int rightStick = 10;
-
-
 
   public static final class ModuleConstants {
       public static final double kWheelDiameterMeters = Units.inchesToMeters(4);//TODO: figure out right number
@@ -199,42 +186,65 @@ public final class Constants {
   }
 
   public static class ArmConstants {
-    public static final int ElevatorMotor1ID = 0000;
-    public static final int ElevatorMotor2ID = 0000;
-    public static final int ArmMotor1ID = 0000;
-    public static final int ArmMotor2ID = 0000;
-    public static final int WristMotorID = 0000;
-    public static final int GripperMotor1ID = 0000;
-    public static final int GripperMotor2ID = 0000;
+    public static final int InclinovatorMotor1ID = 1; //position mode
+    public static final int InclinovatorMotor2ID = 2; //Slave to 1
+    public static final int GripperMotorRID = 4; // POsition
+    public static final int GripperMotorLID = 5; // position
+    public static final int ArmMotorRID = 6; // inverted slave
+    public static final int ArmMotorLID = 7; // position
+    public static final int BucketMotorLID = 8; // position
+    public static final int BucketMotorRID = 9; // position
+    public static final int WristMotorID = 10;  // motion profiling
     // Precalculated positions (in motor ticks):
-    // {Extension , angle between arm and hand, wrist rotation}
-    int[] intakeHopperPosition = {0000, 0000, 0000};
-    int[] intakeGroundPosition = {0000, 0000, 0000};
-    int[] intakeShelfPosition = {0000, 0000, 0000};
-    int[] scoreHighPosition = {0000, 0000, 0000};
-    int[] scoreMidPosition = {0000, 0000, 0000};
-    int[] scoreLowPosition = {0000, 0000, 0000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, out bucket cmd pos, in bucket cmd pos, initial gripper pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos}
+    double[] intakeBucketPosition = {0, 0, 1, -0.07, 0.07, -0.2, 15, -10, -10, 3};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, initial gripper pos, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smartmotion max velocity, smart motion max accel}
+    double[] intakeGroundPosition = {0, 135, 0, 0.05, 75, -12, 0, 3, 3, 5500, 9000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
+    double[] intakeShelfPosition = {0, 85, 0, 0.1, 75, -9, -9, 3, 3, 5500, 9000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
+    double[] scoreHighPosition = {-4, 75, 18.9, 0.1, 70, 3, -12, 3, 3, 5500, 9000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
+    double[] scoreMidPosition = {-4, 80, 2, 0.1, 50, 3, -12, 3, 3, 5500, 9000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
+    double[] scoreGroundPosition = {0, 156, 0, 0.1, 75, 3, 3, -1, -1, 5500, 9000};
+    // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
+    double[] homePos = {0, 0, 0, 0.07, -12, -12, 3, 3, 2500, 4000};
+    // finally constant so saves us the PTA... {Kp, Max, Ki, Min, Kd, Max i, Ki zone, Min i}
+    double[] PIDconstants = {0.018, 1, 0, -1, 0.002, 100, 5, -100};
 
-    public static int gripBoxTicks = 0000;
-    public static int gripConeTicks = 0000;
-    public static int microAdjustArmTicks = 0000;
-    public static int microAdjustElevatorTicks = 0000;
-    public static int microAdjustWristTicks = 0000;
+    public static int SmartMotionMaxVel = 2500;
+    public static int SmartMotionMaxAccel = 4000;
+    public static double BucketInSensorPosition = 0.214286;
+    public static double BucketInCommandPosition = 0.07;
+
+    // P Gain, I Gain, D Gain, F Gain, I Zone, Min Output, Max Output
+    double[] GripperLGains = {0.3, 0, 0, 0, 0, -1, 1};
+    double[] GripperRGains = {0.3, 0, 0, 0, 0, -1, 1};
+    double[] WristGains = {0.4, 0, 0, 0, 0, -0.5, 0.5};
+    double[] BucketGains = {0.4, 0, 0, 0, 0, -0.25, 0.25};
   }
 
   public static final class OIConstants {
       public static final int kDriverControllerPort = 0;
       public static final int kCoDriverControllerPort = 1;
 
-      public static final int kDriverYAxis = 5;
-      public static final int kDriverXAxis = 4;
-      public static final int kDriverRotXAxis = 0;
-      public static final int kDriverRotYAxis = 1;
-      public static final int kDriverFieldOrientedButtonIdx = 2;
+      // triggers
       public static final int kDriverLeftTrigger = 2;
       public static final int kDriverRightTrigger = 3;
-      public static final int kDriverCancelTurn = 7;//back button
-      public static final int kDriverTopSpeed = 5;//left bumper
+      // joysticks
+      public static final int kDriverRightXAxis = 4;
+      public static final int kDriverRightYAxis = 5;
+      public static final int kDriverLeftXAxis = 0;
+      public static final int kDriverLeftYAxis = 1;
+      // buttons
+      public static final int kDriverButtonA = 1;
+      public static final int kDriverButtonB = 2;
+      public static final int kDriverButtonX = 3;
+      public static final int kDriverButtonY = 4;
+      public static final int kDriverLeftBumper = 5;
+      public static final int kDriverRightBumper = 6;  
+      public static final int kDriverBackButton = 7;
 
       public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.03d;

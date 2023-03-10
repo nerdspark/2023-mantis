@@ -21,6 +21,7 @@ import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -31,6 +32,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 import org.photonvision.PhotonCamera;
 
@@ -90,34 +93,33 @@ public class RobotContainer {
     // Configure the trigger bindings
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
       swerveSubsystem,
-      () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
-      () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
+      () -> -driverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRightXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(Constants.buttonY), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
+      () -> driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverBackButton), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverLeftBumper)));
+
+    // Configure Copilot trigger bindings (arm control)
+    armSubsystem.setDefaultCommand(new ArmJoystickCmd(
+      armSubsystem,
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),  
+      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonA), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonB), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonX), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonY), 
+      () -> coDriverJoystick.getPOV(), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverLeftBumper), 
+      () -> coDriverJoystick.getRawButton(OIConstants.kDriverRightBumper)));
 
     // Configure the button bindings
     configureButtonBindings();
-
-    armSubsystem.setDefaultCommand(new ArmJoystickCmd(
-      armSubsystem,
-      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis),
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverXAxis),
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
-      () -> !coDriverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
-      () -> coDriverJoystick.getPOV(), 
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> coDriverJoystick.getRawButton(Constants.buttonY), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
     chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
@@ -143,14 +145,14 @@ public class RobotContainer {
     SmartDashboard.putString("Config", "Button Bindings");
 
     //Print April tag info to Smart dashboard - Button A
-    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    new JoystickButton(driverJoystick, OIConstants.kDriverButtonA).onTrue(aprTagCommand);
     //Chase Aril Tag Continuous - Button B
-    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
+    new JoystickButton(driverJoystick, OIConstants.kDriverButtonB).onTrue(chaseTagCommand);    
     //Go to Origin -  Button X
-    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
+    new JoystickButton(driverJoystick, OIConstants.kDriverButtonX).onTrue(
       new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d())));
     //Go to April Tag and Stop - Button Y
-      new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
+      new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
         new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1));    
   }
 
