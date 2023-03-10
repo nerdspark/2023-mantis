@@ -16,6 +16,7 @@ import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.ArmJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
@@ -59,6 +60,8 @@ public class RobotContainer {
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     public static final ArmSubsystem armSubsystem = new ArmSubsystem();
+
+    public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -108,6 +111,7 @@ public class RobotContainer {
     // Configure Copilot trigger bindings (arm control)
     armSubsystem.setDefaultCommand(new ArmJoystickCmd(
       armSubsystem,
+      gripperSubsystem,
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),  
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
       () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonA), 
