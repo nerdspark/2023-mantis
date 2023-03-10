@@ -197,21 +197,21 @@ public final class Constants {
     public static final int WristMotorID = 10;  // motion profiling
     // Precalculated positions (in motor ticks):
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, out bucket cmd pos, in bucket cmd pos, initial gripper pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos}
-    double[] intakeBucketPosition = {0, 0, 1, -0.07, 0.07, -0.2, 15, -10, -10, 3};
+    public static final double[] intakeBucketPosition = {0, 0, 1, -0.07, 0.07, -0.2, 15, -10, -10, 3};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, initial gripper pos, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smartmotion max velocity, smart motion max accel}
-    double[] intakeGroundPosition = {0, 135, 0, 0.05, 75, -12, 0, 3, 3, 5500, 9000};
+    public static final double[] intakeGroundPosition = {0, 135, 0, 0.05, 75, -12, 0, 3, 3, 5500, 9000};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
-    double[] intakeShelfPosition = {0, 85, 0, 0.1, 75, -9, -9, 3, 3, 5500, 9000};
+    public static final double[] intakeShelfPosition = {0, 85, 0, 0.1, 75, -9, -9, 3, 3, 5500, 9000};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
-    double[] scoreHighPosition = {-4, 75, 18.9, 0.1, 70, 3, -12, 3, 3, 5500, 9000};
+    public static final double[] scoreHighPosition = {-4, 75, 18.9, 0.1, 70, 3, -12, 3, 3, 5500, 9000};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
-    double[] scoreMidPosition = {-4, 80, 2, 0.1, 50, 3, -12, 3, 3, 5500, 9000};
+    public static final double[] scoreMidPosition = {-4, 80, 2, 0.1, 50, 3, -12, 3, 3, 5500, 9000};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, restractdelay, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
-    double[] scoreGroundPosition = {0, 156, 0, 0.1, 75, 3, 3, -1, -1, 5500, 9000};
+    public static final double[] scoreGroundPosition = {0, 156, 0, 0.1, 75, 3, 3, -1, -1, 5500, 9000};
     // {wrist cmd pos, arm cmd pos, inclinator cmd pos, bucket cmd pos, left gripper open cmd pos, right gripper open cmd pos, left gripper close cmd pos, right gripper close cmd pos, smart motion max vel, smart motion max accel}
-    double[] homePos = {0, 0, 0, 0.07, -12, -12, 3, 3, 2500, 4000};
+    public static final double[] homePos = {0, 0, 0, 0.07, -12, -12, 3, 3, 2500, 4000};
     // finally constant so saves us the PTA... {Kp, Max, Ki, Min, Kd, Max i, Ki zone, Min i}
-    double[] PIDconstants = {0.018, 1, 0, -1, 0.002, 100, 5, -100};
+    public static final double[] PIDconstants = {0.018, 1, 0, -1, 0.002, 100, 5, -100};
 
     public static int SmartMotionMaxVel = 2500;
     public static int SmartMotionMaxAccel = 4000;
@@ -219,10 +219,10 @@ public final class Constants {
     public static double BucketInCommandPosition = 0.07;
 
     // P Gain, I Gain, D Gain, F Gain, I Zone, Min Output, Max Output
-    double[] GripperLGains = {0.3, 0, 0, 0, 0, -1, 1};
-    double[] GripperRGains = {0.3, 0, 0, 0, 0, -1, 1};
-    double[] WristGains = {0.4, 0, 0, 0, 0, -0.5, 0.5};
-    double[] BucketGains = {0.4, 0, 0, 0, 0, -0.25, 0.25};
+    public static final double[] GripperLGains = {0.3, 0, 0, 0, 0, -1, 1};
+    public static final double[] GripperRGains = {0.3, 0, 0, 0, 0, -1, 1};
+    public static final double[] WristGains = {0.4, 0, 0, 0, 0, -0.5, 0.5};
+    public static final double[] BucketGains = {0.4, 0, 0, 0, 0, -0.25, 0.25};
 
     public static int gripBoxTicks = 0000;
     public static int gripConeTicks = 0000;
