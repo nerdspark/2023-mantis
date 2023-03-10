@@ -215,6 +215,9 @@ public final class Constants {
     int[] scoreMidPosition = {0000, 0000, 0000};
     int[] scoreLowPosition = {0000, 0000, 0000};
 
+    public static int SmartMotionMaxVel = 2500;
+    public static int SmartMotionMaxAccel = 4000;
+
     public static int gripBoxTicks = 0000;
     public static int gripConeTicks = 0000;
     public static int microAdjustArmTicks = 0000;
