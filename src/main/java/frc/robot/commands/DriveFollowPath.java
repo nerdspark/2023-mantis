@@ -6,10 +6,12 @@ package frc.robot.commands;
 
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.DriveConstants;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;
@@ -17,6 +19,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -26,7 +29,7 @@ public class DriveFollowPath extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 //   private final SwerveSubsystem swerveSubsystem;
   private final PathPlannerTrajectory trajectory;
-  private final HolonomicDriveController swerveController;
+  private final PPHolonomicDriveController swerveController;
   private final boolean resetOdometry;
   private final String pathName;
   public final Timer timer = new Timer();
@@ -41,16 +44,17 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel){
 }
 
 public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean resetOdometry){
-  addRequirements(RobotContainer.swerveSubsystem);
+  addRequirements(RobotContainer.getSwerveSubsystem());
 
   this.trajectory = PathPlanner.loadPath(pathName, maxVel, maxAccel);
 
   PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
   PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kDYController);
-  ProfiledPIDController thetaController = new ProfiledPIDController(
-            AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  // ProfiledPIDController thetaController = new ProfiledPIDController(
+  //           AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController, AutoConstants.kThetaControllerConstraints);
+  PIDController thetaController = new PIDController(AutoConstants.kPThetaController, AutoConstants.kIThetaController, AutoConstants.kDThetaController);
   thetaController.enableContinuousInput(-Math.PI, Math.PI);
-  this.swerveController = new HolonomicDriveController(xController, yController, thetaController);
+  this.swerveController = new PPHolonomicDriveController(xController, yController, thetaController);
   this.resetOdometry = resetOdometry;
 
   this.pathName = pathName;
@@ -72,11 +76,13 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    RobotContainer.swerveSubsystem.enableBrakeMode(true);
+    RobotContainer.getSwerveSubsystem().enableBrakeMode(true);
     timer.reset();
     timer.start();
     Pose2d initialPose = trajectory.getInitialHolonomicPose();
-    if(resetOdometry) RobotContainer.swerveSubsystem.resetOdometry(new Pose2d(initialPose.getTranslation(), RobotContainer.swerveSubsystem.getRotation2d()));
+    // if(resetOdometry) RobotContainer.getSwerveSubsystem().resetOdometry(new Pose2d(initialPose.getTranslation(),
+    //  RobotContainer.getSwerveSubsystem().getRotation2d()));
+    if(resetOdometry) RobotContainer.getSwerveSubsystem().resetOdometry(initialPose);
 
   }
 
@@ -85,18 +91,23 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
   public void execute() {
     double time = timer.get();
     PathPlannerState desiredState = (PathPlannerState) trajectory.sample(time);
-    ChassisSpeeds targetSpeeds = swerveController.calculate(RobotContainer.swerveSubsystem.getPose(), desiredState, new Rotation2d(desiredState.holonomicRotation.getRadians()));
+    ChassisSpeeds targetSpeeds = swerveController.calculate(RobotContainer.getSwerveSubsystem().getPose(), desiredState);
+    // ChassisSpeeds targetSpeeds = swerveController.calculate(RobotContainer.getSwerveSubsystem().getPose(), desiredState,
+    //  new Rotation2d(desiredState.holonomicRotation.getRadians()));
 
-    targetSpeeds.vyMetersPerSecond = -targetSpeeds.vyMetersPerSecond;
-    targetSpeeds.omegaRadiansPerSecond = -targetSpeeds.omegaRadiansPerSecond;
+    // targetSpeeds.vyMetersPerSecond = -targetSpeeds.vyMetersPerSecond;
+    // targetSpeeds.omegaRadiansPerSecond = -targetSpeeds.omegaRadiansPerSecond;
 
-    Pose2d currentPose = RobotContainer.swerveSubsystem.getPose();
+    Pose2d currentPose = RobotContainer.getSwerveSubsystem().getPose();
     String tString = " [" + Math.round(timer.get() * 100) / 100.0 + "]";
     System.out.println(pathName + tString + " x error: " + (desiredState.poseMeters.getX() - currentPose.getX()));
     System.out.println(pathName + tString + " y error: " + (desiredState.poseMeters.getY() - currentPose.getY()));
     System.out.println(pathName + tString + " r error: " + (desiredState.holonomicRotation.getDegrees() - currentPose.getRotation().getDegrees()));
 
-    RobotContainer.swerveSubsystem.driveSwerveDrive(targetSpeeds);
+    // RobotContainer.getSwerveSubsystem().driveSwerveDrive(targetSpeeds);
+
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds  );
+    RobotContainer.getSwerveSubsystem().setModuleStates(moduleStates);
 
 
   }
@@ -105,7 +116,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
   @Override
   public void end(boolean interrupted) {
     timer.stop();
-    RobotContainer.swerveSubsystem.stopModules();
+    RobotContainer.getSwerveSubsystem().stopModules();
   }
 
   // Returns true when the command should end.

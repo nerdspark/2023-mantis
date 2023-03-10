@@ -39,18 +39,18 @@ public class line2meters extends SequentialCommandGroup {
     // 3. Construct command to follow trajectory with WPILIB trajectory follower
     SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
             trajectory,
-            RobotContainer.swerveSubsystem::getPose,
+            RobotContainer.getSwerveSubsystem()::getPose,
             DriveConstants.kDriveKinematics,
             xController,
             yController,
             thetaController,
-            RobotContainer.swerveSubsystem::setModuleStates,
-            RobotContainer.swerveSubsystem);
+            RobotContainer.getSwerveSubsystem()::setModuleStates,
+            RobotContainer.getSwerveSubsystem());
 
     // 4. Run path following command and stop at the end.
     if (resetOdometry) {
       return new SequentialCommandGroup(
-          new InstantCommand(() -> RobotContainer.swerveSubsystem.resetOdometry(trajectory.getInitialPose())),
+          new InstantCommand(() -> RobotContainer.getSwerveSubsystem().resetOdometry(trajectory.getInitialPose())),
           swerveControllerCommand);
     } else {
       return swerveControllerCommand;

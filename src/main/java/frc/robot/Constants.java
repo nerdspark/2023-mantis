@@ -4,7 +4,13 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.CoordinateAxis;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -26,10 +32,20 @@ public final class Constants {
   public static final int sensor1ID = 21;
   public static final int motorr1ID = 12;
   public static final int controllerPort = 0;
-  public static final int buttonA = 1;
   public static final int pigeonPort = 25;
 
+  //JoyStick buttons
+  public static final int buttonA = 1;
+  public static final int buttonB = 2;
+  public static final int buttonX = 3;
   public static final int buttonY = 4;
+  public static final int leftBumper = 5;
+  public static final int rightBumper = 6;
+  public static final int back = 7;
+  public static final int start = 8;
+  public static final int leftStick = 9;
+  public static final int rightStick = 10;
+
 
 
   public static final class ModuleConstants {
@@ -172,7 +188,7 @@ public final class Constants {
       public static final double kPYController = 2.5d;
       public static final double kIYController = 0d;
       public static final double kDYController = 0d;
-      public static final double kPThetaController = 1d;
+      public static final double kPThetaController = 2.5d;
       public static final double kIThetaController = 0d;
       public static final double kDThetaController = 0d;
   
@@ -216,4 +232,60 @@ public final class Constants {
       public static final double joystickTurningGain = 2;
 
   }
+
+  public static class VisionConstants {
+    // public static final Transform3d robotToCam =
+    //         new Transform3d(
+    //                 new Translation3d(0.2, 0.0, 0.4),
+    //                 new Rotation3d(
+    //                         0, 0.524,
+    //                         0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+    // from center.
+   public static final String aprTagCameraName = "photonvision";
+   public static final String coneCameraName = "USB_Web_Camera";
+
+   //For color pipelines
+   public static final double CAMERA_HEIGHT_METERS = 0.168;
+   public static final double CONE_HEIGHT_METERS = 0.32;
+   public static final double CAMERA_PITCH_RADIANS = 0;
+
+   public static final int CUBE_PIPELINE_INDEX = 0;
+   public static final int CONE_PIPELINE_INDEX = 1;
+
+   
+/**
+         * Physical location of the camera on the robot, relative to the center of the robot.
+         */
+        public static final Transform2d CAMERA_TO_ROBOT = 
+            new Transform2d(new Translation2d(0.2, 0.0), new Rotation2d(0.0));
+
+                /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+        new Transform3d(new Translation3d(0.2, 0, -0.90), new Rotation3d(0.0, 0.0, -0.1));
+
+      // Vision Drive Constants
+
+        public static final double TRANSLATION_TOLERANCE = 0.2;
+        public static final double ROTATION_TOLERANCE =5;
+
+        public static final double MAX_VELOCITY = 2;
+        public static final double MAX_ACCELARATION = 1;
+        public static final double MAX_VELOCITY_ROTATION = 8;
+        public static final double MAX_ACCELARATION_ROTATION = 8;
+
+        public static final double kPXController = 2.5d;
+        public static final double kIXController = 0d;
+        public static final double kDXController = 0d;
+        public static final double kPYController = 2.5d;
+        public static final double kIYController = 0d;
+        public static final double kDYController = 0d;
+        public static final double kPThetaController = 1d;
+        public static final double kIThetaController = 0d;
+        public static final double kDThetaController = 0d; 
+
+
+      }
+
+
+
 }
