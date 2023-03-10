@@ -223,6 +223,12 @@ public final class Constants {
     double[] GripperRGains = {0.3, 0, 0, 0, 0, -1, 1};
     double[] WristGains = {0.4, 0, 0, 0, 0, -0.5, 0.5};
     double[] BucketGains = {0.4, 0, 0, 0, 0, -0.25, 0.25};
+
+    public static int gripBoxTicks = 0000;
+    public static int gripConeTicks = 0000;
+    public static int microAdjustArmTicks = 0000;
+    public static int microAdjustElevatorTicks = 0000;
+    public static int microAdjustWristTicks = 0000;
   }
 
   public static final class OIConstants {

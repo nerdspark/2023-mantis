@@ -6,12 +6,9 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class GripperSubsystem extends SubsystemBase {
-
-    public GripperSubsystem() {
-
+public class BucketSubsystem extends SubsystemBase {
+    public BucketSubsystem() {
+        
     }
-
-    
 }
 
