@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class WristSubsystem extends SubsystemBase {
     private final CANSparkMax WristMotor;
     private SparkMaxPIDController WristMotorPIDController;
-    private RelativeEncoder WristSubsystem;
+    private RelativeEncoder WristEncoder;
 
     public WristSubsystem() {
         WristMotor = new CANSparkMax(ArmConstants.GripperMotorLID, CANSparkMax.MotorType.kBrushless);

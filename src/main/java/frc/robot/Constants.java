@@ -186,13 +186,13 @@ public final class Constants {
   }
 
   public static class ArmConstants {
-    public static final int InclinovatorMotor1ID = 3; //position mode
-    public static final int InclinovatorMotor2ID = 2; //Slave to 3
-    public static final int GripperMotorRID = 4; // POsition
+    public static final int InclinovatorMotor1ID = 3; // position
+    public static final int InclinovatorMotor2ID = 2; // slave to 3
+    public static final int GripperMotorRID = 4; // position
     public static final int GripperMotorLID = 5; // position
-    public static final int ArmMotorRID = 6; // inverted slave
-    public static final int ArmMotorLID = 7; // position
-    public static final int BucketMotorLID = 8; // position
+    public static final int ArmMotorRID = 6; // position
+    public static final int ArmMotorLID = 7; // inverted slave
+    public static final int BucketMotorLID = 8; // inverted slave
     public static final int BucketMotorRID = 9; // position
     public static final int WristMotorID = 10;  // motion profiling
     // Precalculated positions (in motor ticks):
