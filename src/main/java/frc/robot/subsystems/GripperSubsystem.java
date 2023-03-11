@@ -16,14 +16,12 @@ public class GripperSubsystem extends SubsystemBase {
         LeftGripperMotor = new CANSparkMax(ArmConstants.GripperMotorLID, CANSparkMax.MotorType.kBrushless);
         RightGripperMotor = new CANSparkMax(ArmConstants.GripperMotorRID, CANSparkMax.MotorType.kBrushless);
 
-        LeftGripperMotor.setInverted(true);
-
         LeftGripperMotorPIDController = LeftGripperMotor.getPIDController();
         RightGripperMotorPIDController = RightGripperMotor.getPIDController();
     }
 
     public void setLeftPosition(double position) {
-        LeftGripperMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
+        LeftGripperMotorPIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
     }
 
     public void setRightPosition(double position) {
