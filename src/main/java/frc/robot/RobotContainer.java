@@ -25,6 +25,7 @@ import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BucketSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -65,7 +66,7 @@ public class RobotContainer {
     public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
     public static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-
+    public static final WristSubsystem wristSubsystem = new WristSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -118,6 +119,7 @@ public class RobotContainer {
       gripperSubsystem,
       bucketSubsystem,
       elevatorSubsystem,
+      wristSubsystem,
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),  
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
       () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonA), 
