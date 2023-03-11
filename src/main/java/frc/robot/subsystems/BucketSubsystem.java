@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -20,12 +21,14 @@ public class BucketSubsystem extends SubsystemBase {
         RightBucketMotorPIDController = RightBucketMotor.getPIDController();
     }
 
-    public void setLeftPosition(double position) {
-        LeftBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kVoltage);
+    public void retract(double position) {
+        LeftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+        RightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+
     }
 
-    public void setRightPosition(double position) {
-        RightBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kVoltage);
+    public void extend(double position) {
+        LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
+        RightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
     }
 }
-
