@@ -165,7 +165,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
       new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1)); 
       
-    // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(intakeBucketCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(homePositionCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(scoreMidCommand);
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(scoreHighCommand);

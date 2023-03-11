@@ -36,8 +36,8 @@ public class HomePositionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.goToPosition(ArmConstants.homePosition.get("armCmdPos"));
     armSubsystem.changeArmSmartMotionParameters(ArmConstants.homePosition.get("smartMotionMaxVel"), ArmConstants.homePosition.get("smartMotionMaxAccel"));
+    armSubsystem.goToPosition(ArmConstants.homePosition.get("armCmdPos"));
   }
 
   // Called once the command ends or is interrupted.

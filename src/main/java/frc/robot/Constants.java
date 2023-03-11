@@ -222,7 +222,7 @@ public final class Constants {
         put("rightGripperOpenCmdPos", 15.0);
         put("leftGripperCloseCmdPos", -10.0);
         put("rightGripperCloseCmdPos", -10.0);
-        put("smartMotionMaxVelocity", 3.0);
+        put("smartMotionMaxVel", 3.0);
         put("smartMotionMaxAccel", 3.0);
       }
     };
@@ -314,7 +314,7 @@ public final class Constants {
         put("rightGripperOpenCmdPos", -12.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVelocity", 2500.0);
+        put("smartMotionMaxVel", 2500.0);
         put("smartMotionMaxAccel", 4000.0);
       }
     };

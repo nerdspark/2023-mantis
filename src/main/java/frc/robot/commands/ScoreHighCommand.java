@@ -36,8 +36,8 @@ public class ScoreHighCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.goToPosition(ArmConstants.scoreHighPosition.get("armCmdPos"));
     armSubsystem.changeArmSmartMotionParameters(ArmConstants.scoreHighPosition.get("smartMotionMaxVel"), ArmConstants.scoreHighPosition.get("smartMotionMaxAccel"));
+    armSubsystem.goToPosition(ArmConstants.scoreHighPosition.get("armCmdPos"));
   }
 
   // Called once the command ends or is interrupted.
