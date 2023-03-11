@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.HashMap;
+
 import edu.wpi.first.math.geometry.CoordinateAxis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -14,6 +16,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -123,10 +126,10 @@ public final class Constants {
       public static final boolean kBackRightDriveCANCoderReversed = false;
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
-      public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
-      public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-      public static final double kBackRightDriveCANCoderOffsetRad = 173.6*Math.PI/180;
+      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72;
+      public static final double kBackLeftDriveCANCoderOffsetRad = -8.42;
+      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16;
+      public static final double kBackRightDriveCANCoderOffsetRad = -0.14;
 
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
@@ -177,6 +180,18 @@ public final class Constants {
 
   }
 
+  // public static final class GripperConstants {
+  //     public static final int leftGripperID = 5;
+  //     public static final int rightGripperID = 4;
+
+  //     public static final boolean leftGripperReversed = true;
+  //     public static final boolean rightGripperReversed = false;
+    
+  //     public static final double kPGripper = 1d;
+  //     public static final double kIGripper = 0d;
+  //     public static final double kDGripper = 0d;
+  // }
+
   public static final class AutoConstants {
       public static final double kMaxSpeedMetersPerSecond = 1d;
       public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
@@ -192,9 +207,11 @@ public final class Constants {
       public static final double kIThetaController = 0d;
       public static final double kDThetaController = 0d;
   
-
       public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
           kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+
+      public static final HashMap<String, Command> autoEventMap = new HashMap<>();
+      
   }
 
 

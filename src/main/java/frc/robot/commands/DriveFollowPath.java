@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 
 
 /** An example command that uses an example subsystem. */
@@ -47,6 +48,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
   addRequirements(RobotContainer.getSwerveSubsystem());
 
   this.trajectory = PathPlanner.loadPath(pathName, maxVel, maxAccel);
+
 
   PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
   PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kDYController);
