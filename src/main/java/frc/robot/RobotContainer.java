@@ -109,9 +109,9 @@ public class RobotContainer {
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverBackButton), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverLeftBumper)));
+      () -> driverJoystick.getRawButton(Constants.buttonY), 
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
     // Configure Copilot trigger bindings (arm control)
     armSubsystem.setDefaultCommand(new ArmJoystickCmd(
