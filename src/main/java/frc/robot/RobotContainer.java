@@ -99,8 +99,13 @@ public class RobotContainer {
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
-  private final HomePositionCommand homePositionCommand = new HomePositionCommand(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
-  ElevatorSubsystem elevatorSubsystem, WristSubsystem)
+  private final IntakeBucketCommand intakeBucketCommand = new IntakeBucketCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final IntakeGroundCommand intakeGroundCommand = new IntakeGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final IntakeShelfCommand intakeShelfCommand = new IntakeShelfCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final ScoreGroundCommand scoreGroundCommand = new ScoreGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final ScoreMidCommand scoreMidCommand = new ScoreMidCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final ScoreHighCommand scoreHighCommand = new ScoreHighCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  private final HomePositionCommand homePositionCommand = new HomePositionCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
 
   //Vision
 
@@ -157,6 +162,13 @@ public class RobotContainer {
     //Go to April Tag and Stop - Button Y
     new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
       new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1)); 
+      
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(intakeBucketCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(scoreMidCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(scoreHighCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
   }
 
   /**
