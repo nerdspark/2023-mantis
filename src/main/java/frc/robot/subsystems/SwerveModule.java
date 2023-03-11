@@ -24,12 +24,12 @@ public class SwerveModule {
 
     private final CANCoder CANCoder;
     private final boolean CANCoderReversed;
-    private final double CANCoderOffsetRad;
+    private final double CANCoderOffsetDeg;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int CANCoderId, double CANCoderOffset, boolean CANCoderReversed) {
 
-        this.CANCoderOffsetRad = CANCoderOffset;
+        this.CANCoderOffsetDeg = CANCoderOffset;
         this.CANCoderReversed = CANCoderReversed;
         CANCoder = new CANCoder(CANCoderId, DriveConstants.canBusName);
 
@@ -121,8 +121,8 @@ public class SwerveModule {
     public double getCANCoderRad() {
         double angle = CANCoder.getAbsolutePosition();
         SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "CANCoder pos", angle);
-        angle *= 2.0 * Math.PI / 360;
-        angle -= CANCoderOffsetRad;
+        angle *= 2.0;
+        angle -= CANCoderOffsetDeg;
         return angle * (CANCoderReversed ? -1.0 : 1.0);
     }
 

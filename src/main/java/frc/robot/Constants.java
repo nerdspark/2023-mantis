@@ -117,26 +117,26 @@ public final class Constants {
       public static final int kFrontRightDriveCANCoderPort = 22;
       public static final int kBackRightDriveCANCoderPort = 21;
 
-      public static final boolean kFrontLeftDriveCANCoderReversed = true;
+      public static final boolean kFrontLeftDriveCANCoderReversed = false;
       public static final boolean kBackLeftDriveCANCoderReversed = false;
       public static final boolean kFrontRightDriveCANCoderReversed = false;
       public static final boolean kBackRightDriveCANCoderReversed = false;
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -151.8*Math.PI/180;
-      public static final double kBackLeftDriveCANCoderOffsetRad = 53.3*Math.PI/180;
-      public static final double kFrontRightDriveCANCoderOffsetRad = -60.4*Math.PI/180;
-      public static final double kBackRightDriveCANCoderOffsetRad = 110.1*Math.PI/180;
+      public static final double kFrontLeftDriveCANCoderOffsetDeg = 0;//-151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = 0;//-129;//53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetDeg = 0;//158;//(-0.66)+(-60.4*Math.PI/180);
+      public static final double kBackRightDriveCANCoderOffsetDeg = 0;//-70;//110.1*Math.PI/180;
 
 
       //Latest Kinmatics2
-        // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
+        // public static final double kFrontLeftDriveCANCoderOffsetDeg = 25.1*Math.PI/180;
         // public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
         // public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = (173.6-1%80)*Math.PI/180;
 
       // //Old Kinematics
-      // public static final double kFrontLeftDriveCANCoderOffsetRad = -6.4+180*Math.PI/180;
+      // public static final double kFrontLeftDriveCANCoderOffsetDeg = -6.4+180*Math.PI/180;
       // public static final double kBackLeftDriveCANCoderOffsetRad = -56.9*Math.PI/180;
       // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
       // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
