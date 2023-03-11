@@ -77,14 +77,7 @@ public final class Constants {
       public static final double kWheelBase = Units.inchesToMeters(19);
       // Distance between front and back wheels
       public static final String canBusName = "canivore1";
-      //Old Kinematics
-      // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-      //         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, +kTrackWidth / 2));
 
-      // New Kinematics
       public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
               new Translation2d(kWheelBase / 2, kTrackWidth / 2),
               new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -128,18 +121,6 @@ public final class Constants {
       public static final double kFrontRightDriveCANCoderOffsetDeg = 158;//(-0.66)+(-60.4*Math.PI/180);
       public static final double kBackRightDriveCANCoderOffsetDeg = -70;//110.1*Math.PI/180;
 
-
-      //Latest Kinmatics2
-        // public static final double kFrontLeftDriveCANCoderOffsetDeg = 25.1*Math.PI/180;
-        // public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
-        // public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        // public static final double kBackRightDriveCANCoderOffsetRad = (173.6-1%80)*Math.PI/180;
-
-      // //Old Kinematics
-      // public static final double kFrontLeftDriveCANCoderOffsetDeg = -6.4+180*Math.PI/180;
-      // public static final double kBackLeftDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-      // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
-      // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
       public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
       public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
