@@ -7,29 +7,39 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.BucketSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
-
 
 public class ArmJoystickCmd extends CommandBase {
 
     private final ArmSubsystem armSubsystem;
     private final GripperSubsystem gripperSubsystem;
+    private final BucketSubsystem bucketSubsystem;
+    private final ElevatorSubsystem elevatorSubsystem;
     private final Supplier<Double> ArmMicroAdjust, WristMicroAdjust;
     private final Supplier<Boolean> isBucketPickup, isGroundPickup, isShelfPickup, isGroundDrop, isMidDrop, isHighDrop;
     private final Supplier<Integer> DPAD;
-    private final PIDController PIDControl = new PIDController(ArmConstants.PIDconstants[0], ArmConstants.PIDconstants[2], ArmConstants.PIDconstants[4]);
+    private final PIDController PIDControl = new PIDController(ArmConstants.PIDconstants[0],
+            ArmConstants.PIDconstants[2], ArmConstants.PIDconstants[4]);
 
-    public ArmJoystickCmd(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem,
+    public ArmJoystickCmd(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
+            ElevatorSubsystem elevatorSubsystem,
             Supplier<Double> ArmMicroAdjust, Supplier<Double> WristMicroAdjust,
-            Supplier<Boolean> isBucketPickup, Supplier<Boolean> isGroundDrop, Supplier<Boolean> isMidDrop, Supplier<Boolean> isHighDrop, Supplier<Integer> DPAD, Supplier<Boolean> isGroundPickup, Supplier<Boolean> isShelfPickup) {
+            Supplier<Boolean> isBucketPickup, Supplier<Boolean> isGroundDrop, Supplier<Boolean> isMidDrop,
+            Supplier<Boolean> isHighDrop, Supplier<Integer> DPAD, Supplier<Boolean> isGroundPickup,
+            Supplier<Boolean> isShelfPickup) {
         this.armSubsystem = armSubsystem;
         this.gripperSubsystem = gripperSubsystem;
+        this.bucketSubsystem = bucketSubsystem;
+        this.elevatorSubsystem = elevatorSubsystem;
         this.ArmMicroAdjust = ArmMicroAdjust;
         this.WristMicroAdjust = WristMicroAdjust;
         this.isBucketPickup = isBucketPickup;
@@ -44,36 +54,42 @@ public class ArmJoystickCmd extends CommandBase {
 
     @Override
     public void initialize() {
-        
+
     }
 
     @Override
     public void execute() {
         double[] thisPosition;
-        if(isBucketPickup.get()) {
+        if (isBucketPickup.get()) {
             thisPosition = ArmConstants.intakeBucketPosition;
-        } else if(isGroundPickup.get()) {
+            // gripperSubsystem.setLeftPosition(-10);
+            // gripperSubsystem.setRightPosition(-10);
+            bucketSubsystem.setLeftPosition(-(.07 * 12));
+            bucketSubsystem.setRightPosition(-(.07 * 12));
+
+        } else if (isGroundPickup.get()) {
             thisPosition = ArmConstants.intakeGroundPosition;
-        } else if(isShelfPickup.get()) {
+        } else if (isShelfPickup.get()) {
             thisPosition = ArmConstants.intakeShelfPosition;
-        } else if(isGroundDrop.get()) {
+        } else if (isGroundDrop.get()) {
             thisPosition = ArmConstants.scoreGroundPosition;
-            gripperSubsystem.setLeftGripperPosition(3);
-            gripperSubsystem.setRightGripperPosition(3);
-        } else if(isMidDrop.get()) {
+            // gripperSubsystem.setLeftPosition(3);
+            // gripperSubsystem.setRightPosition(3);
+            bucketSubsystem.setLeftPosition((.07 * 12));
+            bucketSubsystem.setRightPosition((.07 * 12));
+        } else if (isMidDrop.get()) {
             thisPosition = ArmConstants.scoreMidPosition;
-        } else if(isHighDrop.get()) {
+        } else if (isHighDrop.get()) {
             thisPosition = ArmConstants.scoreHighPosition;
-        } else if(DPAD.get() > 180) {
+        } else if (DPAD.get() > 180) {
             thisPosition = ArmConstants.homePos;
         }
 
-        
     }
 
     @Override
     public void end(boolean interrupted) {
         // swerveSubsystem.stopModules();
     }
-    
+
 }

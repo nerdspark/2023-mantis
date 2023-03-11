@@ -15,6 +15,7 @@ import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.ArmJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
@@ -27,6 +28,7 @@ import frc.robot.subsystems.BucketSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -61,10 +63,9 @@ public class RobotContainer {
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     public static final ArmSubsystem armSubsystem = new ArmSubsystem();
-
     public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
-
     public static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
+    public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
 
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
@@ -117,6 +118,7 @@ public class RobotContainer {
       armSubsystem,
       gripperSubsystem,
       bucketSubsystem,
+      elevatorSubsystem,
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),  
       () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
       () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonA), 

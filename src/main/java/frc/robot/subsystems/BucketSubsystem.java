@@ -21,11 +21,11 @@ public class BucketSubsystem extends SubsystemBase {
     }
 
     public void setLeftPosition(double position) {
-        LeftBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kCurrent);
+        LeftBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kVoltage);
     }
 
     public void setRightPosition(double position) {
-        RightBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kCurrent);
+        RightBucketMotorPIDController.setReference(position, CANSparkMax.ControlType.kVoltage);
     }
 }
 

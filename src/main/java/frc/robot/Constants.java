@@ -186,8 +186,8 @@ public final class Constants {
   }
 
   public static class ArmConstants {
-    public static final int InclinovatorMotor1ID = 1; //position mode
-    public static final int InclinovatorMotor2ID = 2; //Slave to 1
+    public static final int InclinovatorMotor1ID = 3; //position mode
+    public static final int InclinovatorMotor2ID = 2; //Slave to 3
     public static final int GripperMotorRID = 4; // POsition
     public static final int GripperMotorLID = 5; // position
     public static final int ArmMotorRID = 6; // inverted slave
