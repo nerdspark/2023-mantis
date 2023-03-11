@@ -22,8 +22,8 @@ public class ArmJoystickCmd extends CommandBase {
     private final Supplier<Double> ArmMicroAdjust, WristMicroAdjust;
     private final Supplier<Boolean> isBucketPickup, isGroundPickup, isShelfPickup, isGroundDrop, isMidDrop, isHighDrop;
     private final Supplier<Integer> DPAD;
-    private final PIDController PIDControl = new PIDController(ArmConstants.pidConstants.get("kp"), ArmConstants.pidConstants.get("ki"), ArmConstants.pidConstants.get("kd"));
 
+    
     public ArmJoystickCmd(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
             ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, 
             Supplier<Double> ArmMicroAdjust, Supplier<Double> WristMicroAdjust,
@@ -58,6 +58,7 @@ public class ArmJoystickCmd extends CommandBase {
 
     @Override
     public void execute() {
+        System.out.println(isHighDrop.get());
         Map<String, Double> thisPosition = null;
         if (isBucketPickup.get()) {
             thisPosition = ArmConstants.intakeBucketPosition;
@@ -73,15 +74,16 @@ public class ArmJoystickCmd extends CommandBase {
             thisPosition = ArmConstants.scoreHighPosition;
         } else if (DPAD.get() > 180) {
             thisPosition = ArmConstants.homePosition;
-        } else if (WristMicroAdjust.get() != 0) {
-            // If this is correct, need to copy for arm micro adjustment
-            wristSubsystem.microAdjust(WristMicroAdjust.get());
+        // } else if (WristMicroAdjust.get() != 0) {
+        //     // If this is correct, need to copy for arm micro adjustment
+        //     wristSubsystem.microAdjust(WristMicroAdjust.get());
         } else { // No buttons pressed
             return;
         }
         
         armSubsystem.goToPosition(thisPosition.get("armCmdPos"));
-        gripperSubsystem.setLeftPosition(thisPosition.get("leftGripperCloseCmdPos"));
+        armSubsystem.changeArmSmartMotionParameters(thisPosition.get("smartMotionMaxVel"), thisPosition.get("smartMotionMaxAccel"));
+        /*gripperSubsystem.setLeftPosition(thisPosition.get("leftGripperCloseCmdPos"));
         gripperSubsystem.setRightPosition(thisPosition.get("rightGripperCloseCmdPos"));
 
         // TODO: confirm the logic for extending/retracting the bucket
@@ -92,7 +94,7 @@ public class ArmJoystickCmd extends CommandBase {
         }
 
         elevatorSubsystem.setPosition(thisPosition.get("inclinatorCmdPos"));
-        wristSubsystem.setPosition(thisPosition.get("wristCmdPos"));
+        wristSubsystem.setPosition(thisPosition.get("wristCmdPos"));*/
 
 
     }

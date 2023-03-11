@@ -18,16 +18,17 @@ public class ArmSubsystem extends SubsystemBase {
 
         ArmMotorPIDController = ArmMotor.getPIDController();
         ArmMotor2PIDController = ArmMotor2.getPIDController();
-
-        ArmMotor2.follow(ArmMotor, true);
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {
         ArmMotorPIDController.setSmartMotionMaxVelocity(maxVel, 0);
         ArmMotorPIDController.setSmartMotionMaxAccel(maxAccel, 0);
+        ArmMotor2PIDController.setSmartMotionMaxVelocity(maxVel, 0);
+        ArmMotor2PIDController.setSmartMotionMaxAccel(maxAccel, 0);
     }
 
     public void goToPosition(double position) {
-        ArmMotorPIDController.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+        ArmMotorPIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
+        ArmMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
     }
 }

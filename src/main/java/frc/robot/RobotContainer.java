@@ -13,7 +13,13 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.commands.ArmJoystickCmd;
+import frc.robot.commands.HomePositionCommand;
+import frc.robot.commands.IntakeBucketCommand;
+import frc.robot.commands.IntakeGroundCommand;
+import frc.robot.commands.IntakeShelfCommand;
+import frc.robot.commands.ScoreGroundCommand;
+import frc.robot.commands.ScoreMidCommand;
+import frc.robot.commands.ScoreHighCommand;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -93,6 +99,8 @@ public class RobotContainer {
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
+  private final HomePositionCommand homePositionCommand = new HomePositionCommand(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
+  ElevatorSubsystem elevatorSubsystem, WristSubsystem)
 
   //Vision
 
@@ -112,23 +120,6 @@ public class RobotContainer {
       () -> driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverBackButton), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverLeftBumper)));
-
-    // Configure Copilot trigger bindings (arm control)
-    armSubsystem.setDefaultCommand(new ArmJoystickCmd(
-      armSubsystem,
-      gripperSubsystem,
-      bucketSubsystem,
-      elevatorSubsystem,
-      wristSubsystem,
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),  
-      () -> coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonA), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonB), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonX), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverButtonY), 
-      () -> coDriverJoystick.getPOV(), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverLeftBumper), 
-      () -> coDriverJoystick.getRawButton(OIConstants.kDriverRightBumper)));
 
     // Configure the button bindings
     configureButtonBindings();
@@ -164,8 +155,8 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, OIConstants.kDriverButtonX).onTrue(
       new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d())));
     //Go to April Tag and Stop - Button Y
-      new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
-        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1));    
+    new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
+      new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1)); 
   }
 
   /**
