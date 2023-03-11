@@ -121,17 +121,17 @@ public class SwerveModule {
     public double getCANCoderRad() {
         double angle = CANCoder.getAbsolutePosition();
         SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "CANCoder pos", angle);
-        angle *= 2.0;
         angle -= CANCoderOffsetDeg;
+        angle *= Math.PI/180;
         return angle * (CANCoderReversed ? -1.0 : 1.0);
     }
 
     public void resetEncoders() {
         driveMotor.setSelectedSensorPosition(0);
         turningMotor.setSelectedSensorPosition(getCANCoderRad() / ModuleConstants.kTurnTicks2Radians);
-        turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
-        turningMotor.config_kI(1, DriveConstants.kITurningMotor);
-        turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
+        // turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
+        // turningMotor.config_kI(1, DriveConstants.kITurningMotor);
+        // turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
         turningMotor.selectProfileSlot(0, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);

@@ -124,9 +124,9 @@ public final class Constants {
 
       //Latest Kinmatics
       public static final double kFrontLeftDriveCANCoderOffsetDeg = 0;//-151.8*Math.PI/180;
-      public static final double kBackLeftDriveCANCoderOffsetDeg = 0;//-129;//53.3*Math.PI/180;
-      public static final double kFrontRightDriveCANCoderOffsetDeg = 0;//158;//(-0.66)+(-60.4*Math.PI/180);
-      public static final double kBackRightDriveCANCoderOffsetDeg = 0;//-70;//110.1*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = -129;//53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetDeg = 158;//(-0.66)+(-60.4*Math.PI/180);
+      public static final double kBackRightDriveCANCoderOffsetDeg = -70;//110.1*Math.PI/180;
 
 
       //Latest Kinmatics2
