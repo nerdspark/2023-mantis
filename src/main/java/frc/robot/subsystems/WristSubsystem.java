@@ -7,7 +7,18 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class WristSubsystem extends SubsystemBase {
+    private final CANSparkMax WristMotor;
+    private SparkMaxPIDController WristMotorPIDController;
+    private RelativeEncoder WristSubsystem;
+
     public WristSubsystem() {
+        WristMotor = new CANSparkMax(ArmConstants.GripperMotorLID, CANSparkMax.MotorType.kBrushless);
+
+        WristMotorPIDController = WristMotor.getPIDController();
+    }
+
+    public void setPosition(int position) {
+        WristMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 }
 
