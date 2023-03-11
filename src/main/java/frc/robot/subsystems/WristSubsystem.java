@@ -12,7 +12,7 @@ public class WristSubsystem extends SubsystemBase {
     private RelativeEncoder wristEncoder;
 
     public WristSubsystem() {
-        wristMotor = new CANSparkMax(ArmConstants.GripperMotorLID, CANSparkMax.MotorType.kBrushless);
+        wristMotor = new CANSparkMax(ArmConstants.WristMotorID, CANSparkMax.MotorType.kBrushless);
         wristEncoder = wristMotor.getEncoder();
         wristMotorPIDController = wristMotor.getPIDController();
     }

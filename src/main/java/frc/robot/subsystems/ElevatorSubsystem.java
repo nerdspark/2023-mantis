@@ -13,8 +13,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private RelativeEncoder ElevatorMotorEncoder, ElevatorMotor2Encoder;
 
     public ElevatorSubsystem() {
-        ElevatorMotor = new CANSparkMax(ArmConstants.GripperMotorLID, CANSparkMax.MotorType.kBrushless);
-        ElevatorMotor2 = new CANSparkMax(ArmConstants.GripperMotorRID, CANSparkMax.MotorType.kBrushless);
+        ElevatorMotor = new CANSparkMax(ArmConstants.InclinovatorMotor1ID, CANSparkMax.MotorType.kBrushless);
+        ElevatorMotor2 = new CANSparkMax(ArmConstants.InclinovatorMotor2ID, CANSparkMax.MotorType.kBrushless);
 
         ElevatorMotorPIDController = ElevatorMotor.getPIDController();
         ElevatorMotor2PIDController = ElevatorMotor2.getPIDController();
