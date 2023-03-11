@@ -72,11 +72,11 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-      public static final double kTrackWidth = Units.inchesToMeters(17);
+      public static final double kTrackWidth = Units.inchesToMeters(25);
       // Distance between right and left wheels
-      public static final double kWheelBase = Units.inchesToMeters(17);
+      public static final double kWheelBase = Units.inchesToMeters(19);
       // Distance between front and back wheels
-
+      public static final String canBusName = "canivore1";
       //Old Kinematics
       // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       //         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -123,10 +123,11 @@ public final class Constants {
       public static final boolean kBackRightDriveCANCoderReversed = false;
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
-      public static final double kBackLeftDriveCANCoderOffsetRad = -2.14 + Math.PI;
-      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16+Math.PI;
-      public static final double kBackRightDriveCANCoderOffsetRad = -0.14+Math.PI;
+      public static final double kFrontLeftDriveCANCoderOffsetRad = -151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetRad = 53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetRad = -60.4*Math.PI/180;
+      public static final double kBackRightDriveCANCoderOffsetRad = 110.1*Math.PI/180;
+
 
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
