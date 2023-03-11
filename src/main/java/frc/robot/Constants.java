@@ -124,9 +124,9 @@ public final class Constants {
 
       //Latest Kinmatics
       public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
-      public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
-      public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-      public static final double kBackRightDriveCANCoderOffsetRad = 173.6*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetRad = -2.14 + Math.PI;
+      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16+Math.PI;
+      public static final double kBackRightDriveCANCoderOffsetRad = -0.14+Math.PI;
 
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
@@ -146,7 +146,7 @@ public final class Constants {
       public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
       public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
               kPhysicalMaxAngularSpeedRadiansPerSecond *0.09;
-      public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 20;
+      public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
       public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
@@ -157,18 +157,19 @@ public final class Constants {
       public static final double kDTargetTurning = 0d;
       public static final double kTargetTurningDeadband = 1*Math.PI/180;
 
-      public static final double kRampRateTurningMotor = 0.25d;
+      public static final double kRampRateTurningMotor = 0.04d;
       public static final double kPTurningMotor = 0.1d;
       public static final double kITurningMotor = 0;
       public static final double kDTurningMotor = 0;
       // public static final double kMaxSpeedTurningMotor = 100;
       public static final double kMaxAccelTurningMotor = 1;
 
-      public static final double kRampRateDriveMotor = 0.125d;
+      public static final double kRampRateDriveMotor = 0.05D;
       public static final double kPDriveMotor = 0.1d;
       public static final double kIDriveMotor = 0.0001d;
       public static final double kDDriveMotor = 2.5d;
       public static final double kFDriveMotor = 0.048d;
+      public static final double kDriveMotoriZone = 0.048d;
 
       public static final int kEnterDriveTurningDeadband = 90; //degrees for robot not driving until pod is at target position
       public static final int kExitDriveTurningDeadband = 90; //deg
@@ -213,7 +214,7 @@ public final class Constants {
       public static final int kDriverTopSpeed = 5;//left bumper
 
       public static final double kDeadbandSteer = 0.1d;
-      public static final double kDeadbandDrive = 0.03d;
+      public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.75;
       public static final double driverTopMultiplier = 1.5;
