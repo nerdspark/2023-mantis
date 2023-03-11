@@ -49,7 +49,7 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void initialize() {
         // swerveSubsystem.setGains();
-        zeroHeading();
+        // zeroHeading();
     }
 
     @Override
@@ -79,8 +79,11 @@ public class SwerveJoystickCmd extends CommandBase {
             swerveSubsystem.resetOdometry(new Pose2d());
         } else 
         if (DPAD.get() != -1) {
-            targetAngle =  ((DPAD.get()-90) * Math.PI / 180d);
+            targetAngle =  ((DPAD.get()) * Math.PI / 180d);
         } else 
+        if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
+            targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
+        }
         // if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
         //     // targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
         // } else 
@@ -96,11 +99,12 @@ public class SwerveJoystickCmd extends CommandBase {
             SmartDashboard.putString("PID turning?", "disabled");
         }
 
-        if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
-            targetAngle = currentAngle;
-            turningSpeed = turningTargX.get() * OIConstants.joystickTurningGain;
-            SmartDashboard.putString("PID turning?", "joystickturning");
-        } 
+        // if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
+        //     targetAngle = currentAngle;
+        //     turningSpeed = turningTargX.get()*Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
+        //     SmartDashboard.putString("PID turning?", "joystickturning");
+        // } 
+
         
         // 2. Apply deadband
         

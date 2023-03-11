@@ -150,7 +150,7 @@ public final class Constants {
       public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
-      public static final double kFalconMaxSetSpeed = 10000d;
+      public static final double kFalconMaxSetSpeed = 7000d;
 
       public static final double kPTargetTurning = -2.5d;
       public static final double kITargetTurning = 0d;    
@@ -213,7 +213,7 @@ public final class Constants {
       public static final int kDriverCancelTurn = 7;//back button
       public static final int kDriverTopSpeed = 5;//left bumper
 
-      public static final double kDeadbandSteer = 0.1d;
+      public static final double kDeadbandSteer = 0.3d;
       public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.75;
@@ -230,7 +230,7 @@ public final class Constants {
 
       public static final double targetTurnGainScheduleSpeed = 40;
 
-      public static final double joystickTurningGain = 2;
+      public static final double joystickTurningGain = -8;
 
   }
 
