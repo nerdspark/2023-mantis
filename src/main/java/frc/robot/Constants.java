@@ -5,7 +5,12 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.CoordinateAxis;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -27,10 +32,20 @@ public final class Constants {
   public static final int sensor1ID = 21;
   public static final int motorr1ID = 12;
   public static final int controllerPort = 0;
-  public static final int buttonA = 1;
   public static final int pigeonPort = 25;
 
+  //JoyStick buttons
+  public static final int buttonA = 1;
+  public static final int buttonB = 2;
+  public static final int buttonX = 3;
   public static final int buttonY = 4;
+  public static final int leftBumper = 5;
+  public static final int rightBumper = 6;
+  public static final int back = 7;
+  public static final int start = 8;
+  public static final int leftStick = 9;
+  public static final int rightStick = 10;
+
 
 
   public static final class ModuleConstants {
@@ -113,6 +128,7 @@ public final class Constants {
       public static final double kFrontRightDriveCANCoderOffsetRad = -60.4*Math.PI/180;
       public static final double kBackRightDriveCANCoderOffsetRad = 110.1*Math.PI/180;
 
+
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
@@ -131,7 +147,7 @@ public final class Constants {
       public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
       public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
               kPhysicalMaxAngularSpeedRadiansPerSecond *0.09;
-      public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 20;
+      public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
       public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
@@ -142,18 +158,19 @@ public final class Constants {
       public static final double kDTargetTurning = 0d;
       public static final double kTargetTurningDeadband = 1*Math.PI/180;
 
-      public static final double kRampRateTurningMotor = 0.25d;
+      public static final double kRampRateTurningMotor = 0.04d;
       public static final double kPTurningMotor = 0.1d;
       public static final double kITurningMotor = 0;
       public static final double kDTurningMotor = 0;
       // public static final double kMaxSpeedTurningMotor = 100;
       public static final double kMaxAccelTurningMotor = 1;
 
-      public static final double kRampRateDriveMotor = 0.125d;
+      public static final double kRampRateDriveMotor = 0.05D;
       public static final double kPDriveMotor = 0.1d;
       public static final double kIDriveMotor = 0.0001d;
       public static final double kDDriveMotor = 2.5d;
       public static final double kFDriveMotor = 0.048d;
+      public static final double kDriveMotoriZone = 0.048d;
 
       public static final int kEnterDriveTurningDeadband = 90; //degrees for robot not driving until pod is at target position
       public static final int kExitDriveTurningDeadband = 90; //deg
@@ -198,7 +215,7 @@ public final class Constants {
       public static final int kDriverTopSpeed = 5;//left bumper
 
       public static final double kDeadbandSteer = 0.1d;
-      public static final double kDeadbandDrive = 0.03d;
+      public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.75;
       public static final double driverTopMultiplier = 1.5;
@@ -217,4 +234,60 @@ public final class Constants {
       public static final double joystickTurningGain = 2;
 
   }
+
+  public static class VisionConstants {
+    // public static final Transform3d robotToCam =
+    //         new Transform3d(
+    //                 new Translation3d(0.2, 0.0, 0.4),
+    //                 new Rotation3d(
+    //                         0, 0.524,
+    //                         0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
+    // from center.
+   public static final String aprTagCameraName = "photonvision";
+   public static final String coneCameraName = "USB_Web_Camera";
+
+   //For color pipelines
+   public static final double CAMERA_HEIGHT_METERS = 0.168;
+   public static final double CONE_HEIGHT_METERS = 0.32;
+   public static final double CAMERA_PITCH_RADIANS = 0;
+
+   public static final int CUBE_PIPELINE_INDEX = 0;
+   public static final int CONE_PIPELINE_INDEX = 1;
+
+   
+/**
+         * Physical location of the camera on the robot, relative to the center of the robot.
+         */
+        public static final Transform2d CAMERA_TO_ROBOT = 
+            new Transform2d(new Translation2d(0.2, 0.0), new Rotation2d(0.0));
+
+                /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+        new Transform3d(new Translation3d(0.2, 0, -0.90), new Rotation3d(0.0, 0.0, -0.1));
+
+      // Vision Drive Constants
+
+        public static final double TRANSLATION_TOLERANCE = 0.2;
+        public static final double ROTATION_TOLERANCE =5;
+
+        public static final double MAX_VELOCITY = 2;
+        public static final double MAX_ACCELARATION = 1;
+        public static final double MAX_VELOCITY_ROTATION = 8;
+        public static final double MAX_ACCELARATION_ROTATION = 8;
+
+        public static final double kPXController = 2.5d;
+        public static final double kIXController = 0d;
+        public static final double kDXController = 0d;
+        public static final double kPYController = 2.5d;
+        public static final double kIYController = 0d;
+        public static final double kDYController = 0d;
+        public static final double kPThetaController = 1d;
+        public static final double kIThetaController = 0d;
+        public static final double kDThetaController = 0d; 
+
+
+      }
+
+
+
 }
