@@ -18,12 +18,11 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         ElevatorMotorPIDController = ElevatorMotor.getPIDController();
         ElevatorMotor2PIDController = ElevatorMotor2.getPIDController();
-
-        ElevatorMotor2.follow(ElevatorMotor2);
     }
 
     public void setPosition(double position) {
         ElevatorMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
+        ElevatorMotor2PIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 }
 
