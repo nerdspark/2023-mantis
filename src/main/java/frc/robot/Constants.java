@@ -180,17 +180,17 @@ public final class Constants {
 
   }
 
-  public static final class GripperConstants {
-      public static final int leftGripperID = 5;
-      public static final int rightGripperID = 4;
+  // public static final class GripperConstants {
+  //     public static final int leftGripperID = 5;
+  //     public static final int rightGripperID = 4;
 
-      public static final boolean leftGripperReversed = true;
-      public static final boolean rightGripperReversed = false;
+  //     public static final boolean leftGripperReversed = true;
+  //     public static final boolean rightGripperReversed = false;
     
-      public static final double kPGripper = 1d;
-      public static final double kIGripper = 0d;
-      public static final double kDGripper = 0d;
-  }
+  //     public static final double kPGripper = 1d;
+  //     public static final double kIGripper = 0d;
+  //     public static final double kDGripper = 0d;
+  // }
 
   public static final class AutoConstants {
       public static final double kMaxSpeedMetersPerSecond = 1d;

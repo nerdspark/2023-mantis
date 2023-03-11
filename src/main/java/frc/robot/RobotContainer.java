@@ -13,11 +13,11 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.BucketSubsystem;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
+// import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
@@ -74,10 +74,10 @@ public class RobotContainer {
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
-  //Arm, Gripper, Bucket
-    private static final ArmSubsystem armSubsystem = new ArmSubsystem();
-    private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
-    private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
+  // //Arm, Gripper, Bucket
+  //   private static final ArmSubsystem armSubsystem = new ArmSubsystem();
+  //   private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
+  //   private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
 
   //Vision
   private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
@@ -182,16 +182,16 @@ public class RobotContainer {
     return swerveSubsystem;
   }
 
-  public static ArmSubsystem getArmSubsystem(){
-    return armSubsystem;
-  }
+  // public static ArmSubsystem getArmSubsystem(){
+  //   return armSubsystem;
+  // }
   
-  public static GripperSubsystem getGripperSubsystem(){
-    return gripperSubsystem;
-  }
+  // public static GripperSubsystem getGripperSubsystem(){
+  //   return gripperSubsystem;
+  // }
 
-  public static BucketSubsystem getBuckSubsystem(){
-    return bucketSubsystem;
-  }
+  // public static BucketSubsystem getBuckSubsystem(){
+  //   return bucketSubsystem;
+  // }
 
 }
