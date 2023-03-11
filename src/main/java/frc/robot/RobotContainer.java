@@ -13,13 +13,15 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
+
 import frc.robot.commands.HomePositionCommand;
-import frc.robot.commands.IntakeBucketCommand;
-import frc.robot.commands.IntakeGroundCommand;
-import frc.robot.commands.IntakeShelfCommand;
-import frc.robot.commands.ScoreGroundCommand;
+// import frc.robot.commands.IntakeBucketCommand;
+// import frc.robot.commands.IntakeGroundCommand;
+// import frc.robot.commands.IntakeShelfCommand;
+// import frc.robot.commands.ScoreGroundCommand;
 import frc.robot.commands.ScoreMidCommand;
 import frc.robot.commands.ScoreHighCommand;
+
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -99,10 +101,10 @@ public class RobotContainer {
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
-  private final IntakeBucketCommand intakeBucketCommand = new IntakeBucketCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final IntakeGroundCommand intakeGroundCommand = new IntakeGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final IntakeShelfCommand intakeShelfCommand = new IntakeShelfCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final ScoreGroundCommand scoreGroundCommand = new ScoreGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  // private final IntakeBucketCommand intakeBucketCommand = new IntakeBucketCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  // private final IntakeGroundCommand intakeGroundCommand = new IntakeGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  // private final IntakeShelfCommand intakeShelfCommand = new IntakeShelfCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
+  // private final ScoreGroundCommand scoreGroundCommand = new ScoreGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
   private final ScoreMidCommand scoreMidCommand = new ScoreMidCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
   private final ScoreHighCommand scoreHighCommand = new ScoreHighCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
   private final HomePositionCommand homePositionCommand = new HomePositionCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
@@ -122,7 +124,7 @@ public class RobotContainer {
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(Constants.buttonY), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
       () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
@@ -163,12 +165,12 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
       new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1)); 
       
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(intakeBucketCommand);
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
+    // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(intakeBucketCommand);
+    // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(scoreMidCommand);
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(scoreHighCommand);
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
+    // new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
+    // new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
   }
 
   /**

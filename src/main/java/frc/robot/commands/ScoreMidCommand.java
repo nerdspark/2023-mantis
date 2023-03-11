@@ -12,14 +12,14 @@ import frc.robot.subsystems.WristSubsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class HomePositionCommand extends CommandBase {
+public class ScoreMidCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
   private final GripperSubsystem gripperSubsystem;
   private final BucketSubsystem bucketSubsystem;
   private final ElevatorSubsystem elevatorSubsystem;
   private final WristSubsystem wristSubsystem;
-  /** Creates a new HomePositionCommand. */
-  public HomePositionCommand(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
+  /** Creates a new ScoreMidCommand. */
+  public ScoreMidCommand(ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem, BucketSubsystem bucketSubsystem,
   ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
     this.armSubsystem = armSubsystem;
     this.gripperSubsystem = gripperSubsystem;
@@ -36,8 +36,8 @@ public class HomePositionCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armSubsystem.goToPosition(ArmConstants.homePosition.get("armCmdPos"));
-    armSubsystem.changeArmSmartMotionParameters(ArmConstants.homePosition.get("smartMotionMaxVel"), ArmConstants.homePosition.get("smartMotionMaxAccel"));
+    armSubsystem.goToPosition(ArmConstants.scoreMidPosition.get("armCmdPos"));
+    armSubsystem.changeArmSmartMotionParameters(ArmConstants.scoreMidPosition.get("smartMotionMaxVel"), ArmConstants.scoreMidPosition.get("smartMotionMaxAccel"));
   }
 
   // Called once the command ends or is interrupted.

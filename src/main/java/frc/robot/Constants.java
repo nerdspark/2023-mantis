@@ -371,6 +371,8 @@ public final class Constants {
     public static final int kDriverLeftBumper = 5;
     public static final int kDriverRightBumper = 6;
     public static final int kDriverBackButton = 7;
+    public static final int kDriverCancelTurn = 7;//back button
+    public static final int kDriverTopSpeed = 5;//left bumper
 
       public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.04d;
