@@ -13,8 +13,11 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
@@ -24,6 +27,7 @@ import frc.robot.commands.Auton.threeMeterVisionTest;
 import frc.robot.commands.Auton.threeMeterVisionTestCommand;
 import frc.robot.commands.Auton.twoConeWithVision;
 import frc.robot.commands.Auton.visionTest5M;
+import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -60,7 +64,7 @@ public class RobotContainer {
     private static final XboxController cont = new XboxController(Constants.controllerPort);
 
     // public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    private final static SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -69,6 +73,11 @@ public class RobotContainer {
       
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
+
+  //Arm, Gripper, Bucket
+    private static final ArmSubsystem armSubsystem = new ArmSubsystem();
+    private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
+    private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
 
   //Vision
   private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
@@ -93,7 +102,7 @@ public class RobotContainer {
     // Configure the trigger bindings
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
       swerveSubsystem,
-      () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
@@ -116,7 +125,7 @@ public class RobotContainer {
     chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
 
     chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
-
+    chooser.addOption("Five Meters Vision Test Command Marker", new visionTest5MMarker(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
 
     chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
     // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
@@ -172,4 +181,17 @@ public class RobotContainer {
   public static SwerveSubsystem getSwerveSubsystem(){
     return swerveSubsystem;
   }
+
+  public static ArmSubsystem getArmSubsystem(){
+    return armSubsystem;
+  }
+  
+  public static GripperSubsystem getGripperSubsystem(){
+    return gripperSubsystem;
+  }
+
+  public static BucketSubsystem getBuckSubsystem(){
+    return bucketSubsystem;
+  }
+
 }
