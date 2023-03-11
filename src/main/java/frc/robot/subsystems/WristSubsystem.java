@@ -27,5 +27,9 @@ public class WristSubsystem extends SubsystemBase {
         double newPosition = currentPosition + position_delta;
         wristEncoder.setPosition(newPosition);
     }
+
+    public double getPosition() {
+        return wristEncoder.getPosition();
+    }
 }
 

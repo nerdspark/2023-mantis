@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ChaseTagCommand;
@@ -12,15 +13,10 @@ import frc.robot.commands.ConeVisionCommand;
 import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
+import frc.robot.commands.MoveArmCommand;
+import frc.robot.commands.MoveElevatorCommand;
+import frc.robot.commands.MoveWristCommand;
 import frc.robot.commands.SwerveJoystickCmd;
-
-import frc.robot.commands.HomePositionCommand;
-// import frc.robot.commands.IntakeBucketCommand;
-// import frc.robot.commands.IntakeGroundCommand;
-// import frc.robot.commands.IntakeShelfCommand;
-// import frc.robot.commands.ScoreGroundCommand;
-import frc.robot.commands.ScoreMidCommand;
-import frc.robot.commands.ScoreHighCommand;
 
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -40,6 +36,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -101,14 +98,6 @@ public class RobotContainer {
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
-  // private final IntakeBucketCommand intakeBucketCommand = new IntakeBucketCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  // private final IntakeGroundCommand intakeGroundCommand = new IntakeGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  // private final IntakeShelfCommand intakeShelfCommand = new IntakeShelfCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  // private final ScoreGroundCommand scoreGroundCommand = new ScoreGroundCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final ScoreMidCommand scoreMidCommand = new ScoreMidCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final ScoreHighCommand scoreHighCommand = new ScoreHighCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-  private final HomePositionCommand homePositionCommand = new HomePositionCommand(armSubsystem, gripperSubsystem, bucketSubsystem, elevatorSubsystem, wristSubsystem);
-
   //Vision
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -165,10 +154,30 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, OIConstants.kDriverButtonY).onTrue( 
       new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1)); 
       
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(homePositionCommand);
+    // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(homePositionCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(scoreMidCommand);
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(scoreHighCommand);
+
+    // score mid position
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
+      new SequentialCommandGroup(
+        new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"), ArmConstants.scoreMidPosition.get("smartMotionMaxVel"), ArmConstants.scoreMidPosition.get("smartMotionMaxAccel")),
+        new ParallelCommandGroup(
+          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreMidPosition.get("inclinatorCmdPos")),
+          new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos"))
+        )
+      )
+    );
+    // score high position
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(
+      new SequentialCommandGroup(
+        new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"), ArmConstants.scoreHighPosition.get("smartMotionMaxVel"), ArmConstants.scoreHighPosition.get("smartMotionMaxAccel")),
+        new ParallelCommandGroup(
+          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
+          new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos"))
+        )
+      )
+    );
+    
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
   }

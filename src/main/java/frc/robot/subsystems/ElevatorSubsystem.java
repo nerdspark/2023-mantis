@@ -24,5 +24,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         ElevatorMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
         ElevatorMotor2PIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
+
+    public double[] getPositions() {
+        double[] position = {ElevatorMotorEncoder.getPosition(), ElevatorMotor2Encoder.getPosition()};
+
+        return position;
+    }
 }
 

@@ -31,4 +31,10 @@ public class ArmSubsystem extends SubsystemBase {
         ArmMotorPIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
         ArmMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
     }
+
+    public double[] getPositions() {
+        double[] position = {ArmMotorEncoder.getPosition(), ArmMotor2Encoder.getPosition()};
+
+        return position;
+    }
 }
