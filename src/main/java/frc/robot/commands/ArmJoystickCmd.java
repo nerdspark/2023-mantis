@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -51,32 +53,25 @@ public class ArmJoystickCmd extends CommandBase {
 
     @Override
     public void execute() {
-        double[] thisPosition;
+        Map<String, Double> thisPosition;
         if (isBucketPickup.get()) {
             thisPosition = ArmConstants.intakeBucketPosition;
-            // gripperSubsystem.setLeftPosition(-10);
-            // gripperSubsystem.setRightPosition(-10);
-            bucketSubsystem.setLeftPosition(-(.07 * 12));
-            bucketSubsystem.setRightPosition(-(.07 * 12));
-
         } else if (isGroundPickup.get()) {
             thisPosition = ArmConstants.intakeGroundPosition;
         } else if (isShelfPickup.get()) {
             thisPosition = ArmConstants.intakeShelfPosition;
         } else if (isGroundDrop.get()) {
             thisPosition = ArmConstants.scoreGroundPosition;
-            // gripperSubsystem.setLeftPosition(3);
-            // gripperSubsystem.setRightPosition(3);
-            bucketSubsystem.setLeftPosition((.07 * 12));
-            bucketSubsystem.setRightPosition((.07 * 12));
         } else if (isMidDrop.get()) {
             thisPosition = ArmConstants.scoreMidPosition;
         } else if (isHighDrop.get()) {
             thisPosition = ArmConstants.scoreHighPosition;
         } else if (DPAD.get() > 180) {
-            thisPosition = ArmConstants.homePos;
+            thisPosition = ArmConstants.homePosition;
         }
 
+        gripperSubsystem.setLeftPosition(thisPosition.get("leftGripperCloseCmdPos"));
+        gripperSubsystem.setRightPosition(thisPosition.get("rightGripperCloseCmdPos"));
     }
 
     @Override

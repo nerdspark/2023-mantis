@@ -22,11 +22,11 @@ public class GripperSubsystem extends SubsystemBase {
         RightGripperMotorPIDController = RightGripperMotor.getPIDController();
     }
 
-    public void setLeftPosition(int position) {
+    public void setLeftPosition(double position) {
         LeftGripperMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 
-    public void setRightPosition(int position) {
+    public void setRightPosition(double position) {
         RightGripperMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 

@@ -17,7 +17,7 @@ public class WristSubsystem extends SubsystemBase {
         WristMotorPIDController = WristMotor.getPIDController();
     }
 
-    public void setPosition(int position) {
+    public void setPosition(double position) {
         WristMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 }
