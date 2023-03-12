@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import edu.wpi.first.math.geometry.CoordinateAxis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -125,11 +124,11 @@ public final class Constants {
       public static final boolean kFrontRightDriveCANCoderReversed = false;
       public static final boolean kBackRightDriveCANCoderReversed = false;
 
-      //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72;
-      public static final double kBackLeftDriveCANCoderOffsetRad = -8.42;
-      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16;
-      public static final double kBackRightDriveCANCoderOffsetRad = -0.14;
+      //Latest Kinematics
+      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72 + Math.PI;//Old -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
+      public static final double kBackLeftDriveCANCoderOffsetRad = -8.42 + Math.PI;//Old 94.6*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16 + Math.PI;//Old -56.9*Math.PI/180;
+      public static final double kBackRightDriveCANCoderOffsetRad = -0.14 + Math.PI;//Old 173.6*Math.PI/180;
 
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;

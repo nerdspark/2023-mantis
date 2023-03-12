@@ -7,6 +7,7 @@ package frc.robot.commands.Auton;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.DriveFollowPath;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.PathConstraints;
@@ -61,7 +62,8 @@ public class line2metersTurn extends SequentialCommandGroup {
   public line2metersTurn(SwerveSubsystem swerveSubsystem){
 
     addCommands(
-      loadPathPlannerTrajectoryCommand("line2metersTurn", true)
+      // loadPathPlannerTrajectoryCommand("line2metersTurn", true)
+      new DriveFollowPath("line2metersTurn", 1, 0.5, true)
       
     );
   }
