@@ -189,15 +189,15 @@ public final class Constants {
     
     public static final HashMap<String, Double> intakeBucketPosition = new HashMap<String, Double>() {
       {
-        put("wristCmdPos", 0.0);
+        put("wristCmdPos", -23.0);
         put("armCmdPos", 0.0);
         put("inclinatorCmdPos", 1.0);
         put("bucketCmdPos", -0.07);
         put("initialGripperPos", 0.07);
-        put("leftGripperOpenCmdPos", -0.2);
-        put("rightGripperOpenCmdPos", 15.0);
-        put("leftGripperCloseCmdPos", -10.0);
-        put("rightGripperCloseCmdPos", -10.0);
+        put("leftGripperCloseCmdPos", 3.0);
+        put("rightGripperCloseCmdPos", 3.0);
+        put("leftGripperOpenCmdPos", -10.0);
+        put("rightGripperOpenCmdPos", -10.0);
         put("smartMotionMaxVel", 3.0);
         put("smartMotionMaxAccel", 3.0);
       }
@@ -209,7 +209,7 @@ public final class Constants {
         put("armCmdPos", 135.0);
         put("inclinatorCmdPos", 0.0);
         put("bucketCmdPos", 0.05);
-        put("retractDelay", 75.0);
+        put("wristArmPosition", 75.0);
         put("leftGripperOpenCmdPos", -12.0);
         put("rightGripperOpenCmdPos", 0.0);
         put("leftGripperCloseCmdPos", 3.0);
@@ -225,9 +225,9 @@ public final class Constants {
         put("armCmdPos", 85.0);
         put("inclinatorCmdPos", 0.0);
         put("bucketCmdPos", 0.1);
-        put("retractDelay", 75.0);
-        put("leftGripperOpenCmdPos", -9.0);
-        put("rightGripperOpenCmdPos", -9.0);
+        put("wristArmPosition", 75.0);
+        put("leftGripperOpenCmdPos", -7.0);
+        put("rightGripperOpenCmdPos", -7.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -241,9 +241,9 @@ public final class Constants {
         put("armCmdPos", 75.0);
         put("inclinatorCmdPos", 18.9);
         put("bucketCmdPos", 0.1);
-        put("retractDelay", 70.0);
-        put("leftGripperOpenCmdPos", 3.0);
-        put("rightGripperOpenCmdPos", -12.0);
+        put("wristArmPosition", 70.0);
+        put("leftGripperOpenCmdPos", 0.0);
+        put("rightGripperOpenCmdPos", -15.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -256,9 +256,9 @@ public final class Constants {
         put("armCmdPos", 80.0);
         put("inclinatorCmdPos", 2.0);
         put("bucketCmdPos", 0.1);
-        put("retractDelay", 50.0);
-        put("leftGripperOpenCmdPos", 3.0);
-        put("rightGripperOpenCmdPos", -12.0);
+        put("wristArmPosition", 50.0);
+        put("leftGripperOpenCmdPos", 0.0);
+        put("rightGripperOpenCmdPos", -15.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -271,7 +271,7 @@ public final class Constants {
         put("armCmdPos", 156.0);
         put("inclinatorCmdPos", 0.0);
         put("bucketCmdPos", 0.1);
-        put("retractDelay", 75.0);
+        put("wristArmPosition", 75.0);
         put("leftGripperOpenCmdPos", 3.0);
         put("rightGripperOpenCmdPos", 3.0);
         put("leftGripperCloseCmdPos", -1.0);
