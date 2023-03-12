@@ -27,11 +27,13 @@ import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
+import frc.robot.commands.MoveGripperCommand.GripperState;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -160,14 +162,12 @@ public class RobotContainer {
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
 
     new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5).onTrue(
-        new MoveGripperCommand(gripperSubsystem, ArmConstants.intakeBucketPosition.get("leftGripperCloseCmdPos"),
-            ArmConstants.intakeBucketPosition.get("rightGripperCloseCmdPos")));
+        new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Closed));
 
     new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5).onTrue(
-        new MoveGripperCommand(gripperSubsystem, ArmConstants.intakeBucketPosition.get("leftGripperOpenCmdPos"),
-            ArmConstants.intakeBucketPosition.get("rightGripperOpenCmdPos")));
+      new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open));
 
-    new Trigger(() -> coDriverJoystick.getPOV() > 180).onTrue(
+    new Trigger(() -> coDriverJoystick.getPOV() > 180).onTrue(armSubsystem.changeArmPositionState(ArmPosition.Home)).onTrue(
         new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.get("wristCmdPos")),
@@ -177,7 +177,7 @@ public class RobotContainer {
                 ArmConstants.homePosition.get("smartMotionMaxAccel"))));
 
     // bucket pickup
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(armSubsystem.changeArmPositionState(ArmPosition.BucketPickup)).onTrue(
         new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
@@ -188,7 +188,7 @@ public class RobotContainer {
                 ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel"))));
 
     // score mid position
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(armSubsystem.changeArmPositionState(ArmPosition.MidDrop)).onTrue(
         new SequentialCommandGroup(
             new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"),
                 ArmConstants.scoreMidPosition.get("smartMotionMaxVel"),
@@ -196,8 +196,9 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreMidPosition.get("inclinatorCmdPos")),
                 new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos")))));
+    
     // score high position
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(armSubsystem.changeArmPositionState(ArmPosition.HighDrop)).onTrue(
         new SequentialCommandGroup(
             new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"),
                 ArmConstants.scoreHighPosition.get("smartMotionMaxVel"),
@@ -205,9 +206,6 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
                 new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos")))));
-    
-    // new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
-    // new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
   }
 
   /**

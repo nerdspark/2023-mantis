@@ -1,9 +1,12 @@
 package frc.robot.subsystems;
+
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.*;
+
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -11,6 +14,28 @@ public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax ArmMotor2;
     private SparkMaxPIDController ArmMotorPIDController, ArmMotor2PIDController;
     private RelativeEncoder ArmMotorEncoder, ArmMotor2Encoder;
+
+    public enum ArmPosition {
+        Home,
+        GroundPickup,
+        BucketPickup,
+        ShelfPickup,
+        GroundDrop,
+        MidDrop,
+        HighDrop
+    }
+
+    public ArmPosition armPosition = ArmPosition.Home;
+
+    public CommandBase changeArmPositionState(ArmPosition state) {
+        return runOnce(() -> {
+            armPosition = state;
+        });
+    }
+
+    public ArmPosition getArmPositionState() {
+        return armPosition;
+    }
 
     public ArmSubsystem() {
         ArmMotor = new CANSparkMax(ArmConstants.ArmMotorRID, CANSparkMax.MotorType.kBrushless);
@@ -25,7 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
         ArmMotorEncoder.setPosition(0);
         ArmMotor2Encoder.setPosition(0);
 
-        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + ArmMotorEncoder.getPosition() + " Encoder 2 position: " + ArmMotor2Encoder.getPosition());
+        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + ArmMotorEncoder.getPosition()
+                + " Encoder 2 position: " + ArmMotor2Encoder.getPosition());
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {
@@ -41,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double[] getPositions() {
-        double[] position = {ArmMotorEncoder.getPosition(), ArmMotor2Encoder.getPosition()};
+        double[] position = { ArmMotorEncoder.getPosition(), ArmMotor2Encoder.getPosition() };
 
         return position;
     }
