@@ -9,8 +9,11 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -33,10 +36,13 @@ public class GoToTagCommand extends CommandBase {
   
   private  int tagToChase;
   //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
-  private static final Transform3d TAG_TO_GOAL = 
-      new Transform3d(
-          new Translation3d(1, 0.0, 0.0),
-          new Rotation3d(0.0, 0.0, Math.PI));
+  // private static final Transform3d TAG_TO_GOAL = 
+  //     new Transform3d(
+  //         new Translation3d(1, 0.0, 0.0),
+  //         new Rotation3d(0.0, 0.0, Math.PI));
+
+  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
+
 
   private final PhotonCamera photonCamera;
   private final SwerveSubsystem drivetrainSubsystem;
@@ -129,7 +135,9 @@ public class GoToTagCommand extends CommandBase {
           var targetPose = cameraPose.transformBy(camToTarget);
           
           // Transform the tag's pose to set our goal
-          var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
+          // var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
+          var goalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
+
 
           // Drive
             xController.setGoal(goalPose.getX());

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -51,7 +52,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderOffsetDeg,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
-    private final Pigeon2 gyro = new Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
+
+    private final WPI_Pigeon2 gyro = new Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(), 
@@ -85,7 +87,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(getHeading());
+        return gyro.getRotation2d();
+        // return Rotation2d.fromDegrees(getHeading());
     }
 
     public Pose2d getPose() {

@@ -81,7 +81,7 @@ public class SwerveJoystickCmd extends CommandBase {
         } else 
         SmartDashboard.putString("reset gyro button presssed", "no");
         if (DPAD.get() != -1) {
-            targetAngle =  ((DPAD.get()-90) * Math.PI / 180d);
+            targetAngle =  -((DPAD.get()-90) * Math.PI / 180d);
         } else 
         // if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
         //     // targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);

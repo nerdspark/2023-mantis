@@ -95,7 +95,7 @@ public class DriveToPoseCommand extends CommandBase {
         ySpeed = 0;
       }
   
-      var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians());
+      var omegaSpeed = omegaController.calculate(robotPose.getRotation().getRadians() * -1);
       if (omegaController.atGoal()) {
         omegaSpeed = 0;
       }
