@@ -122,7 +122,7 @@ public final class Constants {
       public static final double kBackRightDriveCANCoderOffsetDeg = -70;//110.1*Math.PI/180;
 
 
-      public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
+      public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
       public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
       public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
@@ -132,7 +132,7 @@ public final class Constants {
       public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
-      public static final double kFalconMaxSetSpeed = 10000d;
+      public static final double kFalconMaxSetSpeed = 8000d;
 
       public static final double kPTargetTurning = -2.5d;
       public static final double kITargetTurning = 0d;    
@@ -205,7 +205,7 @@ public final class Constants {
       public static final double triggerMultiplier = 0.1;
       public static final double triggerDeadband = 0.1;
 
-      public static final double driverEPower = 3.5;
+      public static final double driverEPower = 3;
       public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverEXPJoyMultiplier = driverEPower;
