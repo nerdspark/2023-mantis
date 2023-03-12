@@ -308,7 +308,7 @@ public final class Constants {
       {
         put("wristCmdPos", 0.0);
         put("armCmdPos", 0.0);
-        put("inclinatorCmdPos", 0.0);
+        put("inclinatorCmdPos", 0.25);
         put("bucketCmdPos", 0.07);
         put("leftGripperOpenCmdPos", -12.0);
         put("rightGripperOpenCmdPos", -12.0);
