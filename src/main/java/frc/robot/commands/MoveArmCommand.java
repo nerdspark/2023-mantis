@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class MoveArmCommand extends CommandBase {
   private final ArmSubsystem m_subsystem;
   private final double targetPosition;
-    private final double maxVelocity;
-    private final double maxAccel;
+  private final double maxVelocity;
+  private final double maxAccel;
 
   /**
    * Creates a new MoveArmCommand.
@@ -24,7 +24,8 @@ public class MoveArmCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -33,12 +34,18 @@ public class MoveArmCommand extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
     double[] positions = m_subsystem.getPositions();
 
-    return (Math.abs(positions[0] - targetPosition) < 5 && Math.abs(positions[1] - targetPosition) < 5);
+    // todo: don't math.abs everything
+    System.out.println("[MoveArmCommand] Left: " + positions[0] + " Right: " + positions[1] + " Target: " + targetPosition
+        + " Difference: " + Math.abs(positions[0] - targetPosition));
+
+    return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 5
+        && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 5);
   }
 }

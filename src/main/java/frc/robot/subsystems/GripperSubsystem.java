@@ -18,6 +18,9 @@ public class GripperSubsystem extends SubsystemBase {
 
         LeftGripperMotorPIDController = LeftGripperMotor.getPIDController();
         RightGripperMotorPIDController = RightGripperMotor.getPIDController();
+
+        GripperMotor1Encoder = LeftGripperMotor.getEncoder();
+        GripperMotor2Encoder = RightGripperMotor.getEncoder();
     }
 
     public void setLeftPosition(double position) {

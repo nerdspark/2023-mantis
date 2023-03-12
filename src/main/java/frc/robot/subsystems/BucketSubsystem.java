@@ -19,15 +19,18 @@ public class BucketSubsystem extends SubsystemBase {
 
         LeftBucketMotorPIDController = LeftBucketMotor.getPIDController();
         RightBucketMotorPIDController = RightBucketMotor.getPIDController();
+
+        BucketMotor1Encoder = LeftBucketMotor.getEncoder();
+        BucketMotor2Encoder = RightBucketMotor.getEncoder();
     }
     // Neither method uses the position parameter
-    public void retract(double position) {
+    public void retract() {
         LeftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
         RightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
 
     }
 
-    public void extend(double position) {
+    public void extend() {
         LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
         RightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
     }

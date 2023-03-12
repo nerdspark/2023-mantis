@@ -18,6 +18,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         ArmMotorPIDController = ArmMotor.getPIDController();
         ArmMotor2PIDController = ArmMotor2.getPIDController();
+
+        ArmMotorEncoder = ArmMotor.getEncoder();
+        ArmMotor2Encoder = ArmMotor.getEncoder();
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {

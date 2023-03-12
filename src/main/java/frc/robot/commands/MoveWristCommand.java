@@ -20,7 +20,8 @@ public class MoveWristCommand extends CommandBase {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
@@ -28,12 +29,17 @@ public class MoveWristCommand extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   @Override
   public boolean isFinished() {
     double position = m_subsystem.getPosition();
 
-    return Math.abs(position - targetPosition) < 5;
+    System.out.println(
+        "[MoveWristCommand] Position: " + position + " Target: " + targetPosition + " Difference: " + Math.abs(position - targetPosition));
+      
+    // todo: don't math.abs everything
+    return Math.abs(Math.abs(position) - Math.abs(targetPosition)) < 1;
   }
 }

@@ -157,6 +157,17 @@ public class RobotContainer {
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(homePositionCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
 
+    // bucket pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
+      new SequentialCommandGroup(
+        new ParallelCommandGroup(
+          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
+          new MoveWristCommand(wristSubsystem, ArmConstants.intakeBucketPosition.get("wristCmdPos"))
+        ),
+        new MoveArmCommand(armSubsystem, ArmConstants.intakeBucketPosition.get("armCmdPos"), ArmConstants.intakeBucketPosition.get("smartMotionMaxVel"), ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel"))
+      )
+    );
+
     // score mid position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
       new SequentialCommandGroup(
