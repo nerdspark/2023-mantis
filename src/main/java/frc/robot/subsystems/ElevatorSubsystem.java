@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import frc.robot.Constants.ArmConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -21,18 +22,19 @@ public class ElevatorSubsystem extends SubsystemBase {
 
         ElevatorMotorEncoder = ElevatorMotor.getEncoder();
         ElevatorMotor2Encoder = ElevatorMotor2.getEncoder();
+
+        ElevatorMotorEncoder.setPosition(0);
+        ElevatorMotor2Encoder.setPosition(0);
+
+        ElevatorMotor2.follow(ElevatorMotor);
     }
 
     public void setPosition(double position) {
         System.out.println("ElevatorSubsystem: " + position);
         ElevatorMotorPIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
-        ElevatorMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
     }
 
-    public double[] getPositions() {
-        double[] position = {ElevatorMotorEncoder.getPosition(), ElevatorMotor2Encoder.getPosition()};
-
-        return position;
+    public double getPosition() {
+        return ElevatorMotorEncoder.getPosition();
     }
 }
-
