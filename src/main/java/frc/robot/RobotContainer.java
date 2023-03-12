@@ -14,7 +14,9 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.MoveArmCommand;
+import frc.robot.commands.MoveBucketCommand;
 import frc.robot.commands.MoveElevatorCommand;
+import frc.robot.commands.MoveGripperCommand;
 import frc.robot.commands.MoveWristCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 
@@ -157,37 +159,52 @@ public class RobotContainer {
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(homePositionCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(scoreGroundCommand);
 
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5).onTrue(
+        new MoveGripperCommand(gripperSubsystem, ArmConstants.intakeBucketPosition.get("leftGripperCloseCmdPos"),
+            ArmConstants.intakeBucketPosition.get("rightGripperCloseCmdPos")));
+
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5).onTrue(
+        new MoveGripperCommand(gripperSubsystem, ArmConstants.intakeBucketPosition.get("leftGripperOpenCmdPos"),
+            ArmConstants.intakeBucketPosition.get("rightGripperOpenCmdPos")));
+
+    new Trigger(() -> coDriverJoystick.getPOV() > 180).onTrue(
+        new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.get("wristCmdPos")),
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.get("inclinatorCmdPos"))),
+            new MoveArmCommand(armSubsystem, ArmConstants.homePosition.get("armCmdPos"),
+                ArmConstants.homePosition.get("smartMotionMaxVel"),
+                ArmConstants.homePosition.get("smartMotionMaxAccel"))));
+
     // bucket pickup
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
-      new SequentialCommandGroup(
-        new ParallelCommandGroup(
-          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
-          new MoveWristCommand(wristSubsystem, ArmConstants.intakeBucketPosition.get("wristCmdPos"))
-        ),
-        new MoveArmCommand(armSubsystem, ArmConstants.intakeBucketPosition.get("armCmdPos"), ArmConstants.intakeBucketPosition.get("smartMotionMaxVel"), ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel"))
-      )
-    );
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(
+        new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.intakeBucketPosition.get("wristCmdPos")),
+                new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED)),
+            new MoveArmCommand(armSubsystem, ArmConstants.intakeBucketPosition.get("armCmdPos"),
+                ArmConstants.intakeBucketPosition.get("smartMotionMaxVel"),
+                ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel"))));
 
     // score mid position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(
-      new SequentialCommandGroup(
-        new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"), ArmConstants.scoreMidPosition.get("smartMotionMaxVel"), ArmConstants.scoreMidPosition.get("smartMotionMaxAccel")),
-        new ParallelCommandGroup(
-          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreMidPosition.get("inclinatorCmdPos")),
-          new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos"))
-        )
-      )
-    );
+        new SequentialCommandGroup(
+            new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"),
+                ArmConstants.scoreMidPosition.get("smartMotionMaxVel"),
+                ArmConstants.scoreMidPosition.get("smartMotionMaxAccel")),
+            new ParallelCommandGroup(
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreMidPosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos")))));
     // score high position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(
-      new SequentialCommandGroup(
-        new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"), ArmConstants.scoreHighPosition.get("smartMotionMaxVel"), ArmConstants.scoreHighPosition.get("smartMotionMaxAccel")),
-        new ParallelCommandGroup(
-          new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
-          new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos"))
-        )
-      )
-    );
+        new SequentialCommandGroup(
+            new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"),
+                ArmConstants.scoreHighPosition.get("smartMotionMaxVel"),
+                ArmConstants.scoreHighPosition.get("smartMotionMaxAccel")),
+            new ParallelCommandGroup(
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos")))));
     
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper).onTrue(intakeGroundCommand);
     // new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper).onTrue(intakeShelfCommand);
