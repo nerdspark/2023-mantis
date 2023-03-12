@@ -107,15 +107,15 @@ public class RobotContainer {
     // Configure the trigger bindings
     swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
       swerveSubsystem,
-      () -> -driverJoystick.getRawAxis(OIConstants.kDriverRightYAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRightXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),      
-      () -> !driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
+      () -> -driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
+      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverButtonY), 
+      () -> driverJoystick.getRawButton(Constants.start), 
       () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 

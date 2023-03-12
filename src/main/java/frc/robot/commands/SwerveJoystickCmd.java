@@ -58,7 +58,7 @@ public class SwerveJoystickCmd extends CommandBase {
         double driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : 
-        ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.7 : OIConstants.driverEXPMultiplier))
+        ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.25 : OIConstants.driverEXPMultiplier))
         *Math.pow(Math.E, 
         Math.abs(
             (Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get())
@@ -76,8 +76,10 @@ public class SwerveJoystickCmd extends CommandBase {
         double turningSpeed = 0;
         if (resetGyroButton.get()) {
             zeroHeading();
+            SmartDashboard.putString("reset gyro button presssed", "yes");
             swerveSubsystem.resetOdometry(new Pose2d());
         } else 
+        SmartDashboard.putString("reset gyro button presssed", "no");
         if (DPAD.get() != -1) {
             targetAngle =  ((DPAD.get()-90) * Math.PI / 180d);
         } else 
