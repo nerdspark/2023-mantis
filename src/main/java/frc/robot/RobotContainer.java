@@ -23,6 +23,7 @@ import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.line2metersTurn;
 import frc.robot.commands.Auton.threeElementCommand;
+import frc.robot.commands.Auton.threeElement_Red;
 import frc.robot.commands.Auton.threeMeterVisionTest;
 import frc.robot.commands.Auton.threeMeterVisionTestCommand;
 import frc.robot.commands.Auton.twoConeWithVision;
@@ -76,7 +77,7 @@ public class RobotContainer {
 
   // //Arm, Gripper, Bucket
   //   private static final ArmSubsystem armSubsystem = new ArmSubsystem();
-  //   private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
+    // private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
   //   private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
 
   //Vision
@@ -134,6 +135,8 @@ public class RobotContainer {
     // chooser.setDefaultOption("Line Three Meters With Vision Deadline", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
     //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
 
+    chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
+
 
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
     chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
@@ -163,7 +166,7 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
     //Go to Origin -  Button X
     new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
-      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d())));
+      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(2, 2, new Rotation2d().fromDegrees(90))));
     //Go to April Tag and Stop - Button Y
       new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
         new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,8));    

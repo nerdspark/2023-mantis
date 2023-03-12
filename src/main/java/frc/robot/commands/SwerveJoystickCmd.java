@@ -72,7 +72,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get()))) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
-        double currentAngle = swerveSubsystem.getHeading()*Math.PI/180;
+        double currentAngle = -swerveSubsystem.getHeading()*Math.PI/180;
         double turningSpeed = 0;
         if (resetGyroButton.get()) {
             zeroHeading();
