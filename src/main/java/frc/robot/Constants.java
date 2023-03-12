@@ -110,19 +110,19 @@ public final class Constants {
       public static final int kFrontRightDriveCANCoderPort = 22;
       public static final int kBackRightDriveCANCoderPort = 21;
 
-      public static final boolean kFrontLeftDriveCANCoderReversed = false;
-      public static final boolean kBackLeftDriveCANCoderReversed = false;
-      public static final boolean kFrontRightDriveCANCoderReversed = false;
-      public static final boolean kBackRightDriveCANCoderReversed = false;
+      public static final boolean kFrontLeftDriveCANCoderReversed = true;
+      public static final boolean kBackLeftDriveCANCoderReversed = true;
+      public static final boolean kFrontRightDriveCANCoderReversed = true;
+      public static final boolean kBackRightDriveCANCoderReversed = true;
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetDeg = 0;//-151.8*Math.PI/180;
-      public static final double kBackLeftDriveCANCoderOffsetDeg = -129;//53.3*Math.PI/180;
+      public static final double kFrontLeftDriveCANCoderOffsetDeg = 28;//-151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = -127;//53.3*Math.PI/180;
       public static final double kFrontRightDriveCANCoderOffsetDeg = 158;//(-0.66)+(-60.4*Math.PI/180);
       public static final double kBackRightDriveCANCoderOffsetDeg = -70;//110.1*Math.PI/180;
 
 
-      public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
+      public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
       public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
       public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond/1;
@@ -199,7 +199,7 @@ public final class Constants {
       public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.75;
-      public static final double driverTopMultiplier = 1.5;
+      public static final double driverTopMultiplier = 1;
       public static final double driverPower = 3.5;//2.5 faster but clicks
       public static final double driverBaseSpeedMetersPerSecond = 00;
       public static final double triggerMultiplier = 0.1;
