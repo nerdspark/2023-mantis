@@ -3,14 +3,14 @@ package frc.robot.commands;
 import frc.robot.subsystems.BucketSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-enum BucketPosition {
-    EXTENDED,
-    RETRACTED
-}
-
 public class MoveBucketCommand extends CommandBase {
   private final BucketSubsystem m_subsystem;
   private final BucketPosition position;
+
+  public static enum BucketPosition {
+    EXTENDED,
+    RETRACTED
+  }
 
   /**
    * Creates a new MoveBucketCommand.

@@ -34,13 +34,13 @@ public class MoveElevatorCommand extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    double[] positions = m_subsystem.getPositions();
+    double position = m_subsystem.getPosition();
 
-    System.out.println("[MoveElevatorCommand] Left: " + positions[0] + " Right: " + positions[1] + " Target: " + targetPosition
-        + " Difference: " + Math.abs(positions[0] - targetPosition));
-        
+    System.out.println(
+        "[MoveElevatorCommand] Position: " + position + " Target: " + targetPosition
+            + " Difference: " + Math.abs(position - targetPosition) + " Done: ");
+
     // todo: don't math.abs everything
-    return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 1
-        && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 1);
+    return (Math.abs(Math.abs(position) - Math.abs(targetPosition)) < 2);
   }
 }

@@ -21,6 +21,11 @@ public class ArmSubsystem extends SubsystemBase {
 
         ArmMotorEncoder = ArmMotor.getEncoder();
         ArmMotor2Encoder = ArmMotor.getEncoder();
+
+        ArmMotorEncoder.setPosition(0);
+        ArmMotor2Encoder.setPosition(0);
+
+        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + ArmMotorEncoder.getPosition() + " Encoder 2 position: " + ArmMotor2Encoder.getPosition());
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {
