@@ -111,9 +111,11 @@ public class GoToTagCommand extends CommandBase {
       if(targetFound == false) {
         targetOpt = photonRes.getTargets().stream()
           .filter(t -> t.getFiducialId() == this.tagToChase)
-          .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .2 && t.getPoseAmbiguity() != -1)
+          .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .5 && t.getPoseAmbiguity() != -1)
           .findFirst();
-      }if(targetOpt != null){
+      }
+      
+      if(targetOpt != null){
       if (targetOpt.isPresent()) {
         targetFound = true;
         var target = targetOpt.get();

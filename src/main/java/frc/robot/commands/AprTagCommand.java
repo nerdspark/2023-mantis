@@ -61,6 +61,7 @@ public class AprTagCommand extends CommandBase {
   public void initialize() {
     goalPose = null;
     lastTarget = null;
+    this.aprTagFound = false;
     SmartDashboard.putNumber("AprTagPipeLine INIT", this.tagToChase);  
   }
 

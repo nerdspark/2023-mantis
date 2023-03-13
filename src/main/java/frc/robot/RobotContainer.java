@@ -73,7 +73,7 @@ public class RobotContainer {
   private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
   private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
   private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
-  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,1,poseEstimator::getCurrentPose);
+  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,6,poseEstimator::getCurrentPose);
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
@@ -130,10 +130,10 @@ public class RobotContainer {
     new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
     //Go to Origin -  Button X
     new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
-      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d())));
+      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d().fromDegrees(90))));
     //Go to April Tag and Stop - Button Y
       new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
-        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,1));    
+        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,6));    
   }
 
   /**
