@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -167,7 +168,8 @@ public class RobotContainer {
     new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5).onTrue(
       new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open));
 
-    new Trigger(() -> coDriverJoystick.getPOV() > 180).onTrue(armSubsystem.changeArmPositionState(ArmPosition.Home)).onTrue(
+    // home
+    new Trigger(() -> coDriverJoystick.getPOV() > 180).onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.Home))).onTrue(
         new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.get("wristCmdPos")),
@@ -177,7 +179,7 @@ public class RobotContainer {
                 ArmConstants.homePosition.get("smartMotionMaxAccel"))));
 
     // bucket pickup
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(armSubsystem.changeArmPositionState(ArmPosition.BucketPickup)).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA).onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.BucketPickup))).onTrue(
         new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
@@ -188,7 +190,7 @@ public class RobotContainer {
                 ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel"))));
 
     // score mid position
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(armSubsystem.changeArmPositionState(ArmPosition.MidDrop)).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX).onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.MidDrop))).onTrue(
         new SequentialCommandGroup(
             new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"),
                 ArmConstants.scoreMidPosition.get("smartMotionMaxVel"),
@@ -198,7 +200,7 @@ public class RobotContainer {
                 new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos")))));
     
     // score high position
-    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(armSubsystem.changeArmPositionState(ArmPosition.HighDrop)).onTrue(
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY).onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.HighDrop))).onTrue(
         new SequentialCommandGroup(
             new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"),
                 ArmConstants.scoreHighPosition.get("smartMotionMaxVel"),
@@ -206,6 +208,17 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
                 new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos")))));
+
+      // ground drop
+      new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB).onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundDrop))).onTrue(
+        new SequentialCommandGroup(
+            new MoveArmCommand(armSubsystem, ArmConstants.scoreGroundPosition.get("armCmdPos"),
+                ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
+                ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel")),
+            new ParallelCommandGroup(
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreGroundPosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.scoreGroundPosition.get("wristCmdPos")))));
+
   }
 
   /**

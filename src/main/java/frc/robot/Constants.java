@@ -189,7 +189,7 @@ public final class Constants {
     
     public static final HashMap<String, Double> intakeBucketPosition = new HashMap<String, Double>() {
       {
-        put("wristCmdPos", -23.0);
+        put("wristCmdPos", 0.0);
         put("armCmdPos", 0.0);
         put("inclinatorCmdPos", 1.0);
         put("bucketCmdPos", -0.07);
@@ -237,7 +237,7 @@ public final class Constants {
 
     public static final Map<String, Double> scoreHighPosition = new HashMap<String, Double>() {
       {
-        put("wristCmdPos", -4.0);
+        put("wristCmdPos", 0.0);
         put("armCmdPos", 75.0);
         put("inclinatorCmdPos", 18.9);
         put("bucketCmdPos", 0.1);
@@ -252,7 +252,7 @@ public final class Constants {
     };
     public static final Map<String, Double> scoreMidPosition = new HashMap<>() {
       {
-        put("wristCmdPos", -4.0);
+        put("wristCmdPos", 0.0);
         put("armCmdPos", 80.0);
         put("inclinatorCmdPos", 2.0);
         put("bucketCmdPos", 0.1);
@@ -286,8 +286,8 @@ public final class Constants {
         put("armCmdPos", 0.0);
         put("inclinatorCmdPos", 0.25);
         put("bucketCmdPos", 0.07);
-        put("leftGripperOpenCmdPos", -12.0);
-        put("rightGripperOpenCmdPos", -12.0);
+        put("leftGripperOpenCmdPos", -10.0);
+        put("rightGripperOpenCmdPos", -10.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 2500.0);

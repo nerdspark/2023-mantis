@@ -27,10 +27,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmPosition armPosition = ArmPosition.Home;
 
-    public CommandBase changeArmPositionState(ArmPosition state) {
-        return runOnce(() -> {
-            armPosition = state;
-        });
+    public void setArmPositionState(ArmPosition state) {
+        this.armPosition = state;
     }
 
     public ArmPosition getArmPositionState() {
