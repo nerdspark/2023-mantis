@@ -221,14 +221,14 @@ public class RobotContainer {
 
       // microadjust arm (0.05 buffer to negate joystick error)
       new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) > 0.05 || coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) < -0.05).onTrue(
-        new MoveArmCommand(armSubsystem, ArmConstants.scoreGroundPosition.get("armCmdPos") + coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) * ArmConstants.armAdjustMultiplier,
+        new MoveArmCommand(armSubsystem, armSubsystem.getPositions()[0] + coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) * ArmConstants.armAdjustMultiplier,
           ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
           ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel"))
       );
 
       // microadjust wrist (0.05 buffer to negate joystick error)
       new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) > 0.05 || coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) < -0.05).onTrue(
-        new MoveArmCommand(armSubsystem, ArmConstants.scoreGroundPosition.get("armCmdPos") + coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) * ArmConstants.wristAdjustMultiplier,
+        new MoveArmCommand(armSubsystem, armSubsystem.getPositions()[0] + coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) * ArmConstants.wristAdjustMultiplier,
           ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
           ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel"))
       );
