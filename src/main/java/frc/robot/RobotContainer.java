@@ -12,16 +12,21 @@ import frc.robot.commands.ConeVisionCommand;
 import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
+import frc.robot.commands.LimeLightAlignCommand;
+import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
+import frc.robot.subsystems.PoseEstimatorSubSystem2;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -63,22 +68,29 @@ public class RobotContainer {
     SendableChooser<Command> chooser = new SendableChooser<>();
 
   //Vision
-  private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
+  // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
 
-  private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
-  private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+  // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
+  // private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
 
-  private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
+  // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
-  private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
-  private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
-  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,6,poseEstimator::getCurrentPose);
+  // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
+  // private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
+  // private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
+  // private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,6,poseEstimator::getCurrentPose);
 
   // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
 
 
   //Vision
+
+  //Limelight
+
+  public static final LimeLightSubSystem limeLightSubSystem = new LimeLightSubSystem("limelight");
+   private final PoseEstimatorSubSystem2 poseEstimator2 = new PoseEstimatorSubSystem2(limeLightSubSystem,swerveSubsystem);
+
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -100,15 +112,16 @@ public class RobotContainer {
       // Configure the button bindings
     configureButtonBindings();
 
+    //Update this with correct values for your robot
+    limeLightSubSystem.updateLimelightPose(Units.inchesToMeters(-3), Units.inchesToMeters(0), Units.inchesToMeters(6), 0, 0, 0); 
+    // chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
+    // chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
+    // chooser.addOption("Line 2 Meters Command", new line2metersCommand());
+    // chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
+    //                                           new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+    //                                           new DriveToPoseCommand(swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
 
-    chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
-    chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
-    chooser.addOption("Line 2 Meters Command", new line2metersCommand());
-    chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
-                                              new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
-                                              new DriveToPoseCommand(swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
-
-    Shuffleboard.getTab("Autonomous").add(chooser);
+    // Shuffleboard.getTab("Autonomous").add(chooser);
   }
 
     /**
@@ -124,16 +137,20 @@ public class RobotContainer {
 
     SmartDashboard.putString("Config", "Button Bindings");
 
-    //Print April tag info to Smart dashboard - Button A
-    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
-    //Chase Aril Tag Continuous - Button B
-    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
-    //Go to Origin -  Button X
-    new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
-      new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d().fromDegrees(90))));
-    //Go to April Tag and Stop - Button Y
-      new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
-        new  GoToTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose,6));    
+    // //Print April tag info to Smart dashboard - Button A
+    // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    // //Chase Aril Tag Continuous - Button B
+    // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
+    // //Go to Origin -  Button X
+    // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
+    //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d().fromDegrees(90))));
+    // //Go to April Tag and Stop - Button Y
+    //   new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
+    
+    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
+
+    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new LimeLightAlignCommand(limeLightSubSystem, swerveSubsystem));
+
   }
 
   /**
