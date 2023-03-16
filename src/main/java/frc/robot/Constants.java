@@ -320,11 +320,8 @@ public final class Constants {
     public static final double[] WristGains = { 0.4, 0, 0, 0, 0, -0.5, 0.5 };
     public static final double[] BucketGains = { 0.4, 0, 0, 0, 0, -0.25, 0.25 };
 
-    public static int gripBoxTicks = 0000;
-    public static int gripConeTicks = 0000;
-    public static int microAdjustArmTicks = 0000;
-    public static int microAdjustElevatorTicks = 0000;
-    public static int microAdjustWristTicks = 0000;
+    public static final double armAdjustMultiplier = 25.0;
+    public static final double wristAdjustMultiplier = 0.5;
   }
 
   public static final class OIConstants {
@@ -356,20 +353,20 @@ public final class Constants {
     public static final int kDriverCancelTurn = 7;//back button
     public static final int kDriverTopSpeed = 5;//left bumper
 
-      public static final double kDeadbandSteer = 0.1d;
-      public static final double kDeadbandDrive = 0.04d;
+    public static final double kDeadbandSteer = 0.1d;
+    public static final double kDeadbandDrive = 0.04d;
 
-      public static final double driverMultiplier = 0.75;
-      public static final double driverTopMultiplier = 1;
-      public static final double driverPower = 3.5;//2.5 faster but clicks
-      public static final double driverBaseSpeedMetersPerSecond = 00;
-      public static final double triggerMultiplier = 0.1;
-      public static final double triggerDeadband = 0.1;
+    public static final double driverMultiplier = 0.75;
+    public static final double driverTopMultiplier = 1;
+    public static final double driverPower = 3.5;//2.5 faster but clicks
+    public static final double driverBaseSpeedMetersPerSecond = 00;
+    public static final double triggerMultiplier = 0.1;
+    public static final double triggerDeadband = 0.1;
 
-      public static final double driverEPower = 3;
-      public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
-      public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
-      public static final double driverEXPJoyMultiplier = driverEPower;
+    public static final double driverEPower = 3;
+    public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
+    public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
+    public static final double driverEXPJoyMultiplier = driverEPower;
 
     public static final double targetTurnGainScheduleSpeed = 40;
 
