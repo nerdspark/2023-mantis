@@ -147,12 +147,13 @@ public class SwerveModule {
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
-        turningMotor.selectProfileSlot(0, 0);
-        // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
-        // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
-        // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
-        // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
-        driveMotor.selectProfileSlot(0, 0);
+        turningMotor.selectProfileSlot(1, 0);
+        driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
+        driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
+        driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
+        driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
+        // driveMotor.config_izone/
+        driveMotor.selectProfileSlot(1, 0);
         // turningMotor.selectProfileSlot(0, 0);
         driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
         turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
@@ -181,10 +182,10 @@ public class SwerveModule {
             target += (2*Math.PI);
         }
         boolean backward = false;
-        if ((target - current) > Math.PI/2) {
+        if ((target - current) > Math.PI*0.5) {
             target -= (Math.PI);
             backward = true;
-        } else if ((target - current) < -Math.PI/2) {
+        } else if ((target - current) < -Math.PI*0.5) {
             target += (Math.PI);
             backward = true;
         } 
@@ -193,7 +194,7 @@ public class SwerveModule {
 
         SmartDashboard.putNumber("driveMotorSet" + driveMotor.getDeviceID(), state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
         SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
-        if (Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
+        if (false) {//(Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
             SmartDashboard.putString("drive mode", "velocity");
             driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1));
         } else {
