@@ -24,17 +24,17 @@ public class SwerveModule {
 
     private final CANCoder CANCoder;
     private final boolean CANCoderReversed;
-    private final double CANCoderOffsetRad;
+    private final double CANCoderOffsetDeg;
 
     public SwerveModule(int driveMotorId, int turningMotorId, boolean driveMotorReversed, boolean turningMotorReversed,
             int CANCoderId, double CANCoderOffset, boolean CANCoderReversed) {
 
-        this.CANCoderOffsetRad = CANCoderOffset;
+        this.CANCoderOffsetDeg = CANCoderOffset;
         this.CANCoderReversed = CANCoderReversed;
-        CANCoder = new CANCoder(CANCoderId);
+        CANCoder = new CANCoder(CANCoderId, DriveConstants.canBusName);
 
-        driveMotor = new TalonFX(driveMotorId);
-        turningMotor = new TalonFX(turningMotorId);
+        driveMotor = new TalonFX(driveMotorId, DriveConstants.canBusName);
+        turningMotor = new TalonFX(turningMotorId, DriveConstants.canBusName);
 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
@@ -119,19 +119,20 @@ public class SwerveModule {
     }
 
     public double getCANCoderRad() {
-        double angle = CANCoder.getAbsolutePosition();
+        double angle = CANCoder.getAbsolutePosition() * (CANCoderReversed ? -1.0 : 1.0);
         SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "CANCoder pos", angle);
-        angle *= 2.0 * Math.PI / 360;
-        angle -= CANCoderOffsetRad;
-        return angle * (CANCoderReversed ? -1.0 : 1.0);
+        angle += CANCoderOffsetDeg;
+        angle *= Math.PI/180;
+        return angle;
     }
 
     public void resetEncoders() {
         driveMotor.setSelectedSensorPosition(0);
-        turningMotor.setSelectedSensorPosition(getCANCoderRad() / ModuleConstants.kTurnTicks2Radians);
-        turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
-        turningMotor.config_kI(1, DriveConstants.kITurningMotor);
-        turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
+        turningMotor.setSelectedSensorPosition(getCANCoderRad()/ModuleConstants.kTurnTicks2Radians);
+        SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "getCANCoderRad", getCANCoderRad());
+        // turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
+        // turningMotor.config_kI(1, DriveConstants.kITurningMotor);
+        // turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
         turningMotor.selectProfileSlot(0, 0);
         // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
         // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
@@ -144,18 +145,20 @@ public class SwerveModule {
     }
 
     public void setGains() {
+
         turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         turningMotor.config_kI(1, DriveConstants.kITurningMotor);
         turningMotor.config_kD(1, DriveConstants.kDTurningMotor);
-        turningMotor.selectProfileSlot(0, 0);
-        // driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
-        // driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
-        // driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
-        // driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
-        driveMotor.selectProfileSlot(0, 0);
+        turningMotor.selectProfileSlot(1, 0);
+        driveMotor.config_kP(1, DriveConstants.kPDriveMotor);
+        driveMotor.config_kI(1, DriveConstants.kIDriveMotor);
+        driveMotor.config_kD(1, DriveConstants.kDDriveMotor);
+        driveMotor.config_kF(1, DriveConstants.kFDriveMotor);
+        // driveMotor.config_izone/
+        driveMotor.selectProfileSlot(1, 0);
         // turningMotor.selectProfileSlot(0, 0);
-        driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
-        turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
+        // driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
+        // turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
         
     }
 
@@ -181,10 +184,10 @@ public class SwerveModule {
             target += (2*Math.PI);
         }
         boolean backward = false;
-        if ((target - current) > Math.PI/2) {
+        if ((target - current) > Math.PI*0.5) {
             target -= (Math.PI);
             backward = true;
-        } else if ((target - current) < -Math.PI/2) {
+        } else if ((target - current) < -Math.PI*0.5) {
             target += (Math.PI);
             backward = true;
         } 
@@ -193,7 +196,7 @@ public class SwerveModule {
 
         SmartDashboard.putNumber("driveMotorSet" + driveMotor.getDeviceID(), state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed);
         SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
-        if (Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
+        if (false) {//(Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) { 
             SmartDashboard.putString("drive mode", "velocity");
             driveMotor.set(TalonFXControlMode.Velocity, state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * DriveConstants.kFalconMaxSetSpeed * (backward ? -1 : 1));
         } else {

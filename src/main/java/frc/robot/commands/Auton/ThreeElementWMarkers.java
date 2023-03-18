@@ -7,11 +7,15 @@ package frc.robot.commands.Auton;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.GoToTagCommand;
+import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -23,12 +27,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 /** An example command that uses an example subsystem. */
-public class ThreeElement extends SequentialCommandGroup {
+public class ThreeElementWMarkers extends SequentialCommandGroup {
 
   public Command loadPathPlannerTrajectoryCommand(String filename, boolean resetOdometry){
           // 1. Load file and apply constraints
     PathPlannerTrajectory trajectory = PathPlanner.loadPath(filename, new PathConstraints(
       AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
+
+      AutoConstants.autoEventMap.put("Marker1", new PrintCommand("Passed Marker1"));
+      AutoConstants.autoEventMap.put("Marker2", new PrintCommand("Passed Marker2"));
+
 
           // 2. Define PID controllers for tracking trajectory
     PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
@@ -59,20 +67,23 @@ public class ThreeElement extends SequentialCommandGroup {
     //     RobotContainer.getSwerveSubsystem()::setModuleStates,
     //     RobotContainer.getSwerveSubsystem());
 
-
+    FollowPathWithEvents commandFPWE = new FollowPathWithEvents(swerveControllerCommand, 
+      trajectory.getMarkers(), 
+      AutoConstants.autoEventMap);
 
     // 4. Run path following command and stop at the end.
     if (resetOdometry) {
       return new SequentialCommandGroup(
           new InstantCommand(() -> RobotContainer.getSwerveSubsystem().resetOdometry(trajectory.getInitialHolonomicPose())),
-          swerveControllerCommand);
+          commandFPWE);
     } else {
       return swerveControllerCommand;
     }
 
+
   }
 
-  public ThreeElement(SwerveSubsystem swerveSubsystem){
+  public ThreeElementWMarkers(SwerveSubsystem swerveSubsystem){
 
     addCommands(
       loadPathPlannerTrajectoryCommand("threeConePathOne", true),

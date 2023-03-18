@@ -16,12 +16,22 @@ import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.LimeLightAlignCommand;
 import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.SwerveJoystickCmd;
+// import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
+import frc.robot.commands.Auton.line2metersTurn;
+import frc.robot.commands.Auton.threeElementCommand;
+import frc.robot.commands.Auton.threeElement_Red;
+import frc.robot.commands.Auton.threeMeterVisionTest;
+import frc.robot.commands.Auton.threeMeterVisionTestCommand;
+import frc.robot.commands.Auton.twoConeWithVision;
+import frc.robot.commands.Auton.visionTest5M;
+import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.PoseEstimatorSubSystem2;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -34,6 +44,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -60,7 +71,8 @@ public class RobotContainer {
 
     private static final XboxController cont = new XboxController(Constants.controllerPort);
 
-    public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    // public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -72,6 +84,11 @@ public class RobotContainer {
      
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
+
+  // //Arm, Gripper, Bucket
+  //   private static final ArmSubsystem armSubsystem = new ArmSubsystem();
+    // private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
+  //   private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
 
   //Vision
   // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
@@ -105,14 +122,14 @@ public class RobotContainer {
       swerveSubsystem,
       () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
+      () -> -driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
       () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
-      () -> driverJoystick.getRawButton(Constants.buttonY), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
+      () -> driverJoystick.getRawButton(Constants.start), 
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
       // Configure the button bindings
@@ -175,4 +192,17 @@ public class RobotContainer {
   public static SwerveSubsystem getSwerveSubsystem(){
     return swerveSubsystem;
   }
+
+  // public static ArmSubsystem getArmSubsystem(){
+  //   return armSubsystem;
+  // }
+  
+  // public static GripperSubsystem getGripperSubsystem(){
+  //   return gripperSubsystem;
+  // }
+
+  // public static BucketSubsystem getBuckSubsystem(){
+  //   return bucketSubsystem;
+  // }
+
 }

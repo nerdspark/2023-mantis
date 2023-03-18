@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,7 +23,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
             DriveConstants.kFrontLeftDriveCANCoderPort,
-            DriveConstants.kFrontLeftDriveCANCoderOffsetRad,
+            DriveConstants.kFrontLeftDriveCANCoderOffsetDeg,
             DriveConstants.kFrontLeftDriveCANCoderReversed);
 
     private final SwerveModule frontRight = new SwerveModule(
@@ -31,7 +32,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
             DriveConstants.kFrontRightDriveCANCoderPort,
-            DriveConstants.kFrontRightDriveCANCoderOffsetRad,
+            DriveConstants.kFrontRightDriveCANCoderOffsetDeg,
             DriveConstants.kFrontRightDriveCANCoderReversed);
 
     private final SwerveModule backLeft = new SwerveModule(
@@ -40,7 +41,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
             DriveConstants.kBackLeftDriveCANCoderPort,
-            DriveConstants.kBackLeftDriveCANCoderOffsetRad,
+            DriveConstants.kBackLeftDriveCANCoderOffsetDeg,
             DriveConstants.kBackLeftDriveCANCoderReversed);
 
     private final SwerveModule backRight = new SwerveModule(
@@ -49,7 +50,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
             DriveConstants.kBackRightDriveCANCoderPort,
-            DriveConstants.kBackRightDriveCANCoderOffsetRad,
+            DriveConstants.kBackRightDriveCANCoderOffsetDeg,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
     private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort);
@@ -80,7 +81,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.setYaw(0);
-
+        frontLeft.resetEncoders();
+        frontRight.resetEncoders();
+        backLeft.resetEncoders();
+        backRight.resetEncoders();
     }
 
     public double getHeading() {
