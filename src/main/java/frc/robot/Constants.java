@@ -119,10 +119,10 @@ public final class Constants {
 
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetDeg = 28;//-151.8*Math.PI/180;
-      public static final double kBackLeftDriveCANCoderOffsetDeg = -127;//53.3*Math.PI/180;
-      public static final double kFrontRightDriveCANCoderOffsetDeg = 158;//(-0.66)+(-60.4*Math.PI/180);
-      public static final double kBackRightDriveCANCoderOffsetDeg = -70;//110.1*Math.PI/180;
+      public static final double kFrontLeftDriveCANCoderOffsetDeg = 28 + 180;//-151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = -127 + 180;//53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetDeg = 158 + 180;//(-0.66)+(-60.4*Math.PI/180);
+      public static final double kBackRightDriveCANCoderOffsetDeg = -70 + 180;//110.1*Math.PI/180;
 
       public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
       public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
