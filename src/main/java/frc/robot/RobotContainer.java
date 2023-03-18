@@ -13,6 +13,7 @@ import frc.robot.commands.ConeVisionCommand;
 import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
+import frc.robot.commands.MicroAdjustCommand;
 import frc.robot.commands.MoveArmCommand;
 import frc.robot.commands.MoveBucketCommand;
 import frc.robot.commands.MoveElevatorCommand;
@@ -122,6 +123,13 @@ public class RobotContainer {
       () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
+    armSubsystem.setDefaultCommand(new MicroAdjustCommand(
+      armSubsystem,
+      wristSubsystem,
+      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),   
+      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)
+    ));
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -218,20 +226,6 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.scoreGroundPosition.get("inclinatorCmdPos")),
                 new MoveWristCommand(wristSubsystem, ArmConstants.scoreGroundPosition.get("wristCmdPos")))));
-
-      // microadjust arm (0.05 buffer to negate joystick error)
-      new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) > 0.05 || coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) < -0.05).onTrue(
-        new MoveArmCommand(armSubsystem, armSubsystem.getPositions()[0] + coDriverJoystick.getRawAxis(OIConstants.kDriverRotYAxis) * ArmConstants.armAdjustMultiplier,
-          ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
-          ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel"))
-      );
-
-      // microadjust wrist (0.05 buffer to negate joystick error)
-      new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) > 0.05 || coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) < -0.05).onTrue(
-        new MoveArmCommand(armSubsystem, armSubsystem.getPositions()[0] + coDriverJoystick.getRawAxis(OIConstants.kDriverYAxis) * ArmConstants.wristAdjustMultiplier,
-          ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
-          ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel"))
-      );
   }
 
   /**
