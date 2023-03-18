@@ -6,6 +6,7 @@ package frc.robot;
 
 
 import frc.robot.Constants.OIConstants;
+import frc.robot.LimelightHelpers.LimelightResults;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.ConeVisionCommand;
@@ -38,6 +39,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import java.util.function.BooleanSupplier;
+
 import org.photonvision.PhotonCamera;
 
 
@@ -63,7 +66,10 @@ public class RobotContainer {
 
     public static final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-      
+    BooleanSupplier hasCone;
+    BooleanSupplier hasCube;
+
+     
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
@@ -114,6 +120,10 @@ public class RobotContainer {
 
     //Update this with correct values for your robot
     limeLightSubSystem.updateLimelightPose(Units.inchesToMeters(-3), Units.inchesToMeters(0), Units.inchesToMeters(6), 0, 0, 0); 
+   //To initiate the json parser. which generally takes more time first time
+    LimelightResults initialLimeLightResults = limeLightSubSystem.getLimeLightResults();
+   
+   
     // chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
     // chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
     // chooser.addOption("Line 2 Meters Command", new line2metersCommand());

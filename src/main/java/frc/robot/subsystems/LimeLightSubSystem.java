@@ -15,23 +15,29 @@ import frc.robot.LimelightHelpers.LimelightResults;
 
 public class LimeLightSubSystem extends SubsystemBase{
 
-    private NetworkTable limelightTable;
+    private NetworkTable limelightNetworkTable;
     private double currentTimestamp;
     private  double lastAllianceUpdate;
     private Alliance currentAlliance;
     private String limelightHostname;
 
+    private double activePipelineId;
+    private boolean enabled = false;
+    private boolean driverMode;
+
     
     public LimeLightSubSystem(String hostname) { 
         limelightHostname = hostname;
-        limelightTable = NetworkTableInstance.getDefault().getTable(limelightHostname);
+        limelightNetworkTable = NetworkTableInstance.getDefault().getTable(limelightHostname);
         currentTimestamp = 0.0;
         lastAllianceUpdate = Double.NEGATIVE_INFINITY;
         currentAlliance = Alliance.Invalid;
+
+
     }
 
     public double getValidTargetUpdateTimestamp(){
-        return limelightTable.getEntry("tv").getLastChange();
+        return limelightNetworkTable.getEntry("tv").getLastChange();
     }
 
     public boolean hasLimelightUpdatedRecently(){
@@ -100,8 +106,19 @@ public class LimeLightSubSystem extends SubsystemBase{
             lastAllianceUpdate = currentTimestamp;
         }
 
-    }
-   
+       // Flush NetworkTable to send LED mode and pipeline updates immediately
+    var shouldFlush = (limelightNetworkTable.getEntry("ledMode").getDouble(0.0) != (enabled ? 0.0 : 1.0) || 
+        limelightNetworkTable.getEntry("pipeline").getDouble(0.0) != activePipelineId);
+    
+        limelightNetworkTable.getEntry("ledMode").setDouble(enabled ? 0.0 : 1.0);
+        limelightNetworkTable.getEntry("camMode").setDouble(driverMode ? 1.0 : 0.0);
+        limelightNetworkTable.getEntry("pipeline").setDouble(activePipelineId);
+  
+        if (shouldFlush)  {
+        NetworkTableInstance.getDefault().flush();
+        }
+
+    }   
 
     public boolean hasAprilTagTarget(){
         return LimelightHelpers.getFiducialID(limelightHostname) != -1  && LimelightHelpers.getTV(limelightHostname);
@@ -130,6 +147,9 @@ public class LimeLightSubSystem extends SubsystemBase{
         return LimelightHelpers.getBotPose3d_TargetSpace(limelightHostname);
     }
    
-    
+    public void setPipelineId(int pipelineId) {
+        activePipelineId = pipelineId;
+        LimelightHelpers.setPipelineIndex(limelightHostname, pipelineId);
+      }
       
 }

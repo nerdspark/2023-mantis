@@ -231,6 +231,33 @@ public class SwerveSubsystem extends SubsystemBase {
         public void resetGyro(){
             zeroHeading();
         }
+
+          /**
+   * Gets the raw gyro data.
+   * @return x[0], y[1], and z[2] data in degrees per second
+   */
+  public double[] getGyroVelocityXYZ() {
+    double[] xyz = new double[3];
+    gyro.getRawGyro(xyz);
+    return xyz;
+  }
+
+   /**
+   * Set the wheels to an X pattern to plant the robot.
+   */
+  public void setWheelsToX() {
+    setModuleStates(new SwerveModuleState[] {
+      // front left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+      // front right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+      // back left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+      // back right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+    });
+  }
+
     
         // //May need to change
         // //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase

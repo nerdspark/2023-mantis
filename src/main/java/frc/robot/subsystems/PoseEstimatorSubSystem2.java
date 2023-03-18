@@ -42,7 +42,8 @@ public class PoseEstimatorSubSystem2 extends SubsystemBase {
   private final LimeLightSubSystem limeLightSubSystem;
   private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
 
-  public PoseEstimatorSubSystem2(LimeLightSubSystem limeLightSubSystem, SwerveSubsystem drivetrainSubsystem) {
+  public PoseEstimatorSubSystem2(LimeLightSubSystem limeLightSubSystem,
+   SwerveSubsystem drivetrainSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.limeLightSubSystem = limeLightSubSystem;
         

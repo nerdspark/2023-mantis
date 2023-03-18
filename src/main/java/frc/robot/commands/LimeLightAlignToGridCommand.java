@@ -4,6 +4,10 @@
 
 package frc.robot.commands;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -12,6 +16,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
@@ -20,14 +26,17 @@ import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
-public class LimeLightAlignCommand extends CommandBase {
+public class LimeLightAlignToGridCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final LimeLightSubSystem limeLightSubSystem;
   private final SwerveSubsystem driveTrainSubsystem;
   boolean targetFound = false;
-  int count=0;
+
+  int grid=1;
+  int tagToAlign=1;
 
   Pose2d lastTarget;
+  LimelightTarget_Fiducial targetFiducial;
 
   private static final TrapezoidProfile.Constraints DISTANCE_CONSTRAINTS = new TrapezoidProfile.Constraints(4.0, 2.0);
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRAINTS =
@@ -49,9 +58,11 @@ public class LimeLightAlignCommand extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LimeLightAlignCommand(LimeLightSubSystem limeLightSubSystem, SwerveSubsystem driveTrain ) {
+  public LimeLightAlignToGridCommand(int grid, LimeLightSubSystem limeLightSubSystem, SwerveSubsystem driveTrain ) {
     this.limeLightSubSystem = limeLightSubSystem;
     this.driveTrainSubsystem = driveTrain;
+    this.grid = grid;
+    
    
     SmartDashboard.putNumber("LimeLightTest Constructor", 0);
 
@@ -79,8 +90,35 @@ public class LimeLightAlignCommand extends CommandBase {
     rotationFilter.reset();
     SmartDashboard.putNumber("LimeLightTestCommand INIT", 0);
 
-  
+    if(grid == 1){
+        if( DriverStation.getAlliance() == Alliance.Red){
+          tagToAlign = 3;
+          limeLightSubSystem.setPipelineId(3);
+        }else if (DriverStation.getAlliance() == Alliance.Blue){
+          tagToAlign = 6;
+          limeLightSubSystem.setPipelineId(6);
+
+        }      }
+        if(grid == 2){
+        if( DriverStation.getAlliance() == Alliance.Red){
+          tagToAlign = 2;
+          limeLightSubSystem.setPipelineId(2);
+        }else if (DriverStation.getAlliance() == Alliance.Blue){
+          tagToAlign = 7;
+          limeLightSubSystem.setPipelineId(7);
+        }
+      }
+        if(grid == 3){
+        if( DriverStation.getAlliance() == Alliance.Red){
+          tagToAlign = 1;
+          limeLightSubSystem.setPipelineId(1);
+        }else if (DriverStation.getAlliance() == Alliance.Blue){
+          tagToAlign = 8;
+          limeLightSubSystem.setPipelineId(8);
+        }
+      }
   }
+  
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -88,34 +126,31 @@ public class LimeLightAlignCommand extends CommandBase {
 
      if(limeLightSubSystem.hasAprilTagTarget()){
 
-      count++;
-      SmartDashboard.putNumber("LimeLightAlignCommand Count", count);
 
-
-      SmartDashboard.putNumber("LimeLightAlignCommand Tx", limeLightSubSystem.getTargetTx());
-      SmartDashboard.putNumber("LimeLightAlignCommand Ty", limeLightSubSystem.getTargetTy());
-      SmartDashboard.putNumber("LimeLightAlignCommand Ta", limeLightSubSystem.getTargetTa());
-      SmartDashboard.putNumber("LimeLightAlignCommand TagId", limeLightSubSystem.getAprilTagId());
+      // SmartDashboard.putNumber("LimeLightAlignCommand Tx", limeLightSubSystem.getTargetTx());
+      // SmartDashboard.putNumber("LimeLightAlignCommand Ty", limeLightSubSystem.getTargetTy());
+      // SmartDashboard.putNumber("LimeLightAlignCommand Ta", limeLightSubSystem.getTargetTa());
+      // SmartDashboard.putNumber("LimeLightAlignCommand TagId", limeLightSubSystem.getAprilTagId());
 
    
-      SmartDashboard.putNumber("LimeLightAlignCommand botPose X", limeLightSubSystem.getBotPose().getX());
-      SmartDashboard.putNumber("LimeLightAlignCommand botPose Y", limeLightSubSystem.getBotPose().getY());
-      SmartDashboard.putNumber("LimeLightAlignCommand botPose Angle", limeLightSubSystem.getBotPose().getRotation().getDegrees());
+      // SmartDashboard.putNumber("LimeLightAlignCommand botPose X", limeLightSubSystem.getBotPose().getX());
+      // SmartDashboard.putNumber("LimeLightAlignCommand botPose Y", limeLightSubSystem.getBotPose().getY());
+      // SmartDashboard.putNumber("LimeLightAlignCommand botPose Angle", limeLightSubSystem.getBotPose().getRotation().getDegrees());
 
 
 
-      SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace X", limeLightSubSystem.getTargetPose3d_RobotSpace().getX());
-      SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Y", limeLightSubSystem.getTargetPose3d_RobotSpace().getY());
-      SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Z", limeLightSubSystem.getTargetPose3d_RobotSpace().getZ());
-      SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Angle", limeLightSubSystem.getTargetPose3d_RobotSpace().toPose2d().getRotation().getDegrees());
+      // SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace X", limeLightSubSystem.getTargetPose3d_RobotSpace().getX());
+      // SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Y", limeLightSubSystem.getTargetPose3d_RobotSpace().getY());
+      // SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Z", limeLightSubSystem.getTargetPose3d_RobotSpace().getZ());
+      // SmartDashboard.putNumber("LimeLightAlignCommand target_RobotSpace Angle", limeLightSubSystem.getTargetPose3d_RobotSpace().toPose2d().getRotation().getDegrees());
 
       
-      SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace X", limeLightSubSystem.getRobotPose3d_TargetSpace().getX());
-      SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Y", limeLightSubSystem.getRobotPose3d_TargetSpace().getY());
-      SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Z", limeLightSubSystem.getRobotPose3d_TargetSpace().getZ());
-      SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Angle", limeLightSubSystem.getRobotPose3d_TargetSpace().toPose2d().getRotation().getDegrees());
+      // SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace X", limeLightSubSystem.getRobotPose3d_TargetSpace().getX());
+      // SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Y", limeLightSubSystem.getRobotPose3d_TargetSpace().getY());
+      // SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Z", limeLightSubSystem.getRobotPose3d_TargetSpace().getZ());
+      // SmartDashboard.putNumber("LimeLightAlignCommand robot_TargetSpace Angle", limeLightSubSystem.getRobotPose3d_TargetSpace().toPose2d().getRotation().getDegrees());
       
-      SmartDashboard.putString("LimeLightAlignCommand limelightRetroResults", "before limelightRetroResults");
+      // SmartDashboard.putString("LimeLightAlignCommand limelightRetroResults", "before limelightRetroResults");
 
       var firstTarget = false;
       // If the target is visible, get the new translation. If the target isn't visible we'll use the last known translation.
@@ -123,16 +158,22 @@ public class LimeLightAlignCommand extends CommandBase {
       
       LimelightTarget_Fiducial[] limelightAprTagResults = limeLightSubSystem.getLimeLightResults().targetingResults.targets_Fiducials;
       
+      
       SmartDashboard.putNumber("LimeLightAlignCommand limelightRetroResults after", limelightAprTagResults.length);
-
-      var fidId=0.0;
 
       if (limelightAprTagResults.length > 0) {
         firstTarget = lastTarget == null;
         lastTarget = limelightAprTagResults[0].getTargetPose_RobotSpace().toPose2d();
 
-        fidId = limelightAprTagResults[0].fiducialID;
-      }
+
+        // for(int i=0; i< limelightAprTagResults.length; i++){
+        //   LimelightTarget_Fiducial tempFiducial = limelightAprTagResults[i];
+        //   if((int)tempFiducial.fiducialID == tagToAlign ){
+        //     targetFiducial = tempFiducial;
+        //     lastTarget = tempFiducial.getTargetPose_RobotSpace().toPose2d();
+        //     break;
+        //   }
+        }    
  
 
       if (lastTarget == null) {
@@ -151,6 +192,7 @@ public class LimeLightAlignCommand extends CommandBase {
 
           var robotToTargetDistance = limeLightSubSystem.getTargetPose3d_RobotSpace().getZ();
 
+         
           // Get the robot heading, and the robot-relative heading of the target
           var drivetrainHeading = driveTrainSubsystem.getRotation2d();
           var targetHeading = drivetrainHeading.plus(lastTarget.getRotation());
@@ -180,17 +222,10 @@ public class LimeLightAlignCommand extends CommandBase {
         double omegaSpeed = rotationFilter.calculate(rotationCorrection);
 
 
-        // ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,omegaSpeed);
-        // SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-        //        driveTrainSubsystem.setModuleStates(moduleStates);
-
-
-        ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-          xSpeed, ySpeed, omegaSpeed, driveTrainSubsystem.getRotation2d());
-      SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-
-      driveTrainSubsystem.setModuleStates(moduleStates);
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,omegaSpeed);
+        SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
       
+        driveTrainSubsystem.setModuleStates(moduleStates);
 
       }
 
