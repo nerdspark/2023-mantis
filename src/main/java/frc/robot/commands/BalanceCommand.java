@@ -1,6 +1,8 @@
 package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /**
@@ -38,7 +40,11 @@ public class BalanceCommand extends CommandBase {
       if (isReverse) {
         speed *= -1;
       }
-      drivetrainSubsystem.drive(new ChassisSpeeds(speed, 0.0, 0.0));
+
+      
+     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(speed, 0.0, 0.0);
+      SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+      drivetrainSubsystem.setModuleStates(moduleStates);
     }
   }
 
