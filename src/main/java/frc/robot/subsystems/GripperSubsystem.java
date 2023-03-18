@@ -31,5 +31,13 @@ public class GripperSubsystem extends SubsystemBase {
         RightGripperMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 
+    public double getLeftPosition() {
+        return GripperMotor1Encoder.getPosition();
+    }
+
+    public double getRightPosition() {
+        return GripperMotor2Encoder.getPosition();
+    }
+
 }
 
