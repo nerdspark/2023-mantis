@@ -23,34 +23,34 @@ public class BalanceCommand extends CommandBase {
 
   @Override
   public void initialize() {
-    done = false;
-  }
+//     done = false;
+//   }
 
-  @Override
-  public void execute() {
-    var yAccel = drivetrainSubsystem.getGyroVelocityXYZ()[1];
-    if (isReverse) {
-      yAccel *= -1;
-    }
-    if (yAccel > 10 || done) {
-      done = true;
-      drivetrainSubsystem.setWheelsToX();
-    } else {
-      var speed = 0.5;
-      if (isReverse) {
-        speed *= -1;
-      }
+//   @Override
+//   public void execute() {
+//     var yAccel = drivetrainSubsystem.getGyroVelocityXYZ()[1];
+//     if (isReverse) {
+//       yAccel *= -1;
+//     }
+//     if (yAccel > 10 || done) {
+//       done = true;
+//       drivetrainSubsystem.setWheelsToX();
+//     } else {
+//       var speed = 0.5;
+//       if (isReverse) {
+//         speed *= -1;
+//       }
 
       
-     ChassisSpeeds chassisSpeeds = new ChassisSpeeds(speed, 0.0, 0.0);
-      SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-      drivetrainSubsystem.setModuleStates(moduleStates);
-    }
+//      ChassisSpeeds chassisSpeeds = new ChassisSpeeds(speed, 0.0, 0.0);
+//       SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+//       drivetrainSubsystem.setModuleStates(moduleStates);
+//     }
   }
 
-  @Override
-  public void end(boolean interrupted) {
-    drivetrainSubsystem.setWheelsToX();
-  }
+//   @Override
+//   public void end(boolean interrupted) {
+//     drivetrainSubsystem.setWheelsToX();
+//   }
 
 }
