@@ -16,6 +16,7 @@ public class ScoreMidPositionCommand extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(elevatorSubsystem,
                                 ArmConstants.scoreMidPosition.get("inclinatorCmdPos")),
-                        new MoveWristCommand(wristSubsystem, ArmConstants.scoreMidPosition.get("wristCmdPos"))));
+                        new MoveWristCommand(wristSubsystem,
+                                ArmConstants.scoreMidPosition.get("wristCmdPos"))));
     }
 }

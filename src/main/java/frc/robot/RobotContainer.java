@@ -5,7 +5,6 @@
 package frc.robot;
 
 
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.BucketPickupCommand;
@@ -15,15 +14,13 @@ import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.GroundDropCommand;
+import frc.robot.commands.GroundPickupCommand;
 import frc.robot.commands.HomeCommand;
 import frc.robot.commands.MicroAdjustCommand;
-import frc.robot.commands.MoveArmCommand;
-import frc.robot.commands.MoveBucketCommand;
-import frc.robot.commands.MoveElevatorCommand;
 import frc.robot.commands.MoveGripperCommand;
-import frc.robot.commands.MoveWristCommand;
 import frc.robot.commands.ScoreHighPositionCommand;
 import frc.robot.commands.ScoreMidPositionCommand;
+import frc.robot.commands.ShelfPickupCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 
 import frc.robot.subsystems.ConeVisionSubsystem;
@@ -195,16 +192,26 @@ public class RobotContainer {
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.MidDrop)))
         .onTrue(new ScoreMidPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
-    
+
     // score high position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.HighDrop)))
         .onTrue(new ScoreHighPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
-      // ground drop
-      new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)
-          .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundDrop)))
-          .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+    // ground drop
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundDrop)))
+        .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // ground pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundPickup)))
+        .onTrue(new GroundPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // shelf pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.ShelfPickup)))
+        .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
   }
 
   /**
