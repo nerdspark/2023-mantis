@@ -44,6 +44,6 @@ public class MoveBucketCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     // todo
-    return false;
+    return true;
   }
 }

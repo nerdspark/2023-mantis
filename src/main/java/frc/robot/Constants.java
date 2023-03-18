@@ -320,8 +320,8 @@ public final class Constants {
     public static final double[] WristGains = { 0.4, 0, 0, 0, 0, -0.5, 0.5 };
     public static final double[] BucketGains = { 0.4, 0, 0, 0, 0, -0.25, 0.25 };
 
-    public static final double armAdjustMultiplier = 10.0;
-    public static final double wristAdjustMultiplier = 0.5;
+    public static final double armAdjustMultiplier = 15.0;
+    public static final double wristAdjustMultiplier = 2.0;
   }
 
   public static final class OIConstants {
