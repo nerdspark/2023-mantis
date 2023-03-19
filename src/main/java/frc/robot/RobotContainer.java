@@ -17,6 +17,7 @@ import frc.robot.commands.GroundDropCommand;
 import frc.robot.commands.GroundPickupCommand;
 import frc.robot.commands.HomeCommand;
 import frc.robot.commands.MicroAdjustCommand;
+import frc.robot.commands.MoveBucketCommand;
 import frc.robot.commands.MoveGripperCommand;
 import frc.robot.commands.ScoreHighPositionCommand;
 import frc.robot.commands.ScoreMidPositionCommand;
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -132,6 +134,8 @@ public class RobotContainer {
       () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)
     ));
 
+    new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Closed).execute();
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -181,12 +185,12 @@ public class RobotContainer {
     // home
     new Trigger(() -> coDriverJoystick.getPOV() > 180)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.Home)))
-        .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
 
     // bucket pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.BucketPickup)))
-        .onTrue(new BucketPickupCommand(elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem));
+        .onTrue(new BucketPickupCommand(elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
 
     // score mid position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
@@ -212,6 +216,15 @@ public class RobotContainer {
     new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.ShelfPickup)))
         .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // Right trigger - close gripper when bucket pickup, and vice versa
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+        && (driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5))
+        .onTrue(new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED));
+
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+        && (driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5))
+        .onTrue(new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED));
   }
 
   /**

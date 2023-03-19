@@ -95,7 +95,8 @@ public class MoveGripperCommand extends CommandBase {
   public boolean isFinished() {
     System.out.println("[MoveArmCommand] Left: " + m_subsystem.getLeftPosition() + " Right: " + m_subsystem.getRightPosition() + " Target: " + leftPosition
         + " Difference: " + Math.abs(m_subsystem.getLeftPosition() - leftPosition));                        
-    return (Math.abs(Math.abs(m_subsystem.getLeftPosition()) - Math.abs(leftPosition)) < 1
-        && Math.abs(Math.abs(m_subsystem.getRightPosition()) - Math.abs(rightPosition)) < 1);
+    // return (Math.abs(Math.abs(m_subsystem.getLeftPosition()) - Math.abs(leftPosition)) < 2
+    //     && Math.abs(Math.abs(m_subsystem.getRightPosition()) - Math.abs(rightPosition)) < 2);
+    return true;
   }
 }

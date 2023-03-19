@@ -25,13 +25,13 @@ public class BucketSubsystem extends SubsystemBase {
     }
     // Neither method uses the position parameter
     public void retract() {
-        LeftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
-        RightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+        LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
+        RightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
 
     }
 
     public void extend() {
-        LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
-        RightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
+        LeftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+        RightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
     }
 }
