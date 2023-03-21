@@ -23,6 +23,13 @@ public class BucketSubsystem extends SubsystemBase {
         BucketMotor1Encoder = LeftBucketMotor.getEncoder();
         BucketMotor2Encoder = RightBucketMotor.getEncoder();
     }
+
+    public double[] getPositions() {
+        double[] position = { BucketMotor1Encoder.getPosition(), BucketMotor2Encoder.getPosition() };
+
+        return position;
+    }
+
     // Neither method uses the position parameter
     public void retract() {
         LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);

@@ -44,6 +44,11 @@ public class MoveBucketCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     // todo
-    return true;
+    if (position == BucketPosition.EXTENDED) {
+      return Math.abs(m_subsystem.getPositions()[0]) >= 0.3;
+    } else if (position == BucketPosition.RETRACTED) {
+      return Math.abs(m_subsystem.getPositions()[0]) <= 0.2;
+    }
+    return false;
   }
 }
