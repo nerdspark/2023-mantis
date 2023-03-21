@@ -13,6 +13,18 @@ import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.Auton.ThreeElement;
+import frc.robot.commands.Auton.line2meters;
+import frc.robot.commands.Auton.line2metersCommand;
+import frc.robot.commands.Auton.line2metersTurn;
+import frc.robot.commands.Auton.threeElementCommand;
+import frc.robot.commands.Auton.threeElement_Blue;
+import frc.robot.commands.Auton.threeElement_Red;
+import frc.robot.commands.Auton.threeMeterVisionTest;
+import frc.robot.commands.Auton.threeMeterVisionTestCommand;
+import frc.robot.commands.Auton.twoConeWithVision;
+import frc.robot.commands.Auton.visionTest5M;
+import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -109,20 +121,34 @@ public class RobotContainer {
       // Configure the button bindings
     configureButtonBindings();
 
-    //Update this with correct values for your robot
-    //limeLightSubSystem.updateLimelightPose(Units.inchesToMeters(-3), Units.inchesToMeters(0), Units.inchesToMeters(6), 0, 0, 0); 
-   //To initiate the json parser. which generally takes more time first time
-   // LimelightResults initialLimeLightResults = limeLightSubSystem.getLimeLightResults();
-   
-   
-    // chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
-    // chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
-    // chooser.addOption("Line 2 Meters Command", new line2metersCommand());
-    // chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
-    //                                           new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
-    //                                           new DriveToPoseCommand(swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
 
-    // Shuffleboard.getTab("Autonomous").add(chooser);
+    // chooser.addOption("Line 2 Meters", new line2meters(swerveSubsystem));
+    // chooser.addOption("Line 2 Meters Turn", new line2metersTurn(swerveSubsystem));
+    // chooser.addOption("Three Meters Vision Test", new threeMeterVisionTest(swerveSubsystem));
+    // chooser.addOption("Three Meters Vision Test Command", new threeMeterVisionTestCommand(swerveSubsystem));
+    // chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
+
+    // chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+    // chooser.addOption("Five Meters Vision Test Command Marker", new visionTest5MMarker(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+
+    // chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+    // // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
+    //     new visionTest5M(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
+
+    // chooser.setDefaultOption("Line Three Meters With Vision Deadline", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
+    //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
+
+    chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
+    chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
+
+    chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
+    chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
+    chooser.addOption("Line 2 Meters and Goto Tag", new  SequentialCommandGroup( new line2meters(swerveSubsystem), 
+                                              new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+                                              new DriveToPoseCommand(swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
+
+    Shuffleboard.getTab("Autonomous").add(chooser);
+
   }
 
     /**
