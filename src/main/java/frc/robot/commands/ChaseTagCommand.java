@@ -122,7 +122,6 @@ public class ChaseTagCommand extends CommandBase {
           // Transform the tag's pose to set our goal
           var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
 
-    
           // Drive
           xController.setGoal(goalPose.getX());
           yController.setGoal(goalPose.getY());

@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import edu.wpi.first.math.geometry.CoordinateAxis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -75,19 +74,12 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-      public static final double kTrackWidth = Units.inchesToMeters(17);
+      public static final double kTrackWidth = Units.inchesToMeters(25);
       // Distance between right and left wheels
-      public static final double kWheelBase = Units.inchesToMeters(17);
+      public static final double kWheelBase = Units.inchesToMeters(19);
       // Distance between front and back wheels
+      public static final String canBusName = "canivore1";
 
-      //Old Kinematics
-      // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-      //         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, +kTrackWidth / 2));
-
-      // New Kinematics
       public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
               new Translation2d(kWheelBase / 2, kTrackWidth / 2),
               new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -121,27 +113,16 @@ public final class Constants {
       public static final int kBackRightDriveCANCoderPort = 21;
 
       public static final boolean kFrontLeftDriveCANCoderReversed = true;
-      public static final boolean kBackLeftDriveCANCoderReversed = false;
-      public static final boolean kFrontRightDriveCANCoderReversed = false;
-      public static final boolean kBackRightDriveCANCoderReversed = false;
+      public static final boolean kBackLeftDriveCANCoderReversed = true;
+      public static final boolean kFrontRightDriveCANCoderReversed = true;
+      public static final boolean kBackRightDriveCANCoderReversed = true;
+
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
-      public static final double kBackLeftDriveCANCoderOffsetRad = -2.14 + Math.PI;
-      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16+Math.PI;
-      public static final double kBackRightDriveCANCoderOffsetRad = -0.14+Math.PI;
-
-      //Latest Kinmatics2
-        // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
-        // public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
-        // public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        // public static final double kBackRightDriveCANCoderOffsetRad = (173.6-1%80)*Math.PI/180;
-
-      // //Old Kinematics
-      // public static final double kFrontLeftDriveCANCoderOffsetRad = -6.4+180*Math.PI/180;
-      // public static final double kBackLeftDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-      // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
-      // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
+      public static final double kFrontLeftDriveCANCoderOffsetDeg = 28 + 180;//-151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = -127 + 180;//53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetDeg = 158 + 180;//(-0.66)+(-60.4*Math.PI/180);
+      public static final double kBackRightDriveCANCoderOffsetDeg = -70 + 180;//110.1*Math.PI/180;
 
       public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
       public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
@@ -153,7 +134,7 @@ public final class Constants {
       public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
 
 
-      public static final double kFalconMaxSetSpeed = 7000d;
+      public static final double kFalconMaxSetSpeed = 8000d;
 
       public static final double kPTargetTurning = -2.5d;
       public static final double kITargetTurning = 0d;    
@@ -181,48 +162,41 @@ public final class Constants {
 
   }
 
-  // public static final class AutoConstants {
-  //     public static final double kMaxSpeedMetersPerSecond = 1d;
-  //     public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
-  //     public static final double kMaxAccelerationMetersPerSecondSquared = 0.5d;
-  //     public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
-  //     public static final double kPXController = 2.5d;
-  //     public static final double kIXController = 0d;
-  //     public static final double kDXController = 0d;
-  //     public static final double kPYController = 2.5d;
-  //     public static final double kIYController = 0d;
-  //     public static final double kDYController = 0d;
-  //     public static final double kPThetaController = 1d;
-  //     public static final double kIThetaController = 0d;
-  //     public static final double kDThetaController = 0d;
-  
+  // public static final class GripperConstants {
+  //     public static final int leftGripperID = 5;
+  //     public static final int rightGripperID = 4;
 
-  //     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-  //         kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+  //     public static final boolean leftGripperReversed = true;
+  //     public static final boolean rightGripperReversed = false;
+    
+  //     public static final double kPGripper = 1d;
+  //     public static final double kIGripper = 0d;
+  //     public static final double kDGripper = 0d;
   // }
 
-
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 1d;
-    public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 0.5d;
-    public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
-    public static final double kPXController = 2.5d;
-    public static final double kIXController = 0d;
-    public static final double kDXController = 0d;
-    public static final double kPYController = 2.5d;
-    public static final double kIYController = 0d;
-    public static final double kDYController = 0d;
-    public static final double kPThetaController = 2.5d;
-    public static final double kIThetaController = 0d;
-    public static final double kDThetaController = 0d;
+      public static final double kMaxSpeedMetersPerSecond = 1d;
+      public static final double kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
+      public static final double kMaxAccelerationMetersPerSecondSquared = 0.5d;
+      public static final double kMaxAngularAccelerationRadiansPerSecondSquared = 4 * Math.PI;
+      public static final double kPXController = 2.5d;
+      public static final double kIXController = 0d;
+      public static final double kDXController = 0d;
+      public static final double kPYController = 2.5d;
+      public static final double kIYController = 0d;
+      public static final double kDYController = 0d;
+      public static final double kPThetaController = 2.5d;
+      public static final double kIThetaController = 0d;
+      public static final double kDThetaController = 0d;
+  
+      public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+          kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
 
-    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared);
+      public static final HashMap<String, Command> autoEventMap = new HashMap<>();
+      
+  }
 
-    public static final HashMap<String, Command> autoEventMap = new HashMap<>();
-    
-}
+
 
   public static final class OIConstants {
       public static final int kDriverControllerPort = 0;
@@ -237,24 +211,24 @@ public final class Constants {
       public static final int kDriverCancelTurn = 7;//back button
       public static final int kDriverTopSpeed = 5;//left bumper
 
-      public static final double kDeadbandSteer = 0.3d;
+      public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.75;
-      public static final double driverTopMultiplier = 1.5;
+      public static final double driverTopMultiplier = 1;
       public static final double driverPower = 3.5;//2.5 faster but clicks
       public static final double driverBaseSpeedMetersPerSecond = 00;
       public static final double triggerMultiplier = 0.1;
       public static final double triggerDeadband = 0.1;
 
-      public static final double driverEPower = 3.5;
+      public static final double driverEPower = 3;
       public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverEXPJoyMultiplier = driverEPower;
 
       public static final double targetTurnGainScheduleSpeed = 40;
 
-      public static final double joystickTurningGain = -8;
+      public static final double joystickTurningGain = 2;
 
   }
 
@@ -266,7 +240,7 @@ public final class Constants {
     //                         0, 0.524,
     //                         0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
-   public static final String aprTagCameraName = "OV5647";
+   public static final String aprTagCameraName = "photonvision";
    public static final String coneCameraName = "USB_Web_Camera";
 
    //For color pipelines
@@ -282,16 +256,16 @@ public final class Constants {
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
         public static final Transform2d CAMERA_TO_ROBOT = 
-            new Transform2d(new Translation2d(0.102, 0.0), new Rotation2d(0.0));
+            new Transform2d(new Translation2d(0.2, 0.0), new Rotation2d(0.0));
 
                 /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
         public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-        new Transform3d(new Translation3d(0.102, 0, -0.305), new Rotation3d(0.0, 0.0, -0.1));
+        new Transform3d(new Translation3d(0.2, 0, -0.90), new Rotation3d(0.0, 0.0, -0.1));
 
       // Vision Drive Constants
 
-        public static final double TRANSLATION_TOLERANCE = 0.05;
-        public static final double ROTATION_TOLERANCE =1;
+        public static final double TRANSLATION_TOLERANCE = 0.2;
+        public static final double ROTATION_TOLERANCE =5;
 
         public static final double MAX_VELOCITY = 2;
         public static final double MAX_ACCELARATION = 1;
@@ -312,26 +286,5 @@ public final class Constants {
       }
 
 
-      public enum OffsetFromTargetAprTag {
-
-        LEFT(0,0.5,0),
-        CENTER(0,0,0),
-        RIGHT(0,-0.5,0);
-    
-        public final double xOffset;
-        public final double yOffset;
-        public final double rotationOffset;
-    
-        private OffsetFromTargetAprTag(double xOffset, double yOffset, double rotationOffset) {
-          this.xOffset = xOffset;
-          this.yOffset = yOffset;
-          this.rotationOffset = rotationOffset;
-        }
-            
-
-        
-      } 
-         
 
 }
-

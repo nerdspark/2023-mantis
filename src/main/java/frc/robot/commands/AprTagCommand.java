@@ -27,7 +27,7 @@ public class AprTagCommand extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final ExampleSubsystem m_subsystem;
   public PhotonCamera photonCamera;
-  private int tagToChase = 6;
+  private int tagToChase = 0;
   private boolean aprTagFound = false;
   private Pose2d goalPose = null;
   private PhotonTrackedTarget lastTarget;
@@ -61,7 +61,6 @@ public class AprTagCommand extends CommandBase {
   public void initialize() {
     goalPose = null;
     lastTarget = null;
-    this.aprTagFound = false;
     SmartDashboard.putNumber("AprTagPipeLine INIT", this.tagToChase);  
   }
 
@@ -84,10 +83,7 @@ public class AprTagCommand extends CommandBase {
         SmartDashboard.putNumber("AprTagPipeLine RobotPose Y", robotPose.getY());
         SmartDashboard.putNumber("AprTagPipeLine RobotPose Angle", robotPose.getRotation().toRotation2d().getDegrees());
 
-
     var photonRes = photonCamera.getLatestResult();
-    SmartDashboard.putBoolean("Target Found?", photonRes.hasTargets());
-
     if (photonRes.hasTargets()) {
       SmartDashboard.putNumber("AprTagPipeLine TargetFound", this.tagToChase);
       // Find the tag we want to chase
@@ -115,6 +111,7 @@ public class AprTagCommand extends CommandBase {
           SmartDashboard.putNumber("AprTagPipeLine Target X", X);
           SmartDashboard.putNumber("AprTagPipeLine Target Y", Y);
           SmartDashboard.putNumber("AprTagPipeLine Target Yaw", yaw);
+
 
           // // Get the transformation from the camera to the tag (in 2d)
           // var camToTarget = target.getBestCameraToTarget();

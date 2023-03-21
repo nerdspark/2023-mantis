@@ -55,9 +55,6 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
   private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
   private boolean sawTag = false;
 
-  Pose2d estimatedPoseByVision = null;
-
-  
   public PoseEstimatorSubSystem(PhotonCamera photonCamera, SwerveSubsystem drivetrainSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
     PhotonPoseEstimator photonPoseEstimator;
@@ -153,7 +150,6 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
             && estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FieldConstants.fieldLength
             && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FieldConstants.fieldWidth) {
           previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
-          estimatedPoseByVision = estimatedPose.toPose2d();
           poseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
         }
       });
@@ -173,17 +169,11 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
         pose.getX(), 
         pose.getY(),
         pose.getRotation().getDegrees());
-        
   }
 
   public Pose2d getCurrentPose() {
     return poseEstimator.getEstimatedPosition();
   }
-
-  public Pose2d visionEstimatedPose() {
-    return this.estimatedPoseByVision;
-  }
-
 
   /**
    * Resets the current pose to the specified pose. This should ONLY be called
