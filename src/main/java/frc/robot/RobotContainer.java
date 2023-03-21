@@ -23,6 +23,7 @@ import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.line2metersTurn;
 import frc.robot.commands.Auton.threeElementCommand;
+import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
 import frc.robot.commands.Auton.threeMeterVisionTest;
 import frc.robot.commands.Auton.threeMeterVisionTestCommand;
@@ -119,24 +120,24 @@ public class RobotContainer {
     configureButtonBindings();
 
 
-    chooser.addOption("Line 2 Meters", new line2meters(swerveSubsystem));
-    chooser.addOption("Line 2 Meters Turn", new line2metersTurn(swerveSubsystem));
-    chooser.addOption("Three Meters Vision Test", new threeMeterVisionTest(swerveSubsystem));
-    chooser.addOption("Three Meters Vision Test Command", new threeMeterVisionTestCommand(swerveSubsystem));
-    chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
+    // chooser.addOption("Line 2 Meters", new line2meters(swerveSubsystem));
+    // chooser.addOption("Line 2 Meters Turn", new line2metersTurn(swerveSubsystem));
+    // chooser.addOption("Three Meters Vision Test", new threeMeterVisionTest(swerveSubsystem));
+    // chooser.addOption("Three Meters Vision Test Command", new threeMeterVisionTestCommand(swerveSubsystem));
+    // chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
 
-    chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
-    chooser.addOption("Five Meters Vision Test Command Marker", new visionTest5MMarker(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+    // chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+    // chooser.addOption("Five Meters Vision Test Command Marker", new visionTest5MMarker(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
 
-    chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
-    // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
+    // chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera, m_exampleSubsystem, poseEstimator));
+    // // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
     //     new visionTest5M(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
 
     // chooser.setDefaultOption("Line Three Meters With Vision Deadline", new  ParallelDeadlineGroup( new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
     //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
 
     chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
-
+    chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
 
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
     chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));

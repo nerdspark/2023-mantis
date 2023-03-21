@@ -49,7 +49,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
 
   this.trajectory = PathPlanner.loadPath(pathName, maxVel, maxAccel);
 
-  // AutoConstants.autoEventMap.put("Marker1", new PrintCommand("Passed Marker1"));
+  AutoConstants.autoEventMap.put("Marker1", new PrintCommand("Passed Marker1"));
   // AutoConstants.autoEventMap.put("Marker2", new PrintCommand("Passed Marker2"));
 
 

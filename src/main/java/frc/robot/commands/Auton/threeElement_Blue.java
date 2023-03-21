@@ -19,15 +19,18 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
-public class threeElement_Red extends SequentialCommandGroup {
+public class threeElement_Blue extends SequentialCommandGroup {
 
   // public line2metersCommand(SwerveSubsystem swervesubsystem) {
   // }
 
-  public threeElement_Red(SwerveSubsystem swerveSubsystem){
+  public threeElement_Blue(SwerveSubsystem swerveSubsystem){
 
     addCommands(
-      new DriveFollowPath("threeElementRed_1", 3, 2, true)
+      new DriveFollowPath("threeElementBlue_1", 3, 2, true),
+      new DriveFollowPath("threeElementBlue_2", 3, 2, false),
+      new DriveFollowPath("threeElementBlue_3", 3, 2, false),
+      new DriveFollowPath("threeElementBlue_4", 3, 2, false)
       // new DriveFollowPath("threeConePathTwo", 3, 2, false),
       // new DriveFollowPath("threeConePathThree", 3, 2, false),
       // new DriveFollowPath("threeConePathFour", 3, 2, false)
