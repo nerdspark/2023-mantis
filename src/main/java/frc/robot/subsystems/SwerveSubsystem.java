@@ -22,7 +22,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
             DriveConstants.kFrontLeftDriveCANCoderPort,
-            DriveConstants.kFrontLeftDriveCANCoderOffsetDeg,
+            DriveConstants.kFrontLeftDriveCANCoderOffsetRad,
             DriveConstants.kFrontLeftDriveCANCoderReversed);
 
     private final SwerveModule frontRight = new SwerveModule(
@@ -31,7 +31,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
             DriveConstants.kFrontRightDriveCANCoderPort,
-            DriveConstants.kFrontRightDriveCANCoderOffsetDeg,
+            DriveConstants.kFrontRightDriveCANCoderOffsetRad,
             DriveConstants.kFrontRightDriveCANCoderReversed);
 
     private final SwerveModule backLeft = new SwerveModule(
@@ -40,7 +40,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
             DriveConstants.kBackLeftDriveCANCoderPort,
-            DriveConstants.kBackLeftDriveCANCoderOffsetDeg,
+            DriveConstants.kBackLeftDriveCANCoderOffsetRad,
             DriveConstants.kBackLeftDriveCANCoderReversed);
 
     private final SwerveModule backRight = new SwerveModule(
@@ -49,11 +49,10 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
             DriveConstants.kBackRightDriveCANCoderPort,
-            DriveConstants.kBackRightDriveCANCoderOffsetDeg,
+            DriveConstants.kBackRightDriveCANCoderOffsetRad,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
-
-    private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
+    private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(), 
@@ -76,10 +75,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.setYaw(0);
-        frontLeft.resetEncoders();
-        frontRight.resetEncoders();
-        backLeft.resetEncoders();
-        backRight.resetEncoders();
+
     }
 
     public double getHeading() {
@@ -87,8 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public Rotation2d getRotation2d() {
-        return gyro.getRotation2d();
-        // return Rotation2d.fromDegrees(getHeading());
+        return Rotation2d.fromDegrees(getHeading());
     }
 
     public Pose2d getPose() {
@@ -237,4 +232,33 @@ public class SwerveSubsystem extends SubsystemBase {
         //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
         // }
     
+
+        /**
+
+  /**
+   * Set the wheels to an X pattern to plant the robot.
+   */
+  public void setWheelsToX() {
+    setModuleStates(new SwerveModuleState[] {
+      // front left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+      // front right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+      // back left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+      // back right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+    });
+  }
+
+  /**
+   * Gets the raw gyro data.
+   * @return x[0], y[1], and z[2] data in degrees per second
+   */
+  public double[] getGyroVelocityXYZ() {
+    double[] xyz = new double[3];
+    gyro.getRawGyro(xyz);
+    return xyz;
+  }
+
 }
