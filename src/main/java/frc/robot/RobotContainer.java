@@ -6,46 +6,22 @@ package frc.robot;
 
 
 import frc.robot.Constants.OIConstants;
-import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ChaseTagCommand;
-import frc.robot.commands.ConeVisionCommand;
-import frc.robot.commands.CubeVisionCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
-import frc.robot.commands.LimeLightAlignCommand;
-import frc.robot.commands.LimeLightTestCommand;
 import frc.robot.commands.SwerveJoystickCmd;
-// import frc.robot.subsystems.ArmSubsystem;
-// import frc.robot.subsystems.BucketSubsystem;
-import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LimeLightSubSystem;
-import frc.robot.commands.Auton.ThreeElement;
-import frc.robot.commands.Auton.line2meters;
-import frc.robot.commands.Auton.line2metersCommand;
-import frc.robot.commands.Auton.line2metersTurn;
-import frc.robot.commands.Auton.threeElementCommand;
-import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.commands.Auton.threeMeterVisionTest;
-import frc.robot.commands.Auton.threeMeterVisionTestCommand;
-import frc.robot.commands.Auton.twoConeWithVision;
-import frc.robot.commands.Auton.visionTest5M;
-import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
-import frc.robot.subsystems.PoseEstimatorSubSystem2;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -94,24 +70,22 @@ public class RobotContainer {
   // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
 
   // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
-  // private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+  private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
 
   // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
   // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-  // private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem( photonCamera,swerveSubsystem);
-  // private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 8);
-  // private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,6,poseEstimator::getCurrentPose);
+  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(photonCamera,swerveSubsystem);
+  // private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
+  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,8,poseEstimator::getCurrentPose);
 
-  // private final DriveToPoseCommand estimatePoseCommand = new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose);
-
-
+  
   //Vision
 
   //Limelight
 
-  public static final LimeLightSubSystem limeLightSubSystem = new LimeLightSubSystem("limelight");
-   private final PoseEstimatorSubSystem2 poseEstimator2 = new PoseEstimatorSubSystem2(limeLightSubSystem,swerveSubsystem);
+  // public static final LimeLightSubSystem limeLightSubSystem = new LimeLightSubSystem("limelight");
+  //  private final PoseEstimatorSubSystem2 poseEstimator2 = new PoseEstimatorSubSystem2(limeLightSubSystem,swerveSubsystem);
 
 
 
@@ -123,22 +97,22 @@ public class RobotContainer {
       () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
       () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
       () -> -driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
-      () -> driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
+      () -> -driverJoystick.getRawAxis(OIConstants.kDriverRotYAxis),      
       () -> !driverJoystick.getRawButton(OIConstants.kDriverFieldOrientedButtonIdx), 
       () -> driverJoystick.getPOV(), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger), 
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
       () -> driverJoystick.getRawButton(Constants.start), 
-      () -> !driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
+      () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
       // Configure the button bindings
     configureButtonBindings();
 
     //Update this with correct values for your robot
-    limeLightSubSystem.updateLimelightPose(Units.inchesToMeters(-3), Units.inchesToMeters(0), Units.inchesToMeters(6), 0, 0, 0); 
+    //limeLightSubSystem.updateLimelightPose(Units.inchesToMeters(-3), Units.inchesToMeters(0), Units.inchesToMeters(6), 0, 0, 0); 
    //To initiate the json parser. which generally takes more time first time
-    LimelightResults initialLimeLightResults = limeLightSubSystem.getLimeLightResults();
+   // LimelightResults initialLimeLightResults = limeLightSubSystem.getLimeLightResults();
    
    
     // chooser.setDefaultOption("Line 2 Meters", new line2meters(swerveSubsystem));
@@ -164,19 +138,24 @@ public class RobotContainer {
 
     SmartDashboard.putString("Config", "Button Bindings");
 
-    // //Print April tag info to Smart dashboard - Button A
-    // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
-    // //Chase Aril Tag Continuous - Button B
+
+
+    //Print April tag info to Smart dashboard - Button A
+    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    //Chase Aril Tag Continuous - Button B
     // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
-    // //Go to Origin -  Button X
+    //Go to Origin -  Button X
     // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
     //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d().fromDegrees(90))));
-    // //Go to April Tag and Stop - Button Y
-    //   new JoystickButton(driverJoystick, Constants.buttonY).onTrue( 
-    
-    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
+    //Go to April Tag and Stop - Button Y
+      new JoystickButton(driverJoystick, Constants.buttonY).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 8, OffsetFromTargetAprTag.CENTER));
+      new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 7, OffsetFromTargetAprTag.CENTER));
+      new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 7, OffsetFromTargetAprTag.LEFT));
+      new JoystickButton(driverJoystick, Constants.buttonX).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 7, OffsetFromTargetAprTag.RIGHT));
 
-    new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new LimeLightAlignCommand(limeLightSubSystem, swerveSubsystem));
+    // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
+
+    // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new LimeLightAlignCommand(limeLightSubSystem, swerveSubsystem));
 
   }
 

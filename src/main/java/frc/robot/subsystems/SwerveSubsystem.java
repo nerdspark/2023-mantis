@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -51,7 +52,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderOffsetRad,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
-    private final Pigeon2 gyro = new Pigeon2(Constants.pigeonPort);
+    private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(), 
@@ -231,4 +232,33 @@ public class SwerveSubsystem extends SubsystemBase {
         //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
         // }
     
+
+        /**
+
+  /**
+   * Set the wheels to an X pattern to plant the robot.
+   */
+  public void setWheelsToX() {
+    setModuleStates(new SwerveModuleState[] {
+      // front left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+      // front right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+      // back left
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+      // back right
+      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+    });
+  }
+
+  /**
+   * Gets the raw gyro data.
+   * @return x[0], y[1], and z[2] data in degrees per second
+   */
+  public double[] getGyroVelocityXYZ() {
+    double[] xyz = new double[3];
+    gyro.getRawGyro(xyz);
+    return xyz;
+  }
+
 }

@@ -266,7 +266,7 @@ public final class Constants {
     //                         0, 0.524,
     //                         0)); // Cam mounted facing forward, half a meter forward of center, half a meter up
     // from center.
-   public static final String aprTagCameraName = "photonvision";
+   public static final String aprTagCameraName = "OV5647";
    public static final String coneCameraName = "USB_Web_Camera";
 
    //For color pipelines
@@ -282,16 +282,16 @@ public final class Constants {
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
         public static final Transform2d CAMERA_TO_ROBOT = 
-            new Transform2d(new Translation2d(0.2, 0.0), new Rotation2d(0.0));
+            new Transform2d(new Translation2d(0.102, 0.0), new Rotation2d(0.0));
 
                 /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
         public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-        new Transform3d(new Translation3d(0.2, 0, -0.90), new Rotation3d(0.0, 0.0, -0.1));
+        new Transform3d(new Translation3d(0.102, 0, -0.305), new Rotation3d(0.0, 0.0, -0.1));
 
       // Vision Drive Constants
 
-        public static final double TRANSLATION_TOLERANCE = 0.2;
-        public static final double ROTATION_TOLERANCE =5;
+        public static final double TRANSLATION_TOLERANCE = 0.05;
+        public static final double ROTATION_TOLERANCE =1;
 
         public static final double MAX_VELOCITY = 2;
         public static final double MAX_ACCELARATION = 1;
@@ -311,9 +311,27 @@ public final class Constants {
 
       }
 
-      
 
+      public enum OffsetFromTargetAprTag {
 
+        LEFT(0,0.5,0),
+        CENTER(0,0,0),
+        RIGHT(0,-0.5,0);
+    
+        public final double xOffset;
+        public final double yOffset;
+        public final double rotationOffset;
+    
+        private OffsetFromTargetAprTag(double xOffset, double yOffset, double rotationOffset) {
+          this.xOffset = xOffset;
+          this.yOffset = yOffset;
+          this.rotationOffset = rotationOffset;
+        }
+            
+
+        
+      } 
+         
 
 }
 

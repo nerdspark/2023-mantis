@@ -23,7 +23,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.Constants;
+import frc.robot.FieldConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.Constants.VisionConstants;
 
 
@@ -34,15 +36,16 @@ public class GoToTagCommand extends CommandBase {
   private static final TrapezoidProfile.Constraints OMEGA_CONSTRATINTS = 
       new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY_ROTATION, VisionConstants.MAX_ACCELARATION_ROTATION);
   
-  private  int tagToChase;
+  private  int tagToAlign;
   //private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
   // private static final Transform3d TAG_TO_GOAL = 
   //     new Transform3d(
   //         new Translation3d(1, 0.0, 0.0),
   //         new Rotation3d(0.0, 0.0, Math.PI));
 
-  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0), Rotation2d.fromDegrees(180.0));
-
+  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1.0, 0), Rotation2d.fromDegrees(180.0));
+  private   OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
+  private   Transform2d GOAL_OFFSET = null;
 
   private final PhotonCamera photonCamera;
   private final SwerveSubsystem drivetrainSubsystem;
@@ -54,26 +57,39 @@ public class GoToTagCommand extends CommandBase {
 
   private PhotonTrackedTarget lastTarget;
 
-  boolean targetFound = false;
+  boolean targetReached = false;
 
 
   public GoToTagCommand(
         PhotonCamera photonCamera, 
         SwerveSubsystem drivetrainSubsystem,
-        Supplier<Pose2d> poseProvider, int tagToChase) {
+        Supplier<Pose2d> poseProvider, int tagToAlign, OffsetFromTargetAprTag offsetFromTarget) {
     this.photonCamera = photonCamera;
     this.drivetrainSubsystem = drivetrainSubsystem;
     this.poseProvider = poseProvider;
-    this.tagToChase=tagToChase;
+    this.tagToAlign=tagToAlign;
+    this.offsetFromTarget = offsetFromTarget;
+    
+
+    this.GOAL_OFFSET = new Transform2d(new Translation2d(this.offsetFromTarget.xOffset,this.offsetFromTarget.yOffset), Rotation2d.fromDegrees(this.offsetFromTarget.rotationOffset));
+
 
     xController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
     yController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
     omegaController.setTolerance(VisionConstants.ROTATION_TOLERANCE);
     omegaController.enableContinuousInput(-Math.PI, Math.PI);
-
-
+   
     addRequirements(drivetrainSubsystem);
   }
+  public GoToTagCommand(
+    PhotonCamera photonCamera, 
+    SwerveSubsystem drivetrainSubsystem,
+    Supplier<Pose2d> poseProvider, int tagToAlign){
+
+      this(photonCamera, drivetrainSubsystem, poseProvider, tagToAlign, OffsetFromTargetAprTag.CENTER );
+
+    }
+  
 
   @Override
   public void initialize() {
@@ -89,7 +105,7 @@ public class GoToTagCommand extends CommandBase {
     xController.reset(robotPose.getX());
     yController.reset(robotPose.getY());
 
-    targetFound = false;
+    targetReached = false;
 
   }
 
@@ -109,21 +125,21 @@ public class GoToTagCommand extends CommandBase {
     SmartDashboard.putNumber("GoToTagCommand robotPose.Y", robotPose.getY());
     SmartDashboard.putNumber("GoToTagCommand robotPose.Angle", robotPose2d.getRotation().getRadians());
     var photonRes = photonCamera.getLatestResult();
+    SmartDashboard.putBoolean("Target Found?", photonRes.hasTargets());
 
     if (photonRes.hasTargets()) {
       // Find the tag we want to chase
 
       Optional<PhotonTrackedTarget> targetOpt = null;
-      if(targetFound == false) {
+      // if(targetFound == false) {
         targetOpt = photonRes.getTargets().stream()
-          .filter(t -> t.getFiducialId() == this.tagToChase)
+          .filter(t -> t.getFiducialId() == this.tagToAlign)
           .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .5 && t.getPoseAmbiguity() != -1)
           .findFirst();
-      }
+      // }
       
       if(targetOpt != null){
       if (targetOpt.isPresent()) {
-        targetFound = true;
         var target = targetOpt.get();
         if (!target.equals(lastTarget)) {
           // This is new target data, so recalculate the goal
@@ -138,11 +154,16 @@ public class GoToTagCommand extends CommandBase {
           
           // Transform the tag's pose to set our goal
           // var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
-          var goalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
+          var centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
 
+          //offset the goal pose by offset from target to align to scoring location.
+
+          var goalPose = centerGoalPose.transformBy(GOAL_OFFSET);
+
+          targetReached = isRobotAtGoalPose(goalPose, robotPose2d);
 
           // Drive
-            xController.setGoal(goalPose.getX());
+            xController.setGoal(goalPose.getX()); 
             yController.setGoal(goalPose.getY());
             omegaController.setGoal(goalPose.getRotation().getRadians());
             SmartDashboard.putNumber("GoToTagCommand goal Pose X", goalPose.getX());
@@ -199,11 +220,23 @@ public class GoToTagCommand extends CommandBase {
   @Override
   public boolean isFinished() {
  
-    return xController.atGoal() && yController.atGoal() && omegaController.atGoal();
-    
+    // return xController.atGoal() && yController.atGoal() && omegaController.atGoal();
+    return targetReached || lastTarget==null;
     
     }
 
-  
+  private boolean isRobotAtGoalPose(Pose2d goalPose, Pose2d robotPose){
+
+
+    Transform2d poseDifference = goalPose.minus(robotPose);
+
+    SmartDashboard.putNumber("GoToTagCommand poseDifferenceX", poseDifference.getX());
+    SmartDashboard.putNumber("GoToTagCommand poseDifference Y", poseDifference.getY());
+    SmartDashboard.putNumber("GoToTagCommand poseDifference Angle", poseDifference.getRotation().getDegrees());
+
+    return (Math.abs(poseDifference.getX()) <= VisionConstants.TRANSLATION_TOLERANCE) && 
+        (Math.abs(poseDifference.getY()) <= VisionConstants.TRANSLATION_TOLERANCE) && 
+        (Math.abs(poseDifference.getRotation().getDegrees()) <= VisionConstants.ROTATION_TOLERANCE);
+  }
 
   }
