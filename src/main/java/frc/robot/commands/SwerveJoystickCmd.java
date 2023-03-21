@@ -58,7 +58,7 @@ public class SwerveJoystickCmd extends CommandBase {
         double driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : 
-        ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.25 : OIConstants.driverEXPMultiplier))
+        ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.7 : OIConstants.driverEXPMultiplier))
         *Math.pow(Math.E, 
         Math.abs(
             (Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get())
@@ -76,13 +76,14 @@ public class SwerveJoystickCmd extends CommandBase {
         double turningSpeed = 0;
         if (resetGyroButton.get()) {
             zeroHeading();
-            SmartDashboard.putString("reset gyro button presssed", "yes");
             swerveSubsystem.resetOdometry(new Pose2d());
         } else 
-        SmartDashboard.putString("reset gyro button presssed", "no");
         if (DPAD.get() != -1) {
-            targetAngle =  -((DPAD.get()-90) * Math.PI / 180d);
+            targetAngle =  ((DPAD.get()) * Math.PI / 180d);
         } else 
+        if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
+            targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
+        }
         // if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
         //     // targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
         // } else 
@@ -98,11 +99,12 @@ public class SwerveJoystickCmd extends CommandBase {
             SmartDashboard.putString("PID turning?", "disabled");
         }
 
-        if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
-            targetAngle = currentAngle;
-            turningSpeed = turningTargX.get() * OIConstants.joystickTurningGain;
-            SmartDashboard.putString("PID turning?", "joystickturning");
-        } 
+        // if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
+        //     targetAngle = currentAngle;
+        //     turningSpeed = turningTargX.get()*Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
+        //     SmartDashboard.putString("PID turning?", "joystickturning");
+        // } 
+
         
         // 2. Apply deadband
         

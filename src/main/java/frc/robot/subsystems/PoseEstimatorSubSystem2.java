@@ -1,15 +1,6 @@
 package frc.robot.subsystems;
 
-import static frc.robot.Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT;
-import java.util.ArrayList;
-
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -17,8 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -26,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.FieldConstants;
 
-public class PoseEstimatorSubSystem extends SubsystemBase {
+public class PoseEstimatorSubSystem2 extends SubsystemBase {
 
   // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
   // you trust your various sensors. Smaller numbers will cause the filter to
@@ -49,48 +38,15 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
   private final SwerveSubsystem drivetrainSubsystem;
   private final SwerveDrivePoseEstimator poseEstimator;
   private final Field2d field2d = new Field2d();
-  private final PhotonPoseEstimator photonPoseEstimator;
 
-  private double previousPipelineTimestamp = 0;
+  private final LimeLightSubSystem limeLightSubSystem;
   private OriginPosition originPosition = OriginPosition.kBlueAllianceWallRightSide;
-  private boolean sawTag = false;
 
-  Pose2d estimatedPoseByVision = null;
-
-  
-  public PoseEstimatorSubSystem(PhotonCamera photonCamera, SwerveSubsystem drivetrainSubsystem) {
+  public PoseEstimatorSubSystem2(LimeLightSubSystem limeLightSubSystem,
+   SwerveSubsystem drivetrainSubsystem) {
     this.drivetrainSubsystem = drivetrainSubsystem;
-    PhotonPoseEstimator photonPoseEstimator;
-
-    final AprilTag tag1 = new AprilTag(0,FieldConstants.aprilTags3D.get(1));
-     final AprilTag tag2 = new AprilTag(0,FieldConstants.aprilTags3D.get(2));
-     final AprilTag tag3 = new AprilTag(0,FieldConstants.aprilTags3D.get(3));
-     final AprilTag tag4 = new AprilTag(0,FieldConstants.aprilTags3D.get(4));
-     final AprilTag tag5 = new AprilTag(0,FieldConstants.aprilTags3D.get(5));
-     final AprilTag tag6 = new AprilTag(0,FieldConstants.aprilTags3D.get(6));
-     final AprilTag tag7 = new AprilTag(0,FieldConstants.aprilTags3D.get(7));
-     final AprilTag tag8 = new AprilTag(0,FieldConstants.aprilTags3D.get(8));
-     final ArrayList<AprilTag> atList =  new ArrayList<AprilTag>();
-     atList.add(tag1);
-     atList.add(tag2);
-     atList.add(tag3);
-     atList.add(tag4);
-     atList.add(tag5);
-     atList.add(tag6);
-     atList.add(tag7);
-     atList.add(tag8);    
-    
-
-    try {
-      var layout = new AprilTagFieldLayout(atList, FieldConstants.fieldLength, FieldConstants.fieldWidth);
-      layout.setOrigin(originPosition);
-      photonPoseEstimator =
-          new PhotonPoseEstimator(layout, PoseStrategy.MULTI_TAG_PNP, photonCamera, APRILTAG_CAMERA_TO_ROBOT);
-    } catch(Exception e) {
-      DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-      photonPoseEstimator = null;
-    }
-    this.photonPoseEstimator = photonPoseEstimator;
+    this.limeLightSubSystem = limeLightSubSystem;
+        
 
     ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
@@ -106,35 +62,6 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
     tab.add("Field", field2d).withPosition(2, 0).withSize(6, 4);
   }
 
-  /**
-   * Sets the alliance. This is used to configure the origin of the AprilTag map
-   * @param alliance alliance
-   */
-  public void setAlliance(Alliance alliance) {
-    var fieldTags = photonPoseEstimator.getFieldTags();
-    boolean allianceChanged = false;
-    switch(alliance) {
-      case Blue:
-        fieldTags.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
-        allianceChanged = (originPosition == OriginPosition.kRedAllianceWallRightSide);
-        originPosition = OriginPosition.kBlueAllianceWallRightSide;
-        break;
-      case Red:
-        fieldTags.setOrigin(OriginPosition.kRedAllianceWallRightSide);
-        allianceChanged = (originPosition == OriginPosition.kBlueAllianceWallRightSide);
-        originPosition = OriginPosition.kRedAllianceWallRightSide;
-        break;
-      default:
-        // No valid alliance data. Nothing we can do about it
-    }
-    if (allianceChanged && sawTag) {
-      // The alliance changed, which changes the coordinate system.
-      // Since a tag was seen, and the tags are all relative to the coordinate system, the estimated pose
-      // needs to be transformed to the new coordinate system.
-      var newPose = flipAlliance(poseEstimator.getEstimatedPosition());
-      setCurrentPose(newPose);
-    }
-  }
 
   @Override
   public void periodic() {
@@ -143,22 +70,9 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
         drivetrainSubsystem.getRotation2d(),
         drivetrainSubsystem.getModulePositions());
     
-    if (photonPoseEstimator != null) {
-      // Update pose estimator with the best visible target
-      photonPoseEstimator.update().ifPresent(estimatedRobotPose -> {
-        sawTag = true;
-        var estimatedPose = estimatedRobotPose.estimatedPose;
-        // Make sure we have a new measurement, and that it's on the field
-        if (estimatedRobotPose.timestampSeconds != previousPipelineTimestamp
-            && estimatedPose.getX() > 0.0 && estimatedPose.getX() <= FieldConstants.fieldLength
-            && estimatedPose.getY() > 0.0 && estimatedPose.getY() <= FieldConstants.fieldWidth) {
-          previousPipelineTimestamp = estimatedRobotPose.timestampSeconds;
-          estimatedPoseByVision = estimatedPose.toPose2d();
-          poseEstimator.addVisionMeasurement(estimatedPose.toPose2d(), estimatedRobotPose.timestampSeconds);
-        }
-      });
-    }
-
+    var visionPose = limeLightSubSystem.getBotPose();
+    poseEstimator.addVisionMeasurement(visionPose, limeLightSubSystem.getLastTimeStampForPose());
+   
     Pose2d dashboardPose = getCurrentPose();
     if (originPosition == OriginPosition.kRedAllianceWallRightSide) {
       // Flip the pose when red, since the dashboard field photo cannot be rotated
@@ -179,11 +93,6 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
   public Pose2d getCurrentPose() {
     return poseEstimator.getEstimatedPosition();
   }
-
-  public Pose2d visionEstimatedPose() {
-    return this.estimatedPoseByVision;
-  }
-
 
   /**
    * Resets the current pose to the specified pose. This should ONLY be called
