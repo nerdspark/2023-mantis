@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.ArmMoveCommands;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
