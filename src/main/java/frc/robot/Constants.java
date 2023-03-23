@@ -394,9 +394,9 @@ public final class Constants {
     public static final int kDriverCancelTurn = 7;//back button
     public static final int kDriverTopSpeed = 5;//left bumper
 
+    public static final double targetTurnGainScheduleSpeed = 40;
 
-      public static final double joystickTurningGain = -8;
-
+    public static final double joystickTurningGain = -8;
   }
 
   public static class VisionConstants {
