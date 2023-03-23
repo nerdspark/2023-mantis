@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.HashMap;
 
-import edu.wpi.first.math.geometry.CoordinateAxis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -75,17 +74,11 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-      public static final double kTrackWidth = Units.inchesToMeters(17);
+      public static final double kTrackWidth = Units.inchesToMeters(25);
       // Distance between right and left wheels
-      public static final double kWheelBase = Units.inchesToMeters(17);
+      public static final double kWheelBase = Units.inchesToMeters(19);
       // Distance between front and back wheels
-
-      //Old Kinematics
-      // public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-      //         new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-      //         new Translation2d(-kWheelBase / 2, +kTrackWidth / 2));
+      public static final String canBusName = "canivore1";
 
       // New Kinematics
       public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
@@ -121,15 +114,15 @@ public final class Constants {
       public static final int kBackRightDriveCANCoderPort = 21;
 
       public static final boolean kFrontLeftDriveCANCoderReversed = true;
-      public static final boolean kBackLeftDriveCANCoderReversed = false;
-      public static final boolean kFrontRightDriveCANCoderReversed = false;
-      public static final boolean kBackRightDriveCANCoderReversed = false;
+      public static final boolean kBackLeftDriveCANCoderReversed = true;
+      public static final boolean kFrontRightDriveCANCoderReversed = true;
+      public static final boolean kBackRightDriveCANCoderReversed = true;
 
       //Latest Kinmatics
-      public static final double kFrontLeftDriveCANCoderOffsetRad = -2.72+ Math.PI;//(25.1*Math.PI/180)+1.02;
-      public static final double kBackLeftDriveCANCoderOffsetRad = -2.14 + Math.PI;
-      public static final double kFrontRightDriveCANCoderOffsetRad = 2.16+Math.PI;
-      public static final double kBackRightDriveCANCoderOffsetRad = -0.14+Math.PI;
+      public static final double kFrontLeftDriveCANCoderOffsetDeg = 28 + 180;//-151.8*Math.PI/180;
+      public static final double kBackLeftDriveCANCoderOffsetDeg = -127 + 180;//53.3*Math.PI/180;
+      public static final double kFrontRightDriveCANCoderOffsetDeg = 158 + 180;//(-0.66)+(-60.4*Math.PI/180);
+      public static final double kBackRightDriveCANCoderOffsetDeg = -70 + 180;//110.1*Math.PI/180;
 
       //Latest Kinmatics2
         // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
