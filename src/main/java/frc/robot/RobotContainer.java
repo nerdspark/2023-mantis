@@ -11,8 +11,22 @@ import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
+import frc.robot.commands.ShelfPickupCommand;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
+import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
+import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
+import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
+import frc.robot.commands.ArmPositionCommands.GroundDropCommand;
+import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
+import frc.robot.commands.ArmPositionCommands.HomeCommand;
+import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
+import frc.robot.commands.ArmPositionCommands.ScoreHighPositionCommand;
+import frc.robot.commands.ArmPositionCommands.ScoreMidPositionCommand;
+import frc.robot.subsystems.ConeVisionSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
@@ -27,18 +41,23 @@ import frc.robot.commands.Auton.visionTest5M;
 import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.BucketSubsystem;
+import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 import java.util.function.BooleanSupplier;
 
@@ -60,11 +79,19 @@ public class RobotContainer {
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
     private static final XboxController cont = new XboxController(Constants.controllerPort);
+    private static final XboxController cont2 = new XboxController(Constants.controllerPort2);
 
-    // public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    private static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+
+    public static final ArmSubsystem armSubsystem = new ArmSubsystem();
+    public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
+    public static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
+    public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+    public static final WristSubsystem wristSubsystem = new WristSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
+
+    private final Joystick coDriverJoystick = new Joystick(OIConstants.kCoDriverControllerPort);
 
     public static final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -120,9 +147,17 @@ public class RobotContainer {
       () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
-      // Configure the button bindings
-    configureButtonBindings();
+    armSubsystem.setDefaultCommand(new MicroAdjustCommand(
+      armSubsystem,
+      wristSubsystem,
+      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),   
+      () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)
+    ));
 
+    new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Closed).execute();
+
+    // Configure the button bindings
+    configureButtonBindings();
 
     // chooser.addOption("Line 2 Meters", new line2meters(swerveSubsystem));
     // chooser.addOption("Line 2 Meters Turn", new line2metersTurn(swerveSubsystem));
@@ -169,7 +204,7 @@ public class RobotContainer {
 
 
     //Print April tag info to Smart dashboard - Button A
-    new JoystickButton(driverJoystick, Constants.buttonA).onTrue(aprTagCommand);
+    new JoystickButton(driverJoystick, OIConstants.kDriverButtonA).onTrue(aprTagCommand);
     //Chase Aril Tag Continuous - Button B
     // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);    
     //Go to Origin -  Button X
@@ -185,6 +220,61 @@ public class RobotContainer {
 
     // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new LimeLightAlignCommand(limeLightSubSystem, swerveSubsystem));
 
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BucketPickup).onTrue(
+        new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Closed));
+
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BucketPickup).onTrue(
+      new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open));
+
+    // home
+    new Trigger(() -> coDriverJoystick.getPOV() > 180)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.Home)))
+        .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
+
+    // bucket pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.BucketPickup)))
+        .onTrue(new BucketPickupCommand(elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
+
+    // score mid position
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.MidDrop)))
+        .onTrue(new ScoreMidPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // score high position
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.HighDrop)))
+        .onTrue(new ScoreHighPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // ground drop
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundDrop)))
+        .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // ground pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundPickup)))
+        .onTrue(new GroundPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // shelf pickup
+    new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
+        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.ShelfPickup)))
+        .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+
+    // Right trigger - close gripper when bucket pickup, and vice versa
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+        && (driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5))
+        .onTrue(new SequentialCommandGroup(
+          new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED),
+          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Closed)
+        ));
+
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+        && (driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5))
+        .onTrue(new SequentialCommandGroup(
+          new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
+          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open)
+        ));
   }
 
   /**
@@ -199,6 +289,4 @@ public class RobotContainer {
   public static SwerveSubsystem getSwerveSubsystem(){
     return swerveSubsystem;
   }
-
-
 }
