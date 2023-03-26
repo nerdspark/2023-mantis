@@ -424,12 +424,12 @@ public final class Constants {
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
         public static final Transform2d CAMERA_TO_ROBOT = 
-            new Transform2d(new Translation2d(0.102, 0.0), new Rotation2d(0.0));
+            new Transform2d(new Translation2d(0.051, 0.2), new Rotation2d(0.0));
 
                 /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
         public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-        new Transform3d(new Translation3d(0.102, 0, -0.305), new Rotation3d(0.0, 0.0, -0.1));
-
+        new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
+      //2, 16.5 8 inch
     // Vision Drive Constants
 
         public static final double TRANSLATION_TOLERANCE = 0.05;
