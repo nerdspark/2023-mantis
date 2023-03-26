@@ -163,3 +163,7 @@ bin/
 *.pdb
 *.MF
 *.bin
+
+.idea/
+
+.run/

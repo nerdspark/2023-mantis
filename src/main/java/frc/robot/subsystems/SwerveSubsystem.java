@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -52,14 +51,14 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderOffsetDeg,
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
-    private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort);
+    private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
-                frontLeft.getSwerveModulePosition(), 
-                frontRight.getSwerveModulePosition(),
-                backLeft.getSwerveModulePosition(),
-                backRight.getSwerveModulePosition()
-            });
+            frontLeft.getSwerveModulePosition(),
+            frontRight.getSwerveModulePosition(),
+            backLeft.getSwerveModulePosition(),
+            backRight.getSwerveModulePosition()
+    });
 
     SwerveDriveKinematics kinematics;
 
@@ -75,7 +74,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void zeroHeading() {
         gyro.setYaw(0);
-
+        frontLeft.resetEncoders();
+        frontRight.resetEncoders();
+        backLeft.resetEncoders();
+        backRight.resetEncoders();
     }
 
     public double getHeading() {
@@ -93,17 +95,17 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         odometer.resetPosition(getRotation2d(), new SwerveModulePosition[] {
-            new SwerveModulePosition(), 
-            new SwerveModulePosition(), 
-            new SwerveModulePosition(), 
-            new SwerveModulePosition()
-    }, pose);
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition(),
+                new SwerveModulePosition()
+        }, pose);
     }
 
     @Override
     public void periodic() {
         odometer.update(getRotation2d(), new SwerveModulePosition[] {
-                frontLeft.getSwerveModulePosition(), 
+                frontLeft.getSwerveModulePosition(),
                 frontRight.getSwerveModulePosition(),
                 backLeft.getSwerveModulePosition(),
                 backRight.getSwerveModulePosition()
@@ -203,62 +205,59 @@ public class SwerveSubsystem extends SubsystemBase {
         //     desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
         //     desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
         // } else {
-            driveTurning = false;
+        driveTurning = false;
         // }
 
         frontLeft.setDesiredState(desiredStates[0]);
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
-            
-        
+
+
     }
 
     public SwerveModulePosition[] getModulePositions (){
         return new SwerveModulePosition[] {
-            frontLeft.getSwerveModulePosition(), frontRight.getSwerveModulePosition(),
-            backLeft.getSwerveModulePosition(), backRight.getSwerveModulePosition()
-            };
-        }
+                frontLeft.getSwerveModulePosition(), frontRight.getSwerveModulePosition(),
+                backLeft.getSwerveModulePosition(), backRight.getSwerveModulePosition()
+        };
+    }
 
-        public void resetGyro(){
-            zeroHeading();
-        }
-    
-        // //May need to change
-        // //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
-    
-        // public Rotation2d getGyroRotation(){
-        //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
-        // }
-    
+    public void resetGyro(){
+        zeroHeading();
+    }
 
-        /**
+    // //May need to change
+    // //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
 
-  /**
-   * Set the wheels to an X pattern to plant the robot.
-   */
-  public void setWheelsToX() {
-    setModuleStates(new SwerveModuleState[] {
-      // front left
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
-      // front right
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
-      // back left
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
-      // back right
-      new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
-    });
-  }
+    // public Rotation2d getGyroRotation(){
+    //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
+    // }
 
-  /**
-   * Gets the raw gyro data.
-   * @return x[0], y[1], and z[2] data in degrees per second
-   */
-  public double[] getGyroVelocityXYZ() {
-    double[] xyz = new double[3];
-    gyro.getRawGyro(xyz);
-    return xyz;
-  }
+    /**
+     * Set the wheels to an X pattern to plant the robot.
+     */
+    public void setWheelsToX() {
+        setModuleStates(new SwerveModuleState[] {
+                // front left
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(45.0)),
+                // front right
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(-45.0)),
+                // back left
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(135.0)),
+                // back right
+                new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
+        });
+    }
+
+    /**
+     * Gets the raw gyro data.
+     * @return x[0], y[1], and z[2] data in degrees per second
+     */
+    public double[] getGyroVelocityXYZ() {
+        double[] xyz = new double[3];
+        gyro.getRawGyro(xyz);
+        return xyz;
+    }
 
 }
