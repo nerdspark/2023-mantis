@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -53,6 +54,7 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
     private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort);
+    public WPI_PigeonIMU IMU = new WPI_PigeonIMU(Constants.pigeonPort);
     private final SwerveDriveOdometry odometer = new SwerveDriveOdometry(DriveConstants.kDriveKinematics,
             new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(), 
@@ -171,7 +173,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // }
     }
 
-
+    public void drive(ChassisSpeeds chassisSpeeds){
+        this.setModuleStates(this.kinematics.toSwerveModuleStates(chassisSpeeds));
+    }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

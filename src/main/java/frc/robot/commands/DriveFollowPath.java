@@ -111,7 +111,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
 
     // RobotContainer.getSwerveSubsystem().driveSwerveDrive(targetSpeeds);
 
-    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds  );
+    SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     RobotContainer.getSwerveSubsystem().setModuleStates(moduleStates);
 
 
