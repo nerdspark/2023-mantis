@@ -41,8 +41,9 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
     PathPlannerTrajectory trajectory = PathPlanner.loadPath(filename, new PathConstraints(
       AutoConstants.kMaxSpeedMetersPerSecond, AutoConstants.kMaxAccelerationMetersPerSecondSquared));
 
-      AutoConstants.autoEventMap.put("Marker1", new PrintCommand("Passed Marker1"));
-      // AutoConstants.autoEventMap.put("Marker2", new PrintCommand("Passed Marker2"));
+      AutoConstants.autoEventMap.put("Marker1", new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()));
+      AutoConstants.autoEventMap.put("Marker2", new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()));
+
 
 
           // 2. Define PID controllers for tracking trajectory
@@ -97,9 +98,11 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
       new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new ParallelCommandGroup(
-        loadPathPlannerTrajectoryCommand("threeElementRed_1", true),
-        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
-      ),
+
+        loadPathPlannerTrajectoryCommand("threeElementRed_1", true)
+      //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+       ),
+
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
       new ParallelCommandGroup(
         loadPathPlannerTrajectoryCommand("threeElementRed_2", false),
@@ -108,8 +111,9 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
       new ParallelCommandGroup(
-        loadPathPlannerTrajectoryCommand("threeElementRed_3", false),
-        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+
+        loadPathPlannerTrajectoryCommand("threeElementRed_3", false)
+      //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
       ),
       new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
