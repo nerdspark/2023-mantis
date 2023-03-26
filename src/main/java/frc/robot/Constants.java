@@ -456,10 +456,9 @@ public final class Constants {
 }
 
 public enum OffsetFromTargetAprTag {
-
-  LEFT(0,0.5,0),
+  LEFT(0,0.56,0),
   CENTER(0,0,0),
-  RIGHT(0,-0.5,0);
+  RIGHT(0,-0.56,0);
 
   public final double xOffset;
   public final double yOffset;
@@ -472,7 +471,8 @@ public enum OffsetFromTargetAprTag {
   }
       
 
-  
-} 
+        
+      } 
+    
 }
 
