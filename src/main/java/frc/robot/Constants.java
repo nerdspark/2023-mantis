@@ -158,9 +158,9 @@ public final class Constants {
 
       public static final double kFalconMaxSetSpeed = 7000d;
 
-      public static final double kPTargetTurning = -2.5d;
-      public static final double kITargetTurning = 0d;    
-      public static final double kDTargetTurning = 0d;
+      public static final double kPTargetTurning = -5d;
+      public static final double kITargetTurning = 0d;
+      public static final double kDTargetTurning = -0.1d;
       public static final double kTargetTurningDeadband = 1*Math.PI/180;
 
       public static final double kRampRateTurningMotor = 0.04d;
@@ -366,7 +366,7 @@ public final class Constants {
     public static final int kDriverRotYAxis = 1;
     public static final int kDriverFieldOrientedButtonIdx = 2;
 
-      public static final double kDeadbandSteer = 0.3d;
+      public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.04d;
 
       public static final double driverMultiplier = 0.3;
@@ -437,7 +437,7 @@ public final class Constants {
       //2, 16.5 8 inch
     // Vision Drive Constants
 
-        public static final double TRANSLATION_TOLERANCE = 0.05;
+        public static final double TRANSLATION_TOLERANCE = 0.1; //Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE =1;
 
     public static final double MAX_VELOCITY = 2;
@@ -451,7 +451,7 @@ public final class Constants {
     public static final double kPYController = 2.5d;
     public static final double kIYController = 0d;
     public static final double kDYController = 0d;
-    public static final double kPThetaController = 1d;
+    public static final double kPThetaController = 2.5d;
     public static final double kIThetaController = 0d;
     public static final double kDThetaController = 0d;
 
@@ -461,9 +461,9 @@ public final class Constants {
 }
 
 public enum OffsetFromTargetAprTag {
-  LEFT(0,0.56,0),
-  CENTER(0,0,0),
-  RIGHT(0,-0.56,0);
+  LEFT(0,0.6436,0),
+  CENTER(0,0.181,0),
+  RIGHT(0,-0.43,0);
 
   public final double xOffset;
   public final double yOffset;

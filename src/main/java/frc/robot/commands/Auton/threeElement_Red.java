@@ -28,6 +28,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** An example command that uses an example subsystem. */
 public class threeElement_Red extends SequentialCommandGroup {
@@ -40,24 +41,37 @@ public class threeElement_Red extends SequentialCommandGroup {
     addCommands(
       new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
-      new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new ParallelCommandGroup(
+      new WaitCommand(0.2),
+      new ParallelCommandGroup(  
         new DriveFollowPath("threeElementRed_1", 1, 0.5, true),
-        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+        new SequentialCommandGroup(
+          new WaitCommand(1),
+          new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
+        )
       ),
+      new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+
+      new WaitCommand(0.2),
       new ParallelCommandGroup(
         new DriveFollowPath("threeElementRed_2", 1, 0.5, false),
         new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
       ),
+
       new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
-      new ParallelCommandGroup(
+      new WaitCommand(0.2),
+      new ParallelCommandGroup(  
         new DriveFollowPath("threeElementRed_3", 1, 0.5, true),
-        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+        new SequentialCommandGroup(
+          new WaitCommand(1),
+          new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
+        )
       ),
-      new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+      new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+
+      new WaitCommand(0.2),
       new ParallelCommandGroup(
         new DriveFollowPath("threeElementRed_4", 1, 0.5, false),
         new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())

@@ -49,7 +49,8 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void initialize() {
         // swerveSubsystem.setGains();
-        zeroHeading();
+        // zeroHeading();
+        targetAngle = -swerveSubsystem.getHeading()*Math.PI/180;
     }
 
     @Override
@@ -101,7 +102,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
          if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
              targetAngle = currentAngle;
-             turningSpeed = turningTargX.get()*Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
+             turningSpeed = -turningTargX.get()*Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
              SmartDashboard.putString("PID turning?", "joystickturning");
          }
 

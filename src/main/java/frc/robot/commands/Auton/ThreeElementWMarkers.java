@@ -45,6 +45,7 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       AutoConstants.autoEventMap.put("Marker2", new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()));
 
 
+
           // 2. Define PID controllers for tracking trajectory
     PIDController xController = new PIDController(AutoConstants.kPXController, AutoConstants.kIXController, AutoConstants.kDXController);
     PIDController yController = new PIDController(AutoConstants.kPYController, AutoConstants.kIYController, AutoConstants.kIYController);
@@ -97,9 +98,11 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
       new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new ParallelCommandGroup(
+
         loadPathPlannerTrajectoryCommand("threeElementRed_1", true)
       //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
        ),
+
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
       new ParallelCommandGroup(
         loadPathPlannerTrajectoryCommand("threeElementRed_2", false),
@@ -108,6 +111,7 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
       new ParallelCommandGroup(
+
         loadPathPlannerTrajectoryCommand("threeElementRed_3", false)
       //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
       ),
