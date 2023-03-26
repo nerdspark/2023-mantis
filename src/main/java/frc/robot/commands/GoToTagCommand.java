@@ -43,7 +43,7 @@ public class GoToTagCommand extends CommandBase {
   //         new Translation3d(1, 0.0, 0.0),
   //         new Rotation3d(0.0, 0.0, Math.PI));
 
-  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(1.0, 0), Rotation2d.fromDegrees(180.0));
+  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.75, 0), Rotation2d.fromDegrees(180.0));
   private   OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
   private   Transform2d GOAL_OFFSET = null;
 
@@ -56,6 +56,8 @@ public class GoToTagCommand extends CommandBase {
   private final ProfiledPIDController omegaController = new ProfiledPIDController(VisionConstants.kPThetaController,VisionConstants.kIThetaController,VisionConstants.kDThetaController, OMEGA_CONSTRATINTS);
 
   private PhotonTrackedTarget lastTarget;
+  private PhotonTrackedTarget originalTarget;
+
 
   boolean targetReached = false;
 
@@ -133,7 +135,6 @@ public class GoToTagCommand extends CommandBase {
       Optional<PhotonTrackedTarget> targetOpt = null;
       // if(targetFound == false) {
         targetOpt = photonRes.getTargets().stream()
-          .filter(t -> t.getFiducialId() == this.tagToAlign)
           .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .5 && t.getPoseAmbiguity() != -1)
           .findFirst();
       // }
@@ -173,6 +174,7 @@ public class GoToTagCommand extends CommandBase {
         }      
       }
     }
+
     }
    
     if (lastTarget == null) {

@@ -211,10 +211,10 @@ public class RobotContainer {
     // new JoystickButton(driverJoystick, Constants.buttonX).onTrue(
     //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new Rotation2d().fromDegrees(90))));
     //Go to April Tag and Stop - Button Y
-      new JoystickButton(driverJoystick, Constants.buttonY).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 4, OffsetFromTargetAprTag.CENTER));
-      new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 2, OffsetFromTargetAprTag.CENTER));
-      new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 2, OffsetFromTargetAprTag.LEFT));
-      new JoystickButton(driverJoystick, Constants.buttonX).onTrue(new GoToTagCommand(photonCamera, swerveSubsystem,poseEstimator::getCurrentPose , 2, OffsetFromTargetAprTag.RIGHT));
+      new JoystickButton(driverJoystick, Constants.buttonY).whileTrue(new GoToTagCommand(photonCamera, swerveSubsystem,swerveSubsystem::getPose , 4, OffsetFromTargetAprTag.CENTER));
+      new JoystickButton(driverJoystick, Constants.buttonA).whileTrue(new GoToTagCommand(photonCamera, swerveSubsystem,swerveSubsystem::getPose , 2, OffsetFromTargetAprTag.CENTER));
+      new JoystickButton(driverJoystick, Constants.buttonB).whileTrue(new GoToTagCommand(photonCamera, swerveSubsystem,swerveSubsystem::getPose , 2, OffsetFromTargetAprTag.LEFT));
+      new JoystickButton(driverJoystick, Constants.buttonX).whileTrue(new GoToTagCommand(photonCamera, swerveSubsystem,swerveSubsystem::getPose , 2, OffsetFromTargetAprTag.RIGHT));
 
     // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
 
