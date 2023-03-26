@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.ctre.phoenix.sensors.WPI_PigeonIMU;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -173,7 +174,9 @@ public class SwerveSubsystem extends SubsystemBase {
         // }
     }
 
-
+    public void drive(ChassisSpeeds chassisSpeeds){
+        this.setModuleStates(this.kinematics.toSwerveModuleStates(chassisSpeeds));
+    }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);

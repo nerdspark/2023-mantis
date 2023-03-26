@@ -254,7 +254,7 @@ public class RobotContainer {
     // ground pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper)
         .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundPickup)))
-        .onTrue(new GroundPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        .onTrue(new GroundPickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
 
     // shelf pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
@@ -288,5 +288,21 @@ public class RobotContainer {
 
   public static SwerveSubsystem getSwerveSubsystem(){
     return swerveSubsystem;
+  }
+
+  public static ArmSubsystem getArmSubsystem() {
+    return armSubsystem;
+  }
+
+  public static WristSubsystem getWristSubsystem() {
+    return wristSubsystem;
+  }
+
+  public static ElevatorSubsystem getElevatorSubsystem() {
+    return elevatorSubsystem;
+  }
+
+  public static GripperSubsystem getGripperSubsystem() {
+    return gripperSubsystem;
   }
 }

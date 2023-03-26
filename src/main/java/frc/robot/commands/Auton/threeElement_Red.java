@@ -4,10 +4,20 @@
 
 package frc.robot.commands.Auton;
 
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveToPoseCommand;
+import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
+import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
+import frc.robot.commands.ArmPositionCommands.GroundDropCommand;
+import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
+import frc.robot.commands.ArmPositionCommands.HomeCommand;
+import frc.robot.commands.ArmPositionCommands.ScoreHighPositionCommand;
+import frc.robot.commands.ArmPositionCommands.ScoreMidPositionCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -15,6 +25,7 @@ import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -27,10 +38,30 @@ public class threeElement_Red extends SequentialCommandGroup {
   public threeElement_Red(SwerveSubsystem swerveSubsystem){
 
     addCommands(
-      new DriveFollowPath("threeElementRed_1", 3, 2, true)
-      // new DriveFollowPath("threeConePathTwo", 3, 2, false),
-      // new DriveFollowPath("threeConePathThree", 3, 2, false),
-      // new DriveFollowPath("threeConePathFour", 3, 2, false)
+      new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+      new ParallelCommandGroup(
+        new DriveFollowPath("threeElementRed_1", 1, 0.5, true),
+        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+      ),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new ParallelCommandGroup(
+        new DriveFollowPath("threeElementRed_2", 1, 0.5, false),
+        new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
+      ),
+      new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new ParallelCommandGroup(
+        new DriveFollowPath("threeElementRed_3", 1, 0.5, true),
+        new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
+      ),
+      new ScoreHighPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new ParallelCommandGroup(
+        new DriveFollowPath("threeElementRed_4", 1, 0.5, false),
+        new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
+      )
     );
   }
 
