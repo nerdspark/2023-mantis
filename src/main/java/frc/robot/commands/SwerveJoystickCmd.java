@@ -50,6 +50,7 @@ public class SwerveJoystickCmd extends CommandBase {
     public void initialize() {
         // swerveSubsystem.setGains();
         // zeroHeading();
+        targetAngle = -swerveSubsystem.getHeading()*Math.PI/180;
     }
 
     @Override
