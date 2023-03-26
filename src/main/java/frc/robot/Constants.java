@@ -201,6 +201,11 @@ public final class Constants {
 
     public static final HashMap<String, Command> autoEventMap = new HashMap<>();
 
+    public static final double kPBalanceController = 0.015d;
+    public static final double kIBalanceController = 0.0d;
+    public static final double kDBalanceController = 0.01d;
+    public static final double BalanceDeadBandDeg = 6.0d;
+
   }
 
   public static class ArmConstants {
