@@ -158,9 +158,9 @@ public final class Constants {
 
       public static final double kFalconMaxSetSpeed = 7000d;
 
-      public static final double kPTargetTurning = -5d;
+      public static final double kPTargetTurning = -3d;
       public static final double kITargetTurning = 0d;
-      public static final double kDTargetTurning = -0.1d;
+      public static final double kDTargetTurning = -0.0d;
       public static final double kTargetTurningDeadband = 1*Math.PI/180;
 
       public static final double kRampRateTurningMotor = 0.04d;
@@ -275,7 +275,7 @@ public final class Constants {
         put("bucketCmdPos", 0.1);
         put("wristArmPosition", 70.0);
         put("leftGripperOpenCmdPos", -15.0);
-        put("rightGripperOpenCmdPos", 0.0);
+        put("rightGripperOpenCmdPos", -7.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -290,7 +290,7 @@ public final class Constants {
         put("bucketCmdPos", 0.1);
         put("wristArmPosition", 50.0);
         put("leftGripperOpenCmdPos", -15.0);
-        put("rightGripperOpenCmdPos", 0.0);
+        put("rightGripperOpenCmdPos", -7.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -369,14 +369,14 @@ public final class Constants {
       public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.04d;
 
-      public static final double driverMultiplier = 0.3;
-      public static final double driverTopMultiplier = 1.5;
+      public static final double driverMultiplier = 0.5;
+      public static final double driverTopMultiplier = 1;
       public static final double driverPower = 3.5;//2.5 faster but clicks
       public static final double driverBaseSpeedMetersPerSecond = 00;
       public static final double triggerMultiplier = 0.1;
       public static final double triggerDeadband = 0.1;
 
-      public static final double driverEPower = 3.5;
+      public static final double driverEPower = 5;
       public static final double driverEXPMultiplier = driverMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverTopEXPMultiplier = driverTopMultiplier*Math.pow(Math.E, -driverEPower);
       public static final double driverEXPJoyMultiplier = driverEPower;
@@ -440,10 +440,10 @@ public final class Constants {
         public static final double TRANSLATION_TOLERANCE = 0.1; //Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE =1;
 
-    public static final double MAX_VELOCITY = 2;
-    public static final double MAX_ACCELARATION = 1;
-    public static final double MAX_VELOCITY_ROTATION = 8;
-    public static final double MAX_ACCELARATION_ROTATION = 8;
+    public static final double MAX_VELOCITY = 3;
+    public static final double MAX_ACCELARATION = 2;
+    public static final double MAX_VELOCITY_ROTATION = 1000;
+    public static final double MAX_ACCELARATION_ROTATION = 1000;
 
     public static final double kPXController = 2.5d;
     public static final double kIXController = 0d;
@@ -451,7 +451,7 @@ public final class Constants {
     public static final double kPYController = 2.5d;
     public static final double kIYController = 0d;
     public static final double kDYController = 0d;
-    public static final double kPThetaController = 2.5d;
+    public static final double kPThetaController = -DriveConstants.kPTargetTurning;
     public static final double kIThetaController = 0d;
     public static final double kDThetaController = 0d;
 
@@ -461,9 +461,9 @@ public final class Constants {
 }
 
 public enum OffsetFromTargetAprTag {
-  LEFT(0,0.6436,0),
+  LEFT(0,0.7452,-10),
   CENTER(0,0.181,0),
-  RIGHT(0,-0.43,0);
+  RIGHT(0,-0.379,10);
 
   public final double xOffset;
   public final double yOffset;

@@ -145,7 +145,7 @@ public class RobotContainer {
       () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger), 
       () -> driverJoystick.getRawButton(Constants.start), 
       () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn), 
-      () -> driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
+      () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
     armSubsystem.setDefaultCommand(new MicroAdjustCommand(
       armSubsystem,

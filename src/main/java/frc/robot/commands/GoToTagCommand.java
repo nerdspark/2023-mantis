@@ -43,7 +43,7 @@ public class GoToTagCommand extends CommandBase {
   //         new Translation3d(1, 0.0, 0.0),
   //         new Rotation3d(0.0, 0.0, Math.PI));
 
-  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.75, 0), Rotation2d.fromDegrees(180.0));
+  private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.85, 0), Rotation2d.fromDegrees(180.0));
   private   OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
   private   Transform2d GOAL_OFFSET = null;
 

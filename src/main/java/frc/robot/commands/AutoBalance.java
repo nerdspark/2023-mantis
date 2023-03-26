@@ -66,20 +66,20 @@ public class AutoBalance extends CommandBase {
 
     // double BalanceDeadbanDeg = Preferences.getDouble(DriveConstants.autoBalanceDeadbandDegKey, 6);
 
-    try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController, AutoConstants.kIBalanceController,
-      AutoConstants.kDBalanceController)) {
-      double Roll_Deg = RobotContainer.swerveSubsystem.IMU.getRoll();
-      if (Math.abs(Roll_Deg) > AutoConstants.BalanceDeadBandDeg) {
-          double output = balanceController.calculate(Roll_Deg, 0);
-          // double balanceSpeed = new ChassisSpeeds(output, 0, 0);
-          RobotContainer.swerveSubsystem.drive(new ChassisSpeeds(output, 0.0, 0.0));
-      }
-      else {
-          RobotContainer.swerveSubsystem.setWheelsToX();
+    // try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController, AutoConstants.kIBalanceController,
+    //   AutoConstants.kDBalanceController)) {
+    //   double Roll_Deg = RobotContainer.swerveSubsystem.IMU.getRoll();
+    //   if (Math.abs(Roll_Deg) > AutoConstants.BalanceDeadBandDeg) {
+    //       double output = balanceController.calculate(Roll_Deg, 0);
+    //       // double balanceSpeed = new ChassisSpeeds(output, 0, 0);
+    //       RobotContainer.swerveSubsystem.drive(new ChassisSpeeds(output, 0.0, 0.0));
+    //   }
+    //   else {
+    //       RobotContainer.swerveSubsystem.setWheelsToX();
 
-      }
+    //   }
     }
-  }
+  // }
 
   // Called once the command ends or is interrupted.
   @Override
