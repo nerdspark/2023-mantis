@@ -28,6 +28,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.commands.Auton.ThreeElement;
+import frc.robot.commands.Auton.ThreeElementWMarkers;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.line2metersTurn;
@@ -177,6 +178,7 @@ public class RobotContainer {
 
     chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
     chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
+    chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
 
     chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
     chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
