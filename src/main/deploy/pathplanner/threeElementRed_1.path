@@ -70,5 +70,13 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.6666666666667259,
+      "names": [
+        "event",
+        "Marker1"
+      ]
+    }
+  ]
 }
