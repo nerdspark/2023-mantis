@@ -369,7 +369,7 @@ public final class Constants {
       public static final double kDeadbandSteer = 0.3d;
       public static final double kDeadbandDrive = 0.04d;
 
-      public static final double driverMultiplier = 0.75;
+      public static final double driverMultiplier = 0.3;
       public static final double driverTopMultiplier = 1.5;
       public static final double driverPower = 3.5;//2.5 faster but clicks
       public static final double driverBaseSpeedMetersPerSecond = 00;
@@ -429,12 +429,12 @@ public final class Constants {
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
         public static final Transform2d CAMERA_TO_ROBOT = 
-            new Transform2d(new Translation2d(0.102, 0.0), new Rotation2d(0.0));
+            new Transform2d(new Translation2d(0.051, 0.2), new Rotation2d(0.0));
 
                 /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
         public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-        new Transform3d(new Translation3d(0.102, 0, -0.305), new Rotation3d(0.0, 0.0, -0.1));
-
+        new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
+      //2, 16.5 8 inch
     // Vision Drive Constants
 
         public static final double TRANSLATION_TOLERANCE = 0.05;
@@ -461,10 +461,9 @@ public final class Constants {
 }
 
 public enum OffsetFromTargetAprTag {
-
-  LEFT(0,0.5,0),
+  LEFT(0,0.56,0),
   CENTER(0,0,0),
-  RIGHT(0,-0.5,0);
+  RIGHT(0,-0.56,0);
 
   public final double xOffset;
   public final double yOffset;
@@ -477,7 +476,8 @@ public enum OffsetFromTargetAprTag {
   }
       
 
-  
-} 
+        
+      } 
+    
 }
 
