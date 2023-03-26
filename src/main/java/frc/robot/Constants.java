@@ -364,7 +364,7 @@ public final class Constants {
       public static final double kDeadbandSteer = 0.3d;
       public static final double kDeadbandDrive = 0.04d;
 
-      public static final double driverMultiplier = 0.75;
+      public static final double driverMultiplier = 0.3;
       public static final double driverTopMultiplier = 1.5;
       public static final double driverPower = 3.5;//2.5 faster but clicks
       public static final double driverBaseSpeedMetersPerSecond = 00;
