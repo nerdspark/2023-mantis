@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.commands.AprTagCommand;
@@ -16,19 +17,12 @@ import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.ArmPositionCommands.HomeCommand;
 import frc.robot.commands.ArmPositionCommands.ScoreHighPositionCommand;
 import frc.robot.commands.ArmPositionCommands.ScoreMidPositionCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.PoseEstimatorSubSystem;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.*;
 
 import org.photonvision.PhotonCamera;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 /** An example command that uses an example subsystem. */
 public class threeElement_Red extends SequentialCommandGroup {
@@ -45,11 +39,12 @@ public class threeElement_Red extends SequentialCommandGroup {
       new ParallelCommandGroup(  
         new DriveFollowPath("threeElementRed_1", 1, 0.5, true),
         new SequentialCommandGroup(
-          new WaitCommand(1),
-          new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
+          new WaitCommand(0.5),
+          new ScoreMidPositionCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
+          new WaitCommand(0.5),
+          new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
         )
       ),
-      new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()),
       new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
 
       new WaitCommand(0.2),
@@ -78,6 +73,4 @@ public class threeElement_Red extends SequentialCommandGroup {
       )
     );
   }
-
-
 }

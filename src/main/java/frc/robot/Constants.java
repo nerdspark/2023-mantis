@@ -237,13 +237,13 @@ public final class Constants {
 
     public static final HashMap<String, Double> intakeGroundPosition = new HashMap<String, Double>() {
       {
-        put("wristCmdPos", 0.0);
+        put("wristCmdPos", 13.0);
         put("armCmdPos", 135.0);
-        put("inclinatorCmdPos", 0.0);
+        put("inclinatorCmdPos", 1.0);
         put("bucketCmdPos", 0.05);
-        put("wristArmPosition", 75.0);
-        put("leftGripperOpenCmdPos", -12.0);
-        put("rightGripperOpenCmdPos", 0.0);
+        put("wristArmPosition", 13.0);
+        put("leftGripperOpenCmdPos", 0.0);
+        put("rightGripperOpenCmdPos", -12.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
@@ -275,7 +275,7 @@ public final class Constants {
         put("bucketCmdPos", 0.1);
         put("wristArmPosition", 70.0);
         put("leftGripperOpenCmdPos", -15.0);
-        put("rightGripperOpenCmdPos", -7.0);
+        put("rightGripperOpenCmdPos", 5.0);
         put("leftGripperCloseCmdPos", 3.0);
         put("rightGripperCloseCmdPos", 3.0);
         put("smartMotionMaxVel", 5500.0);
