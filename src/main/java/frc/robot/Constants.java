@@ -367,6 +367,9 @@ public final class Constants {
       public static final double kDeadbandSteer = 0.1d;
       public static final double kDeadbandDrive = 0.04d;
 
+      public static final double joystickMagnitudeChange = 0.1d;
+      public static final double joystickMagnitudeChange = 0.1d;
+
       public static final double driverMultiplier = 0.5;
       public static final double driverTopMultiplier = 1;
       public static final double driverPower = 3.5;//2.5 faster but clicks
