@@ -13,6 +13,7 @@ import frc.robot.subsystems.WristSubsystem;
 public class ScoreMidPositionCommand extends SequentialCommandGroup {
     public ScoreMidPositionCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
             WristSubsystem wristSubsystem) {
+        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.MidDrop);
         addCommands(new MoveArmCommand(armSubsystem, ArmConstants.scoreMidPosition.get("armCmdPos"),
                 ArmConstants.scoreMidPosition.get("smartMotionMaxVel"),
                 ArmConstants.scoreMidPosition.get("smartMotionMaxAccel")),

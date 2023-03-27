@@ -13,6 +13,8 @@ import frc.robot.subsystems.WristSubsystem;
 public class ScoreHighPositionCommand extends SequentialCommandGroup {
     public ScoreHighPositionCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
             WristSubsystem wristSubsystem) {
+        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HighDrop);
+
         addCommands(new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"),
                 ArmConstants.scoreHighPosition.get("smartMotionMaxVel"),
                 ArmConstants.scoreHighPosition.get("smartMotionMaxAccel")),

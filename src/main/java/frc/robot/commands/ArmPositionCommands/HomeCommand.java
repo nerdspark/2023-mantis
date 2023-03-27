@@ -14,6 +14,8 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class HomeCommand extends SequentialCommandGroup {
     public HomeCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, GripperSubsystem gripperSubsystem) {
+        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.Home);
+
         addCommands(new ParallelCommandGroup(
                 new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.get("wristCmdPos")),
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.get("inclinatorCmdPos")),

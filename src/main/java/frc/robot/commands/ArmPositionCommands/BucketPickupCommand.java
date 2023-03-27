@@ -17,6 +17,7 @@ import frc.robot.subsystems.WristSubsystem;
 public class BucketPickupCommand extends SequentialCommandGroup {
     public BucketPickupCommand(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem,
             BucketSubsystem bucketSubsystem, ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem) {
+        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.BucketPickup);
         addCommands(
             new ParallelCommandGroup(
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),

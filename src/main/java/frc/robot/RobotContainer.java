@@ -8,10 +8,9 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.commands.AprTagCommand;
-import frc.robot.commands.ChaseTagCommand;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
-import frc.robot.commands.ShelfPickupCommand;
+import frc.robot.commands.ArmPositionCommands.ShelfPickupCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
@@ -23,7 +22,6 @@ import frc.robot.commands.ArmPositionCommands.HomeCommand;
 import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
 import frc.robot.commands.ArmPositionCommands.ScoreHighPositionCommand;
 import frc.robot.commands.ArmPositionCommands.ScoreMidPositionCommand;
-import frc.robot.subsystems.ConeVisionSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -31,15 +29,8 @@ import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.ThreeElementWMarkers;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
-import frc.robot.commands.Auton.line2metersTurn;
-import frc.robot.commands.Auton.threeElementCommand;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.commands.Auton.threeMeterVisionTest;
-import frc.robot.commands.Auton.threeMeterVisionTestCommand;
-import frc.robot.commands.Auton.twoConeWithVision;
-import frc.robot.commands.Auton.visionTest5M;
-import frc.robot.commands.Auton.visionTest5MMarker;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -230,37 +221,30 @@ public class RobotContainer {
 
     // home
     new Trigger(() -> coDriverJoystick.getPOV() > 180)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.Home)))
         .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
 
     // bucket pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.BucketPickup)))
         .onTrue(new BucketPickupCommand(elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
 
     // score mid position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.MidDrop)))
         .onTrue(new ScoreMidPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // score high position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.HighDrop)))
         .onTrue(new ScoreHighPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // ground drop
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundDrop)))
         .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // ground pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.GroundPickup)))
         .onTrue(new GroundPickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
 
     // shelf pickup
     new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
-        .onTrue(new InstantCommand(() -> armSubsystem.setArmPositionState(ArmPosition.ShelfPickup)))
         .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // Right trigger - close gripper when bucket pickup, and vice versa
