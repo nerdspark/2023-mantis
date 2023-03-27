@@ -20,12 +20,12 @@ public class BucketPickupCommand extends SequentialCommandGroup {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.BucketPickup);
         addCommands(
             new ParallelCommandGroup(
-                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.intakeBucketPosition.get("inclinatorCmdPos")),
-                new MoveWristCommand(wristSubsystem, ArmConstants.intakeBucketPosition.get("wristCmdPos")),
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.bucketPickupPosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.bucketPickupPosition.get("wristCmdPos")),
                 new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
                 new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Open)),
-            new MoveArmCommand(armSubsystem, ArmConstants.intakeBucketPosition.get("armCmdPos"),
-                ArmConstants.intakeBucketPosition.get("smartMotionMaxVel"),
-                ArmConstants.intakeBucketPosition.get("smartMotionMaxAccel")));
+            new MoveArmCommand(armSubsystem, ArmConstants.bucketPickupPosition.get("armCmdPos"),
+                ArmConstants.bucketPickupPosition.get("smartMotionMaxVel"),
+                ArmConstants.bucketPickupPosition.get("smartMotionMaxAccel")));
     }
 }

@@ -6,9 +6,7 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import edu.wpi.first.math.geometry.CoordinateAxis;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -219,7 +217,7 @@ public final class Constants {
     public static final int BucketMotorRID = 9; // position
     public static final int WristMotorID = 10; // motion profiling
     
-    public static final HashMap<String, Double> intakeBucketPosition = new HashMap<String, Double>() {
+    public static final HashMap<String, Double> bucketPickupPosition = new HashMap<String, Double>() {
       {
         put("wristCmdPos", 0.0);
         put("armCmdPos", 0.0);
@@ -235,7 +233,7 @@ public final class Constants {
       }
     };
 
-    public static final HashMap<String, Double> intakeGroundPosition = new HashMap<String, Double>() {
+    public static final HashMap<String, Double> groundPickupPosition = new HashMap<String, Double>() {
       {
         put("wristCmdPos", 13.0);
         put("armCmdPos", 135.0);
@@ -267,7 +265,7 @@ public final class Constants {
       }
     };
 
-    public static final Map<String, Double> scoreHighPosition = new HashMap<String, Double>() {
+    public static final Map<String, Double> highDropPosition = new HashMap<String, Double>() {
       {
         put("wristCmdPos", 0.0);
         put("armCmdPos", 75.0);
@@ -282,7 +280,7 @@ public final class Constants {
         put("smartMotionMaxAccel", 9000.0);
       }
     };
-    public static final Map<String, Double> scoreMidPosition = new HashMap<>() {
+    public static final Map<String, Double> midDropPosition = new HashMap<>() {
       {
         put("wristCmdPos", 0.0);
         put("armCmdPos", 80.0);
@@ -297,7 +295,7 @@ public final class Constants {
         put("smartMotionMaxAccel", 9000.0);
       }
     };
-    public static final Map<String, Double> scoreGroundPosition = new HashMap<>() {
+    public static final Map<String, Double> groundDropPosition = new HashMap<>() {
       {
         put("wristCmdPos", 0.0);
         put("armCmdPos", 156.0);

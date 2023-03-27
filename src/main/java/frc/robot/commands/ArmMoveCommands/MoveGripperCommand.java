@@ -56,28 +56,28 @@ public class MoveGripperCommand extends CommandBase {
           rightPosition = ArmConstants.homePosition.get(rightKey);
           break;
       case BucketPickup:
-          leftPosition = ArmConstants.intakeBucketPosition.get(leftKey);
-          rightPosition = ArmConstants.intakeBucketPosition.get(rightKey);
+          leftPosition = ArmConstants.bucketPickupPosition.get(leftKey);
+          rightPosition = ArmConstants.bucketPickupPosition.get(rightKey);
           break;
       case GroundPickup:
-          leftPosition = ArmConstants.intakeGroundPosition.get(leftKey);
-          rightPosition = ArmConstants.intakeGroundPosition.get(rightKey);
+          leftPosition = ArmConstants.groundPickupPosition.get(leftKey);
+          rightPosition = ArmConstants.groundPickupPosition.get(rightKey);
           break;
       case ShelfPickup:
           leftPosition = ArmConstants.intakeShelfPosition.get(leftKey);
           rightPosition = ArmConstants.intakeShelfPosition.get(rightKey);
           break;
       case HighDrop:
-          leftPosition = ArmConstants.scoreHighPosition.get(leftKey);
-          rightPosition = ArmConstants.scoreHighPosition.get(rightKey);
+          leftPosition = ArmConstants.highDropPosition.get(leftKey);
+          rightPosition = ArmConstants.highDropPosition.get(rightKey);
           break;
       case MidDrop:
-          leftPosition = ArmConstants.scoreMidPosition.get(leftKey);
-          rightPosition = ArmConstants.scoreMidPosition.get(rightKey);
+          leftPosition = ArmConstants.midDropPosition.get(leftKey);
+          rightPosition = ArmConstants.midDropPosition.get(rightKey);
           break;
       case GroundDrop:
-          leftPosition = ArmConstants.scoreGroundPosition.get(leftKey);
-          rightPosition = ArmConstants.scoreGroundPosition.get(rightKey);
+          leftPosition = ArmConstants.groundDropPosition.get(leftKey);
+          rightPosition = ArmConstants.groundDropPosition.get(rightKey);
           break;
       default:
         break;

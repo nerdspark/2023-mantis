@@ -20,8 +20,8 @@ import frc.robot.commands.ArmPositionCommands.GroundDropCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.ArmPositionCommands.HomeCommand;
 import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
-import frc.robot.commands.ArmPositionCommands.ScoreHighPositionCommand;
-import frc.robot.commands.ArmPositionCommands.ScoreMidPositionCommand;
+import frc.robot.commands.ArmPositionCommands.HighDropCommand;
+import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -43,7 +43,6 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -229,11 +228,11 @@ public class RobotContainer {
 
     // score mid position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
-        .onTrue(new ScoreMidPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        .onTrue(new MidDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // score high position
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
-        .onTrue(new ScoreHighPositionCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        .onTrue(new HighDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // ground drop
     new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)

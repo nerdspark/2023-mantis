@@ -43,16 +43,16 @@ public class MicroAdjustCommand extends CommandBase {
 
     switch (armPositionState) {
       case GroundDrop:
-        currentArmPositionState = ArmConstants.intakeGroundPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.intakeGroundPosition.get("wristCmdPos");
+        currentArmPositionState = ArmConstants.groundPickupPosition.get("armCmdPos");
+        currentWristPositionState = ArmConstants.groundPickupPosition.get("wristCmdPos");
         break;
       case HighDrop:
-        currentArmPositionState = ArmConstants.scoreHighPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.scoreHighPosition.get("wristCmdPos");
+        currentArmPositionState = ArmConstants.highDropPosition.get("armCmdPos");
+        currentWristPositionState = ArmConstants.highDropPosition.get("wristCmdPos");
         break;
       case MidDrop:
-        currentArmPositionState = ArmConstants.scoreMidPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.scoreMidPosition.get("wristCmdPos");
+        currentArmPositionState = ArmConstants.midDropPosition.get("armCmdPos");
+        currentWristPositionState = ArmConstants.midDropPosition.get("wristCmdPos");
         break;
       default:
         return;

@@ -10,18 +10,18 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
-public class ScoreHighPositionCommand extends SequentialCommandGroup {
-    public ScoreHighPositionCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
-            WristSubsystem wristSubsystem) {
+public class HighDropCommand extends SequentialCommandGroup {
+    public HighDropCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
+                           WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HighDrop);
 
-        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.scoreHighPosition.get("armCmdPos"),
-                ArmConstants.scoreHighPosition.get("smartMotionMaxVel"),
-                ArmConstants.scoreHighPosition.get("smartMotionMaxAccel")),
+        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.highDropPosition.get("armCmdPos"),
+                ArmConstants.highDropPosition.get("smartMotionMaxVel"),
+                ArmConstants.highDropPosition.get("smartMotionMaxAccel")),
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.scoreHighPosition.get("inclinatorCmdPos")),
-                        new MoveWristCommand(wristSubsystem, ArmConstants.scoreHighPosition.get("wristCmdPos"))));
+                                ArmConstants.highDropPosition.get("inclinatorCmdPos")),
+                        new MoveWristCommand(wristSubsystem, ArmConstants.highDropPosition.get("wristCmdPos"))));
     }
 
 }

@@ -15,12 +15,12 @@ public class GroundDropCommand extends SequentialCommandGroup {
             WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GroundDrop);
         addCommands(
-                new MoveArmCommand(armSubsystem, ArmConstants.scoreGroundPosition.get("armCmdPos"),
-                        ArmConstants.scoreGroundPosition.get("smartMotionMaxVel"),
-                        ArmConstants.scoreGroundPosition.get("smartMotionMaxAccel")),
+                new MoveArmCommand(armSubsystem, ArmConstants.groundDropPosition.get("armCmdPos"),
+                        ArmConstants.groundDropPosition.get("smartMotionMaxVel"),
+                        ArmConstants.groundDropPosition.get("smartMotionMaxAccel")),
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.scoreGroundPosition.get("inclinatorCmdPos")),
-                        new MoveWristCommand(wristSubsystem, ArmConstants.scoreGroundPosition.get("wristCmdPos"))));
+                                ArmConstants.groundDropPosition.get("inclinatorCmdPos")),
+                        new MoveWristCommand(wristSubsystem, ArmConstants.groundDropPosition.get("wristCmdPos"))));
     }
 }
