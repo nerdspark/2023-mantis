@@ -94,7 +94,7 @@ public final class Constants {
               new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
               new Translation2d(-kWheelBase / 2, kTrackWidth / 2),
               new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
-      
+
 
     public static final int kFrontLeftDriveMotorPort = 15;
     public static final int kBackLeftDriveMotorPort = 17;
@@ -216,114 +216,28 @@ public final class Constants {
     public static final int BucketMotorLID = 8; // inverted slave
     public static final int BucketMotorRID = 9; // position
     public static final int WristMotorID = 10; // motion profiling
-    
-    public static final HashMap<String, Double> bucketPickupPosition = new HashMap<String, Double>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 0.0);
-        put("inclinatorCmdPos", 1.0);
-        put("bucketCmdPos", -0.07);
-        put("initialGripperPos", 0.07);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("leftGripperOpenCmdPos", -10.0);
-        put("rightGripperOpenCmdPos", -10.0);
-        put("smartMotionMaxVel", 2500.0);
-        put("smartMotionMaxAccel", 4000.0);
-      }
-    };
 
-    public static final HashMap<String, Double> groundPickupPosition = new HashMap<String, Double>() {
-      {
-        put("wristCmdPos", 13.0);
-        put("armCmdPos", 135.0);
-        put("inclinatorCmdPos", 1.0);
-        put("bucketCmdPos", 0.05);
-        put("wristArmPosition", 13.0);
-        put("leftGripperOpenCmdPos", 0.0);
-        put("rightGripperOpenCmdPos", -12.0);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVel", 5500.0);
-        put("smartMotionMaxAccel", 9000.0);
-      }
-    };
+    public static final ArmPositionData bucketPickupPosition = new ArmPositionData(0.0, 0.0, 1.0, -0.07, 3.0, 3.0,
+        -10.0, -10.0, 2500.0, 4000.0);
+    public static final ArmPositionData groundPickupPosition = new ArmPositionData(13.0, 135.0, 1.0, 0.05, 3.0, 3.0,
+        0.0, -12.0, 5500.0, 9000.0);
+    public static final ArmPositionData shelfPickupPosition = new ArmPositionData(0.0, 85.0, 0.0, 0.1, 3.0, 3.0,
+        -7.0, -7.0, 5500.0, 9000.0);
+    public static final ArmPositionData highDropPosition = new ArmPositionData(0.0, 75.0, 18.9, 0.1, 3.0, 3.0, -15.0,
+        5.0, 5500.0, 9000.0);
+    public static final ArmPositionData midDropPosition = new ArmPositionData(0.0, 80.0, 2.0, 0.1, -15.0, -7.0, 3.0,
+        3.0, 5500.0, 9000.0);
+    public static final ArmPositionData groundDropPosition = new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0,
+        3.0, 5500.0, 9000.0);
+    public static final ArmPositionData homePosition = new ArmPositionData(0.0, 0.0, 0.25, 0.07, 3.0, 3.0, -10.0,
+        -10.0, 2500.0, 4000.0);
 
-    public static final Map<String, Double> intakeShelfPosition = new HashMap<String, Double>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 85.0);
-        put("inclinatorCmdPos", 0.0);
-        put("bucketCmdPos", 0.1);
-        put("wristArmPosition", 75.0);
-        put("leftGripperOpenCmdPos", -7.0);
-        put("rightGripperOpenCmdPos", -7.0);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVel", 5500.0);
-        put("smartMotionMaxAccel", 9000.0);
-      }
-    };
+    public record ArmPositionData(double wristCmdPos, double armCmdPos, double inclinatorCmdPos, double bucketCmdPos,
+        double leftGripperCloseCmdPos, double rightGripperCloseCmdPos,
+        double leftGripperOpenCmdPos, double rightGripperOpenCmdPos, double smartMotionMaxVel,
+        double smartMotionMaxAccel) {
+    }
 
-    public static final Map<String, Double> highDropPosition = new HashMap<String, Double>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 75.0);
-        put("inclinatorCmdPos", 18.9);
-        put("bucketCmdPos", 0.1);
-        put("wristArmPosition", 70.0);
-        put("leftGripperOpenCmdPos", -15.0);
-        put("rightGripperOpenCmdPos", 5.0);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVel", 5500.0);
-        put("smartMotionMaxAccel", 9000.0);
-      }
-    };
-    public static final Map<String, Double> midDropPosition = new HashMap<>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 80.0);
-        put("inclinatorCmdPos", 2.0);
-        put("bucketCmdPos", 0.1);
-        put("wristArmPosition", 50.0);
-        put("leftGripperOpenCmdPos", -15.0);
-        put("rightGripperOpenCmdPos", -7.0);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVel", 5500.0);
-        put("smartMotionMaxAccel", 9000.0);
-      }
-    };
-    public static final Map<String, Double> groundDropPosition = new HashMap<>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 156.0);
-        put("inclinatorCmdPos", 0.0);
-        put("bucketCmdPos", 0.1);
-        put("wristArmPosition", 75.0);
-        put("leftGripperOpenCmdPos", 3.0);
-        put("rightGripperOpenCmdPos", 3.0);
-        put("leftGripperCloseCmdPos", -1.0);
-        put("rightGripperCloseCmdPos", -1.0);
-        put("smartMotionMaxVel", 5500.0);
-        put("smartMotionMaxAccel", 9000.0);
-      }
-    };
-    public static final Map<String, Double> homePosition = new HashMap<String, Double>() {
-      {
-        put("wristCmdPos", 0.0);
-        put("armCmdPos", 0.0);
-        put("inclinatorCmdPos", 0.25);
-        put("bucketCmdPos", 0.07);
-        put("leftGripperOpenCmdPos", -10.0);
-        put("rightGripperOpenCmdPos", -10.0);
-        put("leftGripperCloseCmdPos", 3.0);
-        put("rightGripperCloseCmdPos", 3.0);
-        put("smartMotionMaxVel", 2500.0);
-        put("smartMotionMaxAccel", 4000.0);
-      }
-    };
     public static final Map<String, Double> pidConstants = new HashMap<>() {
       {
         put("kp", 0.018);

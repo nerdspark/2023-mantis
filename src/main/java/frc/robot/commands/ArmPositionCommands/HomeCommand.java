@@ -17,11 +17,11 @@ public class HomeCommand extends SequentialCommandGroup {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HOME);
 
         addCommands(new ParallelCommandGroup(
-                new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.get("wristCmdPos")),
-                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.get("inclinatorCmdPos")),
+                new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.wristCmdPos()),
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.inclinatorCmdPos()),
                 new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED)),
-                new MoveArmCommand(armSubsystem, ArmConstants.homePosition.get("armCmdPos"),
-                        ArmConstants.homePosition.get("smartMotionMaxVel"),
-                        ArmConstants.homePosition.get("smartMotionMaxAccel")));
+                new MoveArmCommand(armSubsystem, ArmConstants.homePosition.armCmdPos(),
+                        ArmConstants.homePosition.smartMotionMaxVel(),
+                        ArmConstants.homePosition.smartMotionMaxAccel()));
     }
 }

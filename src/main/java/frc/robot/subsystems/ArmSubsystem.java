@@ -34,6 +34,25 @@ public class ArmSubsystem extends SubsystemBase {
         return armPosition;
     }
 
+    public ArmConstants.ArmPositionData getCurrentArmPositionData() {
+        switch (armPosition) {
+            default:
+                return ArmConstants.homePosition;
+            case GROUND_PICKUP:
+                return ArmConstants.groundPickupPosition;
+            case BUCKET_PICKUP:
+                return ArmConstants.bucketPickupPosition;
+            case SHELF_PICKUP:
+                return ArmConstants.shelfPickupPosition;
+            case GROUND_DROP:
+                return ArmConstants.groundDropPosition;
+            case MID_DROP:
+                return ArmConstants.midDropPosition;
+            case HIGH_DROP:
+                return ArmConstants.highDropPosition;
+        }
+    }
+
     public ArmSubsystem() {
         armMotor1 = new CANSparkMax(ArmConstants.ArmMotorRID, CANSparkMax.MotorType.kBrushless);
         armMotor2 = new CANSparkMax(ArmConstants.ArmMotorLID, CANSparkMax.MotorType.kBrushless);

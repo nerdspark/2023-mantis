@@ -14,13 +14,13 @@ public class MidDropCommand extends SequentialCommandGroup {
     public MidDropCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
                           WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.MID_DROP);
-        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.midDropPosition.get("armCmdPos"),
-                ArmConstants.midDropPosition.get("smartMotionMaxVel"),
-                ArmConstants.midDropPosition.get("smartMotionMaxAccel")),
+        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.midDropPosition.armCmdPos(),
+                ArmConstants.midDropPosition.smartMotionMaxVel(),
+                ArmConstants.midDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.midDropPosition.get("inclinatorCmdPos")),
+                                ArmConstants.midDropPosition.inclinatorCmdPos()),
                         new MoveWristCommand(wristSubsystem,
-                                ArmConstants.midDropPosition.get("wristCmdPos"))));
+                                ArmConstants.midDropPosition.wristCmdPos())));
     }
 }

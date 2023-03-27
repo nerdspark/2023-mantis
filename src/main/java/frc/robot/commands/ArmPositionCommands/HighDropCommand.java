@@ -15,13 +15,13 @@ public class HighDropCommand extends SequentialCommandGroup {
                            WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HIGH_DROP);
 
-        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.highDropPosition.get("armCmdPos"),
-                ArmConstants.highDropPosition.get("smartMotionMaxVel"),
-                ArmConstants.highDropPosition.get("smartMotionMaxAccel")),
+        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.highDropPosition.armCmdPos(),
+                ArmConstants.highDropPosition.smartMotionMaxVel(),
+                ArmConstants.highDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.highDropPosition.get("inclinatorCmdPos")),
-                        new MoveWristCommand(wristSubsystem, ArmConstants.highDropPosition.get("wristCmdPos"))));
+                                ArmConstants.highDropPosition.inclinatorCmdPos()),
+                        new MoveWristCommand(wristSubsystem, ArmConstants.highDropPosition.wristCmdPos())));
     }
 
 }

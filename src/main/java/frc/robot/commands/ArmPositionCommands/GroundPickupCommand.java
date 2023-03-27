@@ -19,11 +19,11 @@ public class GroundPickupCommand extends SequentialCommandGroup {
         addCommands(
             new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED),
             new ParallelCommandGroup(
-                new MoveArmCommand(armSubsystem, ArmConstants.groundPickupPosition.get("armCmdPos"),
-                        ArmConstants.groundPickupPosition.get("smartMotionMaxVel"),
-                        ArmConstants.groundPickupPosition.get("smartMotionMaxAccel")),
-                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundPickupPosition.get("inclinatorCmdPos")),
-                new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.get("wristCmdPos"))),
+                new MoveArmCommand(armSubsystem, ArmConstants.groundPickupPosition.armCmdPos(),
+                        ArmConstants.groundPickupPosition.smartMotionMaxVel(),
+                        ArmConstants.groundPickupPosition.smartMotionMaxAccel()),
+                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundPickupPosition.inclinatorCmdPos()),
+                new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.wristCmdPos())),
             new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
     }
 }

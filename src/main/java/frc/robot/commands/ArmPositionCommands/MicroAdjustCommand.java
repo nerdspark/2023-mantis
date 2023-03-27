@@ -39,23 +39,16 @@ public class MicroAdjustCommand extends CommandBase {
     double currentArmPositionState = 0;
     double currentWristPositionState = 0;
 
-    ArmPosition armPositionState = armSubsystem.getArmPositionState();
+    ArmConstants.ArmPositionData currentArmPositionData = armSubsystem.getCurrentArmPositionData();
 
-    switch (armPositionState) {
-      case GROUND_DROP:
-        currentArmPositionState = ArmConstants.groundPickupPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.groundPickupPosition.get("wristCmdPos");
-        break;
-      case HIGH_DROP:
-        currentArmPositionState = ArmConstants.highDropPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.highDropPosition.get("wristCmdPos");
-        break;
-      case MID_DROP:
-        currentArmPositionState = ArmConstants.midDropPosition.get("armCmdPos");
-        currentWristPositionState = ArmConstants.midDropPosition.get("wristCmdPos");
-        break;
-      default:
-        return;
+    currentArmPositionState = currentArmPositionData.armCmdPos();
+    currentWristPositionState = currentArmPositionData.wristCmdPos();
+
+    if (
+            armSubsystem.getArmPositionState() != ArmPosition.GROUND_DROP ||
+            armSubsystem.getArmPositionState() != ArmPosition.MID_DROP ||
+            armSubsystem.getArmPositionState() != ArmPosition.HIGH_DROP) {
+      return;
     }
 
     if (Math.abs(rightJoystickY.get()) > 0.05) {
