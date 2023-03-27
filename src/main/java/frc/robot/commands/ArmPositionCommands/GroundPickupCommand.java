@@ -14,17 +14,17 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class GroundPickupCommand extends SequentialCommandGroup {
     public GroundPickupCommand(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem) {
-        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GroundPickup);
+        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GROUND_PICKUP);
 
         addCommands(
-            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Closed),
+            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED),
             new ParallelCommandGroup(
                 new MoveArmCommand(armSubsystem, ArmConstants.groundPickupPosition.get("armCmdPos"),
                         ArmConstants.groundPickupPosition.get("smartMotionMaxVel"),
                         ArmConstants.groundPickupPosition.get("smartMotionMaxAccel")),
                 new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundPickupPosition.get("inclinatorCmdPos")),
                 new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.get("wristCmdPos"))),
-            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Open));
+            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
     }
 }
 

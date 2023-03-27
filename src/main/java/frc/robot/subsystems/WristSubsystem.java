@@ -21,13 +21,6 @@ public class WristSubsystem extends SubsystemBase {
         wristMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
     }
 
-    public void microAdjust(double position_delta) {
-        // Does it make sense to use the encoder like this, instead of the PID controller?
-        double currentPosition = wristEncoder.getPosition();
-        double newPosition = currentPosition + position_delta;
-        wristEncoder.setPosition(newPosition);
-    }
-
     public double getPosition() {
         return wristEncoder.getPosition();
     }

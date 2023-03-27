@@ -8,33 +8,33 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsystem extends SubsystemBase {
-    private final CANSparkMax ElevatorMotor;
-    private final CANSparkMax ElevatorMotor2;
-    private SparkMaxPIDController ElevatorMotorPIDController, ElevatorMotor2PIDController;
-    private RelativeEncoder ElevatorMotorEncoder, ElevatorMotor2Encoder;
+    private final CANSparkMax elevatorMotor1;
+    private final CANSparkMax elevatorMotor2;
+    private SparkMaxPIDController elevatorMotor1PIDController, elevatorMotor2PIDController;
+    private RelativeEncoder elevatorMotor1Encoder, elevatorMotor2Encoder;
 
     public ElevatorSubsystem() {
-        ElevatorMotor = new CANSparkMax(ArmConstants.InclinovatorMotor1ID, CANSparkMax.MotorType.kBrushless);
-        ElevatorMotor2 = new CANSparkMax(ArmConstants.InclinovatorMotor2ID, CANSparkMax.MotorType.kBrushless);
+        elevatorMotor1 = new CANSparkMax(ArmConstants.InclinovatorMotor1ID, CANSparkMax.MotorType.kBrushless);
+        elevatorMotor2 = new CANSparkMax(ArmConstants.InclinovatorMotor2ID, CANSparkMax.MotorType.kBrushless);
 
-        ElevatorMotorPIDController = ElevatorMotor.getPIDController();
-        ElevatorMotor2PIDController = ElevatorMotor2.getPIDController();
+        elevatorMotor1PIDController = elevatorMotor1.getPIDController();
+        elevatorMotor2PIDController = elevatorMotor2.getPIDController();
 
-        ElevatorMotorEncoder = ElevatorMotor.getEncoder();
-        ElevatorMotor2Encoder = ElevatorMotor2.getEncoder();
+        elevatorMotor1Encoder = elevatorMotor1.getEncoder();
+        elevatorMotor2Encoder = elevatorMotor2.getEncoder();
 
-        ElevatorMotorEncoder.setPosition(0);
-        ElevatorMotor2Encoder.setPosition(0);
+        elevatorMotor1Encoder.setPosition(0);
+        elevatorMotor2Encoder.setPosition(0);
 
-        ElevatorMotor2.follow(ElevatorMotor);
+        elevatorMotor2.follow(elevatorMotor1);
     }
 
     public void setPosition(double position) {
         System.out.println("ElevatorSubsystem: " + position);
-        ElevatorMotorPIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
+        elevatorMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
     }
 
     public double getPosition() {
-        return ElevatorMotorEncoder.getPosition();
+        return elevatorMotor1Encoder.getPosition();
     }
 }

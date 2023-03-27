@@ -8,37 +8,37 @@ import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BucketSubsystem extends SubsystemBase {
-    private final CANSparkMax LeftBucketMotor;
-    private final CANSparkMax RightBucketMotor;
-    private SparkMaxPIDController LeftBucketMotorPIDController, RightBucketMotorPIDController;
-    private RelativeEncoder BucketMotor1Encoder, BucketMotor2Encoder;
+    private final CANSparkMax leftBucketMotor;
+    private final CANSparkMax rightBucketMotor;
+    private SparkMaxPIDController leftBucketMotorPIDController, rightBucketMotorPIDController;
+    private RelativeEncoder leftBucketMotorEncoder, rightBucketMotorEncoder;
 
     public BucketSubsystem() {
-        LeftBucketMotor = new CANSparkMax(ArmConstants.BucketMotorLID, CANSparkMax.MotorType.kBrushless);
-        RightBucketMotor = new CANSparkMax(ArmConstants.BucketMotorRID, CANSparkMax.MotorType.kBrushless);
+        leftBucketMotor = new CANSparkMax(ArmConstants.BucketMotorLID, CANSparkMax.MotorType.kBrushless);
+        rightBucketMotor = new CANSparkMax(ArmConstants.BucketMotorRID, CANSparkMax.MotorType.kBrushless);
 
-        LeftBucketMotorPIDController = LeftBucketMotor.getPIDController();
-        RightBucketMotorPIDController = RightBucketMotor.getPIDController();
+        leftBucketMotorPIDController = leftBucketMotor.getPIDController();
+        rightBucketMotorPIDController = rightBucketMotor.getPIDController();
 
-        BucketMotor1Encoder = LeftBucketMotor.getEncoder();
-        BucketMotor2Encoder = RightBucketMotor.getEncoder();
+        leftBucketMotorEncoder = leftBucketMotor.getEncoder();
+        rightBucketMotorEncoder = rightBucketMotor.getEncoder();
     }
 
     public double[] getPositions() {
-        double[] position = { BucketMotor1Encoder.getPosition(), BucketMotor2Encoder.getPosition() };
+        double[] position = { leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition() };
 
         return position;
     }
 
     // Neither method uses the position parameter
     public void retract() {
-        LeftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
-        RightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
+        leftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
+        rightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
 
     }
 
     public void extend() {
-        LeftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
-        RightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+        leftBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
+        rightBucketMotorPIDController.setReference(-0.84, CANSparkMax.ControlType.kVoltage);
     }
 }

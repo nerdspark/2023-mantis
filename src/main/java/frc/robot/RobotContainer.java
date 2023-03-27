@@ -145,7 +145,7 @@ public class RobotContainer {
       () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)
     ));
 
-    new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.Closed).execute();
+    new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
 
     // Configure the button bindings
     configureButtonBindings();
@@ -212,11 +212,11 @@ public class RobotContainer {
 
     // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(new LimeLightAlignCommand(limeLightSubSystem, swerveSubsystem));
 
-    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BucketPickup).onTrue(
-        new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Closed));
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BUCKET_PICKUP).onTrue(
+        new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
 
-    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BucketPickup).onTrue(
-      new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open));
+    new Trigger(() -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5 && armSubsystem.getArmPositionState() != ArmPosition.BUCKET_PICKUP).onTrue(
+      new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.OPENED));
 
     // home
     new Trigger(() -> coDriverJoystick.getPOV() > 180)
@@ -247,18 +247,18 @@ public class RobotContainer {
         .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
     // Right trigger - close gripper when bucket pickup, and vice versa
-    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP)
         && (driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5))
         .onTrue(new SequentialCommandGroup(
           new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED),
-          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Closed)
+          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED)
         ));
 
-    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BucketPickup)
+    new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP)
         && (driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger) > 0.5))
         .onTrue(new SequentialCommandGroup(
           new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
-          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.Open)
+          new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.OPENED)
         ));
   }
 

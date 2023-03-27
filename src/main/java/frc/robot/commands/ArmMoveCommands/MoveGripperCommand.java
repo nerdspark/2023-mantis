@@ -11,8 +11,8 @@ public class MoveGripperCommand extends CommandBase {
   private final ArmSubsystem armSubsystem;
 
   public enum GripperState {
-    Open,
-    Closed,
+      OPENED,
+      CLOSED,
   }
 
   private double leftPosition;
@@ -42,7 +42,7 @@ public class MoveGripperCommand extends CommandBase {
     String leftKey = "";
     String rightKey = "";
 
-    if (state == GripperState.Open) {
+    if (state == GripperState.OPENED) {
       leftKey = "leftGripperOpenCmdPos";
       rightKey = "rightGripperOpenCmdPos";
     } else {
@@ -51,31 +51,31 @@ public class MoveGripperCommand extends CommandBase {
     }
     
     switch (armSubsystem.getArmPositionState()) {
-      case Home:
+      case HOME:
           leftPosition = ArmConstants.homePosition.get(leftKey);
           rightPosition = ArmConstants.homePosition.get(rightKey);
           break;
-      case BucketPickup:
+      case BUCKET_PICKUP:
           leftPosition = ArmConstants.bucketPickupPosition.get(leftKey);
           rightPosition = ArmConstants.bucketPickupPosition.get(rightKey);
           break;
-      case GroundPickup:
+      case GROUND_PICKUP:
           leftPosition = ArmConstants.groundPickupPosition.get(leftKey);
           rightPosition = ArmConstants.groundPickupPosition.get(rightKey);
           break;
-      case ShelfPickup:
+      case SHELF_PICKUP:
           leftPosition = ArmConstants.intakeShelfPosition.get(leftKey);
           rightPosition = ArmConstants.intakeShelfPosition.get(rightKey);
           break;
-      case HighDrop:
+      case HIGH_DROP:
           leftPosition = ArmConstants.highDropPosition.get(leftKey);
           rightPosition = ArmConstants.highDropPosition.get(rightKey);
           break;
-      case MidDrop:
+      case MID_DROP:
           leftPosition = ArmConstants.midDropPosition.get(leftKey);
           rightPosition = ArmConstants.midDropPosition.get(rightKey);
           break;
-      case GroundDrop:
+      case GROUND_DROP:
           leftPosition = ArmConstants.groundDropPosition.get(leftKey);
           rightPosition = ArmConstants.groundDropPosition.get(rightKey);
           break;

@@ -24,7 +24,7 @@ public class threeElement_Red extends SequentialCommandGroup {
 
     addCommands(
       new HighDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
       new WaitCommand(0.2),
       new ParallelCommandGroup(  
         new DriveFollowPath("threeElementRed_1", 1, 0.5, true),
@@ -35,7 +35,7 @@ public class threeElement_Red extends SequentialCommandGroup {
           new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
         )
       ),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
 
       new WaitCommand(0.2),
       new ParallelCommandGroup(
@@ -44,7 +44,7 @@ public class threeElement_Red extends SequentialCommandGroup {
       ),
 
       new HighDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
       new WaitCommand(0.2),
       new ParallelCommandGroup(  
         new DriveFollowPath("threeElementRed_3", 1, 0.5, true),
@@ -54,7 +54,7 @@ public class threeElement_Red extends SequentialCommandGroup {
         )
       ),
       new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
 
       new WaitCommand(0.2),
       new ParallelCommandGroup(

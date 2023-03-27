@@ -89,7 +89,7 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
 
     addCommands(
       new HighDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
       new MidDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
       new ParallelCommandGroup(
 
@@ -97,20 +97,20 @@ public class ThreeElementWMarkers extends SequentialCommandGroup {
       //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
        ),
 
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
       new ParallelCommandGroup(
         loadPathPlannerTrajectoryCommand("threeElementRed_2", false),
         new MidDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())
       ),
       new HighDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Open),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
       new ParallelCommandGroup(
 
         loadPathPlannerTrajectoryCommand("threeElementRed_3", false)
       //   new GroundPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem())
       ),
       new HighDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem()),
-      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.Closed),
+      new MoveGripperCommand(RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
       new ParallelCommandGroup(
         loadPathPlannerTrajectoryCommand("threeElementRed_4", false),
         new MidDropCommand(RobotContainer.getArmSubsystem(), RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem())

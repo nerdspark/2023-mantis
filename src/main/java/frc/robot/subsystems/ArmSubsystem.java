@@ -6,26 +6,25 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.*;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmSubsystem extends SubsystemBase {
-    private final CANSparkMax ArmMotor;
-    private final CANSparkMax ArmMotor2;
-    private SparkMaxPIDController ArmMotorPIDController, ArmMotor2PIDController;
-    private RelativeEncoder ArmMotorEncoder, ArmMotor2Encoder;
+    private final CANSparkMax armMotor1;
+    private final CANSparkMax armMotor2;
+    private SparkMaxPIDController armMotor1PIDController, armMotor2PIDController;
+    private RelativeEncoder armMotor1Encoder, armMotor2Encoder;
 
     public enum ArmPosition {
-        Home,
-        GroundPickup,
-        BucketPickup,
-        ShelfPickup,
-        GroundDrop,
-        MidDrop,
-        HighDrop
+        HOME,
+        GROUND_PICKUP,
+        BUCKET_PICKUP,
+        SHELF_PICKUP,
+        GROUND_DROP,
+        MID_DROP,
+        HIGH_DROP
     }
 
-    public ArmPosition armPosition = ArmPosition.Home;
+    public ArmPosition armPosition = ArmPosition.HOME;
 
     public void setArmPositionState(ArmPosition state) {
         this.armPosition = state;
@@ -36,36 +35,36 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public ArmSubsystem() {
-        ArmMotor = new CANSparkMax(ArmConstants.ArmMotorRID, CANSparkMax.MotorType.kBrushless);
-        ArmMotor2 = new CANSparkMax(ArmConstants.ArmMotorLID, CANSparkMax.MotorType.kBrushless);
+        armMotor1 = new CANSparkMax(ArmConstants.ArmMotorRID, CANSparkMax.MotorType.kBrushless);
+        armMotor2 = new CANSparkMax(ArmConstants.ArmMotorLID, CANSparkMax.MotorType.kBrushless);
 
-        ArmMotorPIDController = ArmMotor.getPIDController();
-        ArmMotor2PIDController = ArmMotor2.getPIDController();
+        armMotor1PIDController = armMotor1.getPIDController();
+        armMotor2PIDController = armMotor2.getPIDController();
 
-        ArmMotorEncoder = ArmMotor.getEncoder();
-        ArmMotor2Encoder = ArmMotor.getEncoder();
+        armMotor1Encoder = armMotor1.getEncoder();
+        armMotor2Encoder = armMotor1.getEncoder();
 
-        ArmMotorEncoder.setPosition(0);
-        ArmMotor2Encoder.setPosition(0);
+        armMotor1Encoder.setPosition(0);
+        armMotor2Encoder.setPosition(0);
 
-        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + ArmMotorEncoder.getPosition()
-                + " Encoder 2 position: " + ArmMotor2Encoder.getPosition());
+        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + armMotor1Encoder.getPosition()
+                + " Encoder 2 position: " + armMotor2Encoder.getPosition());
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {
-        ArmMotorPIDController.setSmartMotionMaxVelocity(maxVel, 0);
-        ArmMotorPIDController.setSmartMotionMaxAccel(maxAccel, 0);
-        ArmMotor2PIDController.setSmartMotionMaxVelocity(maxVel, 0);
-        ArmMotor2PIDController.setSmartMotionMaxAccel(maxAccel, 0);
+        armMotor1PIDController.setSmartMotionMaxVelocity(maxVel, 0);
+        armMotor1PIDController.setSmartMotionMaxAccel(maxAccel, 0);
+        armMotor2PIDController.setSmartMotionMaxVelocity(maxVel, 0);
+        armMotor2PIDController.setSmartMotionMaxAccel(maxAccel, 0);
     }
 
     public void goToPosition(double position) {
-        ArmMotorPIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
-        ArmMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
+        armMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
+        armMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public double[] getPositions() {
-        double[] position = { ArmMotorEncoder.getPosition(), ArmMotor2Encoder.getPosition() };
+        double[] position = { armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition() };
 
         return position;
     }
