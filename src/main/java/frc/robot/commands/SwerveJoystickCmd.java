@@ -25,6 +25,9 @@ public class SwerveJoystickCmd extends CommandBase {
     private final PIDController targetTurnController = new PIDController(DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
 
     private  double targetAngle;
+    private double driveAngle = 0;
+    private double joystickMagnitude = 0;
+    private double currentDrivetrainPose = 0;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningTargX, Supplier<Double> turningTargY,
@@ -60,12 +63,16 @@ public class SwerveJoystickCmd extends CommandBase {
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : 
         ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.7 : OIConstants.driverEXPMultiplier))
-        *Math.pow(Math.E, 
-        Math.abs(
-            (Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get())
-            *OIConstants.driverEXPJoyMultiplier))
-             * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-        double xSpeed = 0.75*(Math.cos(driveAngle)*driveSpeed);
+        *Math.pow(Math.E, Math.abs(joystickMagnitude*OIConstants.driverEXPJoyMultiplier)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+
+        if (prevJoyMagnitude - joystickMagnitude > OIConstants.joystickMagnitudeChange) {
+            driveAngle = prevDriveAngle;
+        }
+        if (joystickMagnitude < OIConstants.kDeadbandDrive) {
+            driveAngle = prevDriveAngle;
+            driveSpeed = 0;
+        }
+        double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         double ySpeed = (Math.sin(driveAngle)*driveSpeed);
         // double xSpeed = OIConstants.driverMultiplier*xSpdFunction.get()*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double ySpeed = OIConstants.driverMultiplier*ySpdFunction.get()*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -75,16 +82,25 @@ public class SwerveJoystickCmd extends CommandBase {
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
         double currentAngle = -swerveSubsystem.getHeading()*Math.PI/180;
         double turningSpeed = 0;
+        double prevDrivetrainPose = currentDrivetrainPose;
+        currentDrivetrainPose = Math.sqrt((swerveSubsystem.getPose().getTranslation().getX()*swerveSubsystem.getPose().getTranslation().getX())+(swerveSubsystem.getPose().getTranslation().getY()*swerveSubsystem.getPose().getTranslation().getY()));
         if (resetGyroButton.get()) {
             zeroHeading();
             swerveSubsystem.resetOdometry(new Pose2d());
         } else 
         if (DPAD.get() != -1) {
             targetAngle =  ((DPAD.get()) * Math.PI / 180d);
+        } 
+        targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
+        turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
+        SmartDashboard.putString("PID turning?", "yes");
+        if (Math.abs(prevDrivetrainPose - currentDrivetrainPose) > OIConstants.kDeadbandSpeed && joystickMagnitude < OIConstants.kDeadbandDrive) {
+            turningSpeed = 0;
+            SmartDashboard.putString("PID turning?", "disabled");
         }
-//        if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
-//            targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
-//        }
+        // if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
+        //     targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
+        // }
         // if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
         //     // targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
         // } else 
