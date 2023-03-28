@@ -1,12 +1,10 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.ArmConstants;
-
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.*;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax armMotor1;
@@ -83,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double[] getPositions() {
-        double[] position = { armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition() };
+        double[] position = {armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
 
         return position;
     }

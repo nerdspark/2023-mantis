@@ -4,22 +4,18 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.subsystems.SwerveSubsystem;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
 public class threeMeterVisionTestCommand extends SequentialCommandGroup {
 
-  // public line2metersCommand(SwerveSubsystem swervesubsystem) {
-  // }
+    // public line2metersCommand(SwerveSubsystem swervesubsystem) {
+    // }
 
-  public threeMeterVisionTestCommand(SwerveSubsystem swerveSubsystem){
+    public threeMeterVisionTestCommand(SwerveSubsystem swerveSubsystem) {
 
-    addCommands(
-      new DriveFollowPath("threeMeterVisionTest", 1, 0.5)
-    );
-  }
-
-
+        addCommands(new DriveFollowPath("threeMeterVisionTest", 1, 0.5));
+    }
 }

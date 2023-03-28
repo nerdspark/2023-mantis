@@ -13,18 +13,24 @@ import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class GroundPickupCommand extends SequentialCommandGroup {
-    public GroundPickupCommand(ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem, ArmSubsystem armSubsystem, GripperSubsystem gripperSubsystem) {
+    public GroundPickupCommand(
+            ElevatorSubsystem elevatorSubsystem,
+            WristSubsystem wristSubsystem,
+            ArmSubsystem armSubsystem,
+            GripperSubsystem gripperSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GROUND_PICKUP);
 
         addCommands(
-            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED),
-            new ParallelCommandGroup(
-                new MoveArmCommand(armSubsystem, ArmConstants.groundPickupPosition.armCmdPos(),
-                        ArmConstants.groundPickupPosition.smartMotionMaxVel(),
-                        ArmConstants.groundPickupPosition.smartMotionMaxAccel()),
-                new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundPickupPosition.inclinatorCmdPos()),
-                new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.wristCmdPos())),
-            new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
+                new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED),
+                new ParallelCommandGroup(
+                        new MoveArmCommand(
+                                armSubsystem,
+                                ArmConstants.groundPickupPosition.armCmdPos(),
+                                ArmConstants.groundPickupPosition.smartMotionMaxVel(),
+                                ArmConstants.groundPickupPosition.smartMotionMaxAccel()),
+                        new MoveElevatorCommand(
+                                elevatorSubsystem, ArmConstants.groundPickupPosition.inclinatorCmdPos()),
+                        new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.wristCmdPos())),
+                new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
     }
 }
-

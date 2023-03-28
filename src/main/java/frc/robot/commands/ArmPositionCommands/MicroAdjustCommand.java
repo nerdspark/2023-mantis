@@ -4,74 +4,76 @@
 
 package frc.robot.commands.ArmPositionCommands;
 
-import frc.robot.Constants.ArmConstants;
-
-import java.util.function.Supplier;
-import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.ArmSubsystem.ArmPosition;
-import frc.robot.subsystems.ArmSubsystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import frc.robot.subsystems.WristSubsystem;
+import java.util.function.Supplier;
 
 public class MicroAdjustCommand extends CommandBase {
-  private final WristSubsystem wristSubsystem;
-  private final ArmSubsystem armSubsystem;
-  private final Supplier<Double> leftJoystickY;
-  private final Supplier<Double> rightJoystickY;
+    private final WristSubsystem wristSubsystem;
+    private final ArmSubsystem armSubsystem;
+    private final Supplier<Double> leftJoystickY;
+    private final Supplier<Double> rightJoystickY;
 
-  /** Creates a new MicroAdjustCommand. */
-  public MicroAdjustCommand(ArmSubsystem armSubsystem, WristSubsystem wristSubsystem, Supplier<Double> leftJoystickY, Supplier<Double> rightJoystickY) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    this.wristSubsystem = wristSubsystem;
-    this.armSubsystem = armSubsystem;
-    this.leftJoystickY = leftJoystickY;
-    this.rightJoystickY = rightJoystickY;
-    addRequirements(armSubsystem);
-  }
-
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    double currentArmPositionState = 0;
-    double currentWristPositionState = 0;
-
-    ArmConstants.ArmPositionData currentArmPositionData = armSubsystem.getCurrentArmPositionData();
-
-    currentArmPositionState = currentArmPositionData.armCmdPos();
-    currentWristPositionState = currentArmPositionData.wristCmdPos();
-
-    if (
-            armSubsystem.getArmPositionState() != ArmPosition.GROUND_DROP ||
-            armSubsystem.getArmPositionState() != ArmPosition.MID_DROP ||
-            armSubsystem.getArmPositionState() != ArmPosition.HIGH_DROP) {
-      return;
+    /** Creates a new MicroAdjustCommand. */
+    public MicroAdjustCommand(
+            ArmSubsystem armSubsystem,
+            WristSubsystem wristSubsystem,
+            Supplier<Double> leftJoystickY,
+            Supplier<Double> rightJoystickY) {
+        // Use addRequirements() here to declare subsystem dependencies.
+        this.wristSubsystem = wristSubsystem;
+        this.armSubsystem = armSubsystem;
+        this.leftJoystickY = leftJoystickY;
+        this.rightJoystickY = rightJoystickY;
+        addRequirements(armSubsystem);
     }
 
-    if (Math.abs(rightJoystickY.get()) > 0.05) {
-      armSubsystem.goToPosition(currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
-    } else {
-      armSubsystem.goToPosition(currentArmPositionState);
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {}
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        double currentArmPositionState = 0;
+        double currentWristPositionState = 0;
+
+        ArmConstants.ArmPositionData currentArmPositionData = armSubsystem.getCurrentArmPositionData();
+
+        currentArmPositionState = currentArmPositionData.armCmdPos();
+        currentWristPositionState = currentArmPositionData.wristCmdPos();
+
+        if (armSubsystem.getArmPositionState() != ArmPosition.GROUND_DROP
+                || armSubsystem.getArmPositionState() != ArmPosition.MID_DROP
+                || armSubsystem.getArmPositionState() != ArmPosition.HIGH_DROP) {
+            return;
+        }
+
+        if (Math.abs(rightJoystickY.get()) > 0.05) {
+            armSubsystem.goToPosition(
+                    currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
+        } else {
+            armSubsystem.goToPosition(currentArmPositionState);
+        }
+
+        if (Math.abs(leftJoystickY.get()) > 0.05) {
+            wristSubsystem.setPosition(
+                    currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
+        } else {
+            wristSubsystem.setPosition(currentWristPositionState);
+        }
     }
 
-    if (Math.abs(leftJoystickY.get()) > 0.05) {
-      wristSubsystem.setPosition(currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
-    } else {
-      wristSubsystem.setPosition(currentWristPositionState);
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {}
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return false;
     }
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
 }

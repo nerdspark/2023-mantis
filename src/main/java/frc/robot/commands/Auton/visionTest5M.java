@@ -4,38 +4,37 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.DriveFollowPath;
-import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
-
 import org.photonvision.PhotonCamera;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
 public class visionTest5M extends SequentialCommandGroup {
 
-  // public line2metersCommand(SwerveSubsystem swervesubsystem) {
-  // }
+    // public line2metersCommand(SwerveSubsystem swervesubsystem) {
+    // }
 
-  public visionTest5M(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, ExampleSubsystem mExamplesubsystem, PoseEstimatorSubSystem poseEstimator){
+    public visionTest5M(
+            SwerveSubsystem swerveSubsystem,
+            PhotonCamera photonCamera,
+            ExampleSubsystem mExamplesubsystem,
+            PoseEstimatorSubSystem poseEstimator) {
 
-    addCommands(
-      new ParallelDeadlineGroup(new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
-      new DriveFollowPath("visionTest5M", 1, 0.5, true)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8))
+        addCommands(
+                new ParallelDeadlineGroup(
+                                new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
+                                new DriveFollowPath("visionTest5M", 1, 0.5, true))
+                        .andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8))
 
-      // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
-      // new DriveFollowPath("visionTest5M", 1, 0.5, true)),
-      // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose)
-    );
-  }
-
-
+                // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
+                // new DriveFollowPath("visionTest5M", 1, 0.5, true)),
+                // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose)
+                );
+    }
 }

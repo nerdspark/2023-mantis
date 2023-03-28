@@ -1,11 +1,10 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.ArmConstants;
-
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 
 public class BucketSubsystem extends SubsystemBase {
     private final CANSparkMax leftBucketMotor;
@@ -25,7 +24,7 @@ public class BucketSubsystem extends SubsystemBase {
     }
 
     public double[] getPositions() {
-        double[] position = { leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition() };
+        double[] position = {leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition()};
 
         return position;
     }
@@ -34,7 +33,6 @@ public class BucketSubsystem extends SubsystemBase {
     public void retract() {
         leftBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
         rightBucketMotorPIDController.setReference(0.84, CANSparkMax.ControlType.kVoltage);
-
     }
 
     public void extend() {
