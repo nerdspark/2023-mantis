@@ -156,7 +156,7 @@ public final class Constants {
         public static final double kPTargetTurning = -3d;
         public static final double kITargetTurning = 0d;
         public static final double kDTargetTurning = -0.0d;
-        public static final double kTargetTurningDeadband = 1 * Math.PI / 180;
+        public static final double kTargetTurningDeadband = 10 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
         public static final double kPTurningMotor = 0.1d;
@@ -281,12 +281,12 @@ public final class Constants {
         public static final int kDriverFieldOrientedButtonIdx = 2;
 
         public static final double kDeadbandSteer = 0.1d;
-        public static final double kDeadbandDrive = 0.04d;
-        public static final double kDeadbandSpeed = 0.001d;
+        public static final double kDeadbandDrive = 0.05d;
+        public static final double kDeadbandSpeed = 1d;
 
-        public static final double joystickMagnitudeChange = 0.1d;
+        public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.5;
+        public static final double driverMultiplier = 0.1;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
