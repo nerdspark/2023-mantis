@@ -25,8 +25,6 @@ public class SwerveJoystickCmd extends CommandBase {
     private final PIDController targetTurnController = new PIDController(DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
 
     private  double targetAngle;
-    private double driveAngle = 0;
-    private double joystickMagnitude = 0;
 
     public SwerveJoystickCmd(SwerveSubsystem swerveSubsystem,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, Supplier<Double> turningTargX, Supplier<Double> turningTargY,
@@ -58,24 +56,16 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute() {
         // 1. Get real-time joystick inputs
+        double driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
         // double driveSpeed = speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get()) + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
-        double prevJoyMagnitude = joystickMagnitude;
-        double prevDriveAngle = driveAngle;
-        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
-        joystickMagnitude = Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get();
-
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : 
         ((leftTrigger.get() > 0.5) ? OIConstants.driverEXPMultiplier * 0.7 : OIConstants.driverEXPMultiplier))
-        *Math.pow(Math.E, Math.abs(joystickMagnitude*OIConstants.driverEXPJoyMultiplier)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
-
-        if (prevJoyMagnitude - joystickMagnitude > OIConstants.joystickMagnitudeChange) {
-            driveAngle = prevDriveAngle;
-        }
-        if (joystickMagnitude < OIConstants.kDeadbandDrive) {
-            driveAngle = prevDriveAngle;
-            driveSpeed = 0;
-        }
-        double xSpeed = 0.75 * (Math.cos(driveAngle)*driveSpeed);
+        *Math.pow(Math.E, 
+        Math.abs(
+            (Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get()) ? ySpdFunction.get() : xSpdFunction.get())
+            *OIConstants.driverEXPJoyMultiplier))
+             * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        double xSpeed = 0.75*(Math.cos(driveAngle)*driveSpeed);
         double ySpeed = (Math.sin(driveAngle)*driveSpeed);
         // double xSpeed = OIConstants.driverMultiplier*xSpdFunction.get()*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double ySpeed = OIConstants.driverMultiplier*ySpdFunction.get()*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -91,17 +81,10 @@ public class SwerveJoystickCmd extends CommandBase {
         } else 
         if (DPAD.get() != -1) {
             targetAngle =  ((DPAD.get()) * Math.PI / 180d);
-        } 
-        targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
-        turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
-        SmartDashboard.putString("PID turning?", "yes");
-        if (prevspeed - currentspeed > constants.speeddeadband) {
-            turningSpeed = 0;
-            SmartDashboard.putString("PID turning?", "disabled");
         }
-        // if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
-        //     targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
-        // }
+//        if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer || (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
+//            targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
+//        }
         // if ((leftTrigger.get() > OIConstants.triggerDeadband) || (rightTrigger.get() > OIConstants.triggerDeadband)) {
         //     // targetAngle += ((rightTrigger.get() - leftTrigger.get()) * OIConstants.triggerMultiplier);
         // } else 
@@ -109,10 +92,13 @@ public class SwerveJoystickCmd extends CommandBase {
         //     targetAngle = -Math.atan2(-turningTargX.get(), -turningTargY.get());
         // }
 
-        // if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get()) {
-        //     turningSpeed = 0;
-        //     SmartDashboard.putString("PID turning?", "disabled");
-        // }
+        targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
+        turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
+        SmartDashboard.putString("PID turning?", "yes");
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband)/* && !SwerveSubsystem.driveTurning*/) || cancelTurn.get()) {
+            turningSpeed = 0;
+            SmartDashboard.putString("PID turning?", "disabled");
+        }
 
          if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
              targetAngle = currentAngle;
@@ -123,14 +109,14 @@ public class SwerveJoystickCmd extends CommandBase {
         
         // 2. Apply deadband
         
-        // if (/*Math.abs(xSpdFunction.get() * xSpdFunction.get()) + Math.abs(ySpdFunction.get() * ySpdFunction.get()) < (OIConstants.kDeadbandDrive * OIConstants.kDeadbandDrive)) {*/Math.abs(xSpdFunction.get()) < OIConstants.kDeadbandDrive && Math.abs(ySpdFunction.get()) < OIConstants.kDeadbandDrive) {
-        //     xSpeed = 0;
-        //     ySpeed = 0;
-        //     SmartDashboard.putString("in drive deadband", "yes");
-        // } else {
-        //     SmartDashboard.putString("in drive deadband", "no");
+        if (/*Math.abs(xSpdFunction.get() * xSpdFunction.get()) + Math.abs(ySpdFunction.get() * ySpdFunction.get()) < (OIConstants.kDeadbandDrive * OIConstants.kDeadbandDrive)) {*/Math.abs(xSpdFunction.get()) < OIConstants.kDeadbandDrive && Math.abs(ySpdFunction.get()) < OIConstants.kDeadbandDrive) {
+            xSpeed = 0;
+            ySpeed = 0;
+            SmartDashboard.putString("in drive deadband", "yes");
+        } else {
+            SmartDashboard.putString("in drive deadband", "no");
 
-        // }
+        }
 
         // turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) > OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
