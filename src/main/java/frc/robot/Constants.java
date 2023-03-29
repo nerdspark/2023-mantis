@@ -223,7 +223,7 @@ public final class Constants {
         public static final ArmPositionData highDropPosition =
                 new ArmPositionData(0.0, 75.0, 18.9, 0.1, 3.0, 3.0, -15.0, 5.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(0.0, 80.0, 2.0, 0.1, -15.0, -7.0, 3.0, 3.0, 5500.0, 9000.0);
+                new ArmPositionData(0.0, 80.0, 2.0, 0.1, 3.0, 3.0, -15.0, -7.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =

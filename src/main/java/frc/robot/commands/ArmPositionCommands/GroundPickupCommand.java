@@ -1,5 +1,6 @@
 package frc.robot.commands.ArmPositionCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -18,9 +19,8 @@ public class GroundPickupCommand extends SequentialCommandGroup {
             WristSubsystem wristSubsystem,
             ArmSubsystem armSubsystem,
             GripperSubsystem gripperSubsystem) {
-        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GROUND_PICKUP);
-
         addCommands(
+                new InstantCommand(() -> armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GROUND_PICKUP)),
                 new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED),
                 new ParallelCommandGroup(
                         new MoveArmCommand(

@@ -25,6 +25,7 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmPosition armPosition = ArmPosition.HOME;
 
     public void setArmPositionState(ArmPosition state) {
+        System.out.println("changed state");
         this.armPosition = state;
     }
 
@@ -33,22 +34,15 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public ArmConstants.ArmPositionData getCurrentArmPositionData() {
-        switch (armPosition) {
-            default:
-                return ArmConstants.homePosition;
-            case GROUND_PICKUP:
-                return ArmConstants.groundPickupPosition;
-            case BUCKET_PICKUP:
-                return ArmConstants.bucketPickupPosition;
-            case SHELF_PICKUP:
-                return ArmConstants.shelfPickupPosition;
-            case GROUND_DROP:
-                return ArmConstants.groundDropPosition;
-            case MID_DROP:
-                return ArmConstants.midDropPosition;
-            case HIGH_DROP:
-                return ArmConstants.highDropPosition;
-        }
+        return switch (armPosition) {
+            default -> ArmConstants.homePosition;
+            case GROUND_PICKUP -> ArmConstants.groundPickupPosition;
+            case BUCKET_PICKUP -> ArmConstants.bucketPickupPosition;
+            case SHELF_PICKUP -> ArmConstants.shelfPickupPosition;
+            case GROUND_DROP -> ArmConstants.groundDropPosition;
+            case MID_DROP -> ArmConstants.midDropPosition;
+            case HIGH_DROP -> ArmConstants.highDropPosition;
+        };
     }
 
     public ArmSubsystem() {

@@ -30,14 +30,14 @@ public class MoveGripperCommand extends CommandBase {
     @Override
     public void execute() {
         switch (state) {
-            case OPENED:
+            case OPENED -> {
                 leftPosition = armSubsystem.getCurrentArmPositionData().leftGripperOpenCmdPos();
-                rightPosition = armSubsystem.getCurrentArmPositionData().rightGripperCloseCmdPos();
-                break;
-            case CLOSED:
+                rightPosition = armSubsystem.getCurrentArmPositionData().rightGripperOpenCmdPos();
+            }
+            case CLOSED -> {
                 leftPosition = armSubsystem.getCurrentArmPositionData().leftGripperCloseCmdPos();
                 rightPosition = armSubsystem.getCurrentArmPositionData().rightGripperCloseCmdPos();
-                break;
+            }
         }
 
         m_subsystem.setLeftPosition(leftPosition);
@@ -49,7 +49,7 @@ public class MoveGripperCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        System.out.println("[MoveArmCommand] Left: " + m_subsystem.getLeftPosition() + " Right: "
+        System.out.println("[MoveGripperCommand] Left: " + m_subsystem.getLeftPosition() + " Right: "
                 + m_subsystem.getRightPosition() + " Target: " + leftPosition + " Difference: "
                 + Math.abs(m_subsystem.getLeftPosition() - leftPosition));
         // return (Math.abs(Math.abs(m_subsystem.getLeftPosition()) - Math.abs(leftPosition)) < 2

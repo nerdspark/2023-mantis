@@ -1,5 +1,6 @@
 package frc.robot.commands.ArmPositionCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -18,9 +19,8 @@ public class HomeCommand extends SequentialCommandGroup {
             ElevatorSubsystem elevatorSubsystem,
             WristSubsystem wristSubsystem,
             GripperSubsystem gripperSubsystem) {
-        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HOME);
-
         addCommands(
+                new InstantCommand(() -> armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HOME)),
                 new ParallelCommandGroup(
                         new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.wristCmdPos()),
                         new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.inclinatorCmdPos()),
