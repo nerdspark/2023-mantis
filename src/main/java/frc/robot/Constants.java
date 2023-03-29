@@ -81,9 +81,9 @@ public final class Constants {
 
     public static final class DriveConstants {
 
-        public static final double kTrackWidth = Units.inchesToMeters(25);
+        public static final double kTrackWidth = Units.inchesToMeters(19);
         // Distance between right and left wheels
-        public static final double kWheelBase = Units.inchesToMeters(19);
+        public static final double kWheelBase = Units.inchesToMeters(25);
         // Distance between front and back wheels
         public static final String canBusName = "canivore1";
 
@@ -153,10 +153,10 @@ public final class Constants {
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
-        public static final double kPTargetTurning = -3d;
+        public static final double kPTargetTurning = -2.6d;
         public static final double kITargetTurning = 0d;
         public static final double kDTargetTurning = -0.0d;
-        public static final double kTargetTurningDeadband = 10 * Math.PI / 180;
+        public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
         public static final double kPTurningMotor = 0.1d;
@@ -282,18 +282,18 @@ public final class Constants {
 
         public static final double kDeadbandSteer = 0.1d;
         public static final double kDeadbandDrive = 0.05d;
-        public static final double kDeadbandSpeed = 1d;
+        public static final double kDeadbandSpeed = 0.01d;
 
         public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.1;
+        public static final double driverMultiplier = 0.4;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 5;
+        public static final double driverEPower = 3;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
