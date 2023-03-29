@@ -142,6 +142,7 @@ public class RobotContainer {
                 () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)));
 
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
+        new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
 
         // Configure the button bindings
         configureButtonBindings();

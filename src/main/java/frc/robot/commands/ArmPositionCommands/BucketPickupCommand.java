@@ -1,5 +1,6 @@
 package frc.robot.commands.ArmPositionCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -21,8 +22,8 @@ public class BucketPickupCommand extends SequentialCommandGroup {
             BucketSubsystem bucketSubsystem,
             ArmSubsystem armSubsystem,
             GripperSubsystem gripperSubsystem) {
-        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.BUCKET_PICKUP);
         addCommands(
+                new InstantCommand(() -> armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.BUCKET_PICKUP)),
                 new ParallelCommandGroup(
                         new MoveElevatorCommand(
                                 elevatorSubsystem, ArmConstants.bucketPickupPosition.inclinatorCmdPos()),

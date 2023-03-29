@@ -1,5 +1,6 @@
 package frc.robot.commands.ArmPositionCommands;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
@@ -13,8 +14,8 @@ import frc.robot.subsystems.WristSubsystem;
 public class MidDropCommand extends SequentialCommandGroup {
     public MidDropCommand(
             ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
-        armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.MID_DROP);
         addCommands(
+                new InstantCommand(() -> armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.MID_DROP)),
                 new MoveArmCommand(
                         armSubsystem,
                         ArmConstants.midDropPosition.armCmdPos(),
