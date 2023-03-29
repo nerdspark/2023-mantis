@@ -47,6 +47,7 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.TimeOfFlightSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import java.util.function.BooleanSupplier;
 import org.photonvision.PhotonCamera;
@@ -75,6 +76,7 @@ public class RobotContainer {
     public static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
     public static final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
     public static final WristSubsystem wristSubsystem = new WristSubsystem();
+    public static final TimeOfFlightSubsystem timeOfFlightSubsystem = new TimeOfFlightSubsystem();
 
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
@@ -273,6 +275,11 @@ public class RobotContainer {
                 .onTrue(new SequentialCommandGroup(
                         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
                         new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.OPENED)));
+
+        // Close the gripper the first time the item is detected
+        new Trigger(() -> armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP
+                        && timeOfFlightSubsystem.getRange() < 200)
+                .toggleOnTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
     }
 
     /**
@@ -302,5 +309,9 @@ public class RobotContainer {
 
     public static GripperSubsystem getGripperSubsystem() {
         return gripperSubsystem;
+    }
+
+    public static TimeOfFlightSubsystem getTimeOfFlightSubsystem() {
+        return timeOfFlightSubsystem;
     }
 }
