@@ -8,8 +8,11 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
+import java.util.List;
+
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
@@ -96,6 +99,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
   public void execute() {
     double time = timer.get();
     PathPlannerState desiredState = (PathPlannerState) trajectory.sample(time);
+    
     ChassisSpeeds targetSpeeds = swerveController.calculate(RobotContainer.getSwerveSubsystem().getPose(), desiredState);
     // ChassisSpeeds targetSpeeds = swerveController.calculate(RobotContainer.getSwerveSubsystem().getPose(), desiredState,
     //  new Rotation2d(desiredState.holonomicRotation.getRadians()));
@@ -113,6 +117,7 @@ public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean 
 
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
     RobotContainer.getSwerveSubsystem().setModuleStates(moduleStates);
+    
 
 
   }

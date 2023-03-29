@@ -9,7 +9,7 @@ import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.PoseEstimatorSubSystem;
+import frc.robot.subsystems.PoseEstimatorSubSystemOld;
 import frc.robot.subsystems.SwerveSubsystem;
 
 import org.photonvision.PhotonCamera;
@@ -25,7 +25,7 @@ public class visionTest5M extends SequentialCommandGroup {
   // public line2metersCommand(SwerveSubsystem swervesubsystem) {
   // }
 
-  public visionTest5M(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, ExampleSubsystem mExamplesubsystem, PoseEstimatorSubSystem poseEstimator){
+  public visionTest5M(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, ExampleSubsystem mExamplesubsystem, PoseEstimatorSubSystemOld poseEstimator){
 
     addCommands(
       new ParallelDeadlineGroup(new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),

@@ -25,13 +25,14 @@ import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.ThreeElementWMarkers;
 import frc.robot.commands.Auton.line2meters;
 import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.subsystems.PoseEstimatorSubSystem;
+import frc.robot.subsystems.PoseEstimatorSubSystemOld;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.BucketSubsystem;
@@ -107,7 +108,11 @@ public class RobotContainer {
   // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
   // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(photonCamera,swerveSubsystem);
+  // private final PoseEstimatorSubSystemOld poseEstimator = new PoseEstimatorSubSystemOld(photonCamera,swerveSubsystem);
+
+  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
+  
+
   // private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
   private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,8,poseEstimator::getCurrentPose);
 
