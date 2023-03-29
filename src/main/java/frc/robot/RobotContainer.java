@@ -37,6 +37,7 @@ import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
 import frc.robot.commands.DriveToPoseCommand;
+import frc.robot.commands.GoToPickupTag;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.ArmSubsystem;
@@ -99,18 +100,24 @@ public class RobotContainer {
     // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
 
     // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
-    private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+    // private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+    public static final PhotonCamera photonCameraFront = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+    public static final PhotonCamera photonCameraBack =
+            new PhotonCamera(Constants.VisionConstants.aprTagCameraBackName);
 
     // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
-  // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-  // private final PoseEstimatorSubSystemOld poseEstimator = new PoseEstimatorSubSystemOld(photonCamera,swerveSubsystem);
+    // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
+    // private final PoseEstimatorSubSystemOld poseEstimator = new
+    // PoseEstimatorSubSystemOld(photonCamera,swerveSubsystem);
 
-  private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
-  
+    private final PoseEstimatorSubSystem poseEstimator =
+            new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
 
-  // private final ChaseTagCommand chaseTagCommand = new ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
-  private final AprTagCommand aprTagCommand = new AprTagCommand(photonCamera,m_exampleSubsystem,8,poseEstimator::getCurrentPose);
+    // private final ChaseTagCommand chaseTagCommand = new
+    // ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
+    private final AprTagCommand aprTagCommand =
+            new AprTagCommand(photonCameraFront, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
 
     // Vision
 
@@ -181,7 +188,7 @@ public class RobotContainer {
                 "Line 2 Meters and Goto Tag",
                 new SequentialCommandGroup(
                         new line2meters(swerveSubsystem),
-                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+                        new GoToTagCommand(photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 1),
                         new DriveToPoseCommand(
                                 swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
 
@@ -210,18 +217,18 @@ public class RobotContainer {
         //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new
         // Rotation2d().fromDegrees(90))));
         // Go to April Tag and Stop - Button Y
+
         new JoystickButton(driverJoystick, Constants.buttonY)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 4, OffsetFromTargetAprTag.CENTER));
+                .whileTrue(new GoToPickupTag(swerveSubsystem, swerveSubsystem::getPose));
         new JoystickButton(driverJoystick, Constants.buttonA)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.CENTER));
+                .whileTrue(new GoToTagCommand(photonCameraFront, swerveSubsystem,poseEstimator::getCurrentPose, 2, //Not used
+                        OffsetFromTargetAprTag.CENTER));
         new JoystickButton(driverJoystick, Constants.buttonB)
                 .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.LEFT));
+                        photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 2, OffsetFromTargetAprTag.LEFT));
         new JoystickButton(driverJoystick, Constants.buttonX)
                 .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.RIGHT));
+                        photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 2, OffsetFromTargetAprTag.RIGHT));
 
         // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
 

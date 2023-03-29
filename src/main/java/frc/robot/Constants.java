@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -335,6 +332,7 @@ public final class Constants {
         // meter up
         // from center.
         public static final String aprTagCameraName = "OV5647";
+        public static final String aprTagCameraBackName = "OV5649";
         public static final String coneCameraName = "USB_Web_Camera";
 
         // For color pipelines
@@ -353,24 +351,20 @@ public final class Constants {
 
         /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
         public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-        new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
-      //2, 16.5 8 inch
+                new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
+        // 2, 16.5 8 inch
 
+        public static final double FIELD_LENGTH_METERS = 16.54175;
+        public static final double FIELD_WIDTH_METERS = 8.0137;
 
-      public static final double FIELD_LENGTH_METERS = 16.54175;
-      public static final double FIELD_WIDTH_METERS = 8.0137;
-  
-      // Pose on the opposite side of the field. Use with `relativeTo` to flip a pose to the opposite alliance
-      public static final Pose2d FLIPPING_POSE = new Pose2d(
-          new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS),
-          new Rotation2d(Math.PI));
-  
-      /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
-      public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+        // Pose on the opposite side of the field. Use with `relativeTo` to flip a pose to the opposite alliance
+        public static final Pose2d FLIPPING_POSE =
+                new Pose2d(new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS), new Rotation2d(Math.PI));
 
+        /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
 
-
-    // Vision Drive Constants
+        // Vision Drive Constants
 
         public static final double TRANSLATION_TOLERANCE = 0.1; // Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE = 1;
@@ -394,7 +388,9 @@ public final class Constants {
     public enum OffsetFromTargetAprTag {
         LEFT(0, 0.7452, -10),
         CENTER(0, 0.181, 0),
-        RIGHT(0, -0.379, 10);
+        RIGHT(0, -0.379, 10),
+        PICKUPRED(0.5, 0.5, 0),
+        PICKUPBLUE(0.5, 0.5, 0);
 
         public final double xOffset;
         public final double yOffset;
