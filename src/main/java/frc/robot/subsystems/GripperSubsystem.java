@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
-import frc.robot.Constants.ArmConstants;
 
+import com.revrobotics.*;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ArmConstants;
 
 public class GripperSubsystem extends SubsystemBase {
     private final CANSparkMax leftGripperMotor;
@@ -38,6 +38,4 @@ public class GripperSubsystem extends SubsystemBase {
     public double getRightPosition() {
         return rightGripperMotorEncoder.getPosition();
     }
-
 }
-

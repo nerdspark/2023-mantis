@@ -11,16 +11,17 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class GroundDropCommand extends SequentialCommandGroup {
-    public GroundDropCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
-            WristSubsystem wristSubsystem) {
+    public GroundDropCommand(
+            ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.GROUND_DROP);
         addCommands(
-                new MoveArmCommand(armSubsystem, ArmConstants.groundDropPosition.armCmdPos(),
+                new MoveArmCommand(
+                        armSubsystem,
+                        ArmConstants.groundDropPosition.armCmdPos(),
                         ArmConstants.groundDropPosition.smartMotionMaxVel(),
                         ArmConstants.groundDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
-                        new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.groundDropPosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundDropPosition.inclinatorCmdPos()),
                         new MoveWristCommand(wristSubsystem, ArmConstants.groundDropPosition.wristCmdPos())));
     }
 }

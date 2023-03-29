@@ -13,7 +13,6 @@
 // import edu.wpi.first.wpilibj.Timer;
 // import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
 // /** An example command that uses an example subsystem. */
 // public class AutoBalance extends CommandBase {
 //   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
@@ -29,11 +28,11 @@
 //     // BalanceKD = Preferences.getDouble(DriveConstants.kBalanceDKey, 0.01);
 //     addRequirements(RobotContainer.getSwerveSubsystem());
 
-//     // PIDController balanceController = new PIDController(AutoConstants.kPBalanceController, AutoConstants.kIBalanceController,
+//     // PIDController balanceController = new PIDController(AutoConstants.kPBalanceController,
+// AutoConstants.kIBalanceController,
 //     //  AutoConstants.kDBalanceController);
 
 // }
-
 
 //   // /**
 //   //  * Creates a new ExampleCommand.
@@ -53,7 +52,6 @@
 //     timer.reset();
 //     timer.start();
 
-
 //   }
 
 //   // Called every time the scheduler runs while the command is scheduled.
@@ -66,7 +64,8 @@
 
 //     // double BalanceDeadbanDeg = Preferences.getDouble(DriveConstants.autoBalanceDeadbandDegKey, 6);
 
-    // try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController, AutoConstants.kIBalanceController,
+    // try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController,
+    // AutoConstants.kIBalanceController,
     //   AutoConstants.kDBalanceController)) {
     //   double Roll_Deg = RobotContainer.swerveSubsystem.IMU.getRoll();
     //   if (Math.abs(Roll_Deg) > AutoConstants.BalanceDeadBandDeg) {
@@ -76,7 +75,8 @@
     //   }
     //   else {
     //       RobotContainer.swerveSubsystem.setWheelsToX();
-//     try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController, AutoConstants.kIBalanceController,
+//     try (PIDController balanceController = new PIDController(AutoConstants.kPBalanceController,
+// AutoConstants.kIBalanceController,
 //       AutoConstants.kDBalanceController)) {
 //       double Roll_Deg = RobotContainer.swerveSubsystem.IMU.getRoll();
 //       if (Math.abs(Roll_Deg) > AutoConstants.BalanceDeadBandDeg) {

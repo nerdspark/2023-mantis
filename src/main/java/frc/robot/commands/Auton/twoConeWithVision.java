@@ -4,51 +4,42 @@
 
 package frc.robot.commands.Auton;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.DriveFollowPath;
-import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.PoseEstimatorSubSystemOld;
 import frc.robot.subsystems.SwerveSubsystem;
-
 import org.photonvision.PhotonCamera;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /** An example command that uses an example subsystem. */
 public class twoConeWithVision extends SequentialCommandGroup {
 
+    // public line2metersCommand(SwerveSubsystem swervesubsystem) {
+    // }
 
-  // public line2metersCommand(SwerveSubsystem swervesubsystem) {
-  // }
+    public twoConeWithVision(
+            SwerveSubsystem swerveSubsystem,
+            PhotonCamera photonCamera,
+            ExampleSubsystem mExamplesubsystem,
+            PoseEstimatorSubSystem poseEstimator) {
 
-  public twoConeWithVision(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, ExampleSubsystem mExamplesubsystem,
-    PoseEstimatorSubSystemOld poseEstimator){
+        addCommands(
+                // new DriveFollowPath("coneTestVision_p1", 1, 0.5, true),
+                // new DriveFollowPath("coneTestVision_p2", 1, 0.5, false));
 
-      
+                new DriveFollowPath("coneTestVision_p1", 1, 0.5, true),
+                new ParallelDeadlineGroup(
+                                new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
+                                new DriveFollowPath("coneTestVision_p2", 1, 0.5, false))
+                        .andThen(new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8))
 
-    addCommands(
-      // new DriveFollowPath("coneTestVision_p1", 1, 0.5, true),
-      // new DriveFollowPath("coneTestVision_p2", 1, 0.5, false));
+                // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
+                // new DriveFollowPath("visionTest5M", 1, 0.5, true)),
+                // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose)
 
-      new DriveFollowPath("coneTestVision_p1", 1, 0.5, true),
-      new ParallelDeadlineGroup(new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
-        new DriveFollowPath("coneTestVision_p2", 1, 0.5, false)).andThen(
-          new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8))
-
-      // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose),
-      // new DriveFollowPath("visionTest5M", 1, 0.5, true)),
-      // new AprTagCommand(photonCamera, mExamplesubsystem, 8, poseEstimator::getCurrentPose)
-      
-    
-
-    );
-  }
-
-
+                );
+    }
 }

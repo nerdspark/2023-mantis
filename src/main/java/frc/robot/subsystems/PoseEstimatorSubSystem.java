@@ -26,11 +26,11 @@ import frc.robot.Constants.VisionConstants;
  */
 public class PoseEstimatorSubSystem extends SubsystemBase {
 
-  // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
-  // you trust your various sensors. Smaller numbers will cause the filter to
-  // "trust" the estimate from that particular component more than the others. 
-  // This in turn means the particualr component will have a stronger influence
-  // on the final pose estimate.
+    // Kalman Filter Configuration. These can be "tuned-to-taste" based on how much
+    // you trust your various sensors. Smaller numbers will cause the filter to
+    // "trust" the estimate from that particular component more than the others.
+    // This in turn means the particualr component will have a stronger influence
+    // on the final pose estimate.
 
   /**
    * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
@@ -153,13 +153,13 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
     poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
   }
 
-  /**
-   * Resets the position on the field to 0,0 0-degrees, with forward being downfield. This resets
-   * what "forward" is for field oriented driving.
-   */
-  public void resetFieldPosition() {
-    setCurrentPose(new Pose2d());
-  }
+    /**
+     * Resets the position on the field to 0,0 0-degrees, with forward being downfield. This resets
+     * what "forward" is for field oriented driving.
+     */
+    public void resetFieldPosition() {
+        setCurrentPose(new Pose2d());
+    }
 
   /**
    * Transforms a pose to the opposite alliance's coordinate system. (0,0) is always on the right corner of your

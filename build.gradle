@@ -1,6 +1,7 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2023.4.2"
+    id "com.diffplug.spotless" version "6.17.0"
 }
 
 sourceCompatibility = JavaVersion.VERSION_16
@@ -96,4 +97,21 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+// spotless auto formatter - palantirJavaFormat, based on Google Java Style Guide
+spotless {
+    java {
+        importOrder()
+        removeUnusedImports()
+        cleanthat()
+
+        palantirJavaFormat()
+
+        formatAnnotations()
+    }
+}
+
+afterEvaluate {
+    tasks.getByName('spotlessCheck').dependsOn(tasks.getByName('spotlessApply'))
 }

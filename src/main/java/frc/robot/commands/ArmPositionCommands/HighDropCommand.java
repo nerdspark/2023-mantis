@@ -11,17 +11,18 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 public class HighDropCommand extends SequentialCommandGroup {
-    public HighDropCommand(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem,
-                           WristSubsystem wristSubsystem) {
+    public HighDropCommand(
+            ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
         armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HIGH_DROP);
 
-        addCommands(new MoveArmCommand(armSubsystem, ArmConstants.highDropPosition.armCmdPos(),
-                ArmConstants.highDropPosition.smartMotionMaxVel(),
-                ArmConstants.highDropPosition.smartMotionMaxAccel()),
+        addCommands(
+                new MoveArmCommand(
+                        armSubsystem,
+                        ArmConstants.highDropPosition.armCmdPos(),
+                        ArmConstants.highDropPosition.smartMotionMaxVel(),
+                        ArmConstants.highDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
-                        new MoveElevatorCommand(elevatorSubsystem,
-                                ArmConstants.highDropPosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.highDropPosition.inclinatorCmdPos()),
                         new MoveWristCommand(wristSubsystem, ArmConstants.highDropPosition.wristCmdPos())));
     }
-
 }
