@@ -35,7 +35,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementRed_L1", 2, 1, true),
+                        new DriveFollowPath("threeElementRed_L1", 3, 2, true),
                         new SequentialCommandGroup(
                                 new WaitCommand(0.5),
                                 new GroundPickupCommand(
@@ -43,16 +43,17 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-                                new WaitUntilCommand(() -> (RobotContainer.getTimeOfFlightSubsystem()
-                                                                .getRange()
-                                                        < 75)
-                                                && (RobotContainer.getTimeOfFlightSubsystem()
-                                                                .getRange()
-                                                        > 30))
-                                        .andThen(() -> System.out.println("********** TOF sensor <75 "
-                                                + RobotContainer.getTimeOfFlightSubsystem()
-                                                        .getRange()))
-                                        .withTimeout(3.8),
+//                                new WaitUntilCommand(() -> (RobotContainer.getTimeOfFlightSubsystem()
+//                                                                .getRange()
+//                                                        < 75)
+//                                                && (RobotContainer.getTimeOfFlightSubsystem()
+//                                                                .getRange()
+//                                                        > 32))
+//                                        .andThen(() -> System.out.println("********** TOF sensor <75 "
+//                                                + RobotContainer.getTimeOfFlightSubsystem()
+//                                                        .getRange()))
+//                                        .withTimeout(2.5),
+                                new WaitCommand(1.85),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
