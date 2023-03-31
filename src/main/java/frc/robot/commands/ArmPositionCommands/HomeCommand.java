@@ -4,26 +4,22 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
-import frc.robot.commands.ArmMoveCommands.MoveElevatorCommand;
-import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
-import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.commands.ArmMoveCommands.*;
+import frc.robot.subsystems.*;
 
 public class HomeCommand extends SequentialCommandGroup {
     public HomeCommand(
             ArmSubsystem armSubsystem,
             ElevatorSubsystem elevatorSubsystem,
             WristSubsystem wristSubsystem,
-            GripperSubsystem gripperSubsystem) {
+            GripperSubsystem gripperSubsystem,
+            BucketSubsystem bucketSubsystem) {
         addCommands(
                 new InstantCommand(() -> armSubsystem.setArmPositionState(ArmSubsystem.ArmPosition.HOME)),
                 new ParallelCommandGroup(
+                        new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED),
                         new MoveWristCommand(wristSubsystem, ArmConstants.homePosition.wristCmdPos()),
-                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.homePosition.elevatorCmdPos()),
                         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED)),
                 new MoveArmCommand(
                         armSubsystem,

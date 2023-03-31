@@ -82,13 +82,9 @@ public class SwerveJoystickCmd extends CommandBase {
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
         driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
-        joystickMagnitude = Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get())
-                ? Math.abs(ySpdFunction.get())
-                : Math.abs(xSpdFunction.get());
+        joystickMagnitude = Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
-        double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
-                * Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
-                * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        double driveSpeed = joystickMagnitude * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
         // double xSpeed =
         // OIConstants.driverMultiplier*xSpdFunction.get()*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
@@ -126,19 +122,22 @@ public class SwerveJoystickCmd extends CommandBase {
                                         * (prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())))
                         > OIConstants.kDeadbandSpeed
                 && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)) {
-            turningSpeed = 0;
-            driveAngle = prevDriveAngle;
+            //            turningSpeed = 0;
+            //            driveAngle = prevDriveAngle;
             SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
         } else {
             SmartDashboard.putString("PID turning?", "yes");
         }
 
-        boolean isArmOut = switch(RobotContainer.getArmSubsystem().getArmPositionState()) {
-            case HIGH_DROP, MID_DROP -> true;
-            default -> false;
-        };
+        boolean isArmOut =
+                switch (RobotContainer.getArmSubsystem().getArmPositionState()) {
+                    case HIGH_DROP, MID_DROP -> true;
+                    default -> false;
+                };
 
-        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get() || isArmOut) {
+        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband)
+                || cancelTurn.get()
+                || isArmOut) {
             turningSpeed = 0;
             SmartDashboard.putString("PID turning?", "deadband");
         }

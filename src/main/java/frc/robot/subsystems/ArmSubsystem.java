@@ -9,8 +9,8 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax armMotor1;
     private final CANSparkMax armMotor2;
-    private SparkMaxPIDController armMotor1PIDController, armMotor2PIDController;
-    private RelativeEncoder armMotor1Encoder, armMotor2Encoder;
+    private final SparkMaxPIDController armMotor1PIDController, armMotor2PIDController;
+    private final RelativeEncoder armMotor1Encoder, armMotor2Encoder;
 
     public enum ArmPosition {
         HOME,
@@ -70,14 +70,12 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2PIDController.setSmartMotionMaxAccel(maxAccel, 0);
     }
 
-    public void goToPosition(double position) {
+    public void setPosition(double position) {
         armMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
         armMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public double[] getPositions() {
-        double[] position = {armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
-
-        return position;
+        return new double[]{armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
     }
 }

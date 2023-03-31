@@ -22,7 +22,7 @@ public class GroundDropCommand extends SequentialCommandGroup {
                         ArmConstants.groundDropPosition.smartMotionMaxVel(),
                         ArmConstants.groundDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
-                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundDropPosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundDropPosition.elevatorCmdPos()),
                         new MoveWristCommand(wristSubsystem, ArmConstants.groundDropPosition.wristCmdPos())));
     }
 }

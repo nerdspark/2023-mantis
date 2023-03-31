@@ -29,7 +29,7 @@ public class MoveArmCommand extends CommandBase {
     @Override
     public void execute() {
         m_subsystem.changeArmSmartMotionParameters(maxVelocity, maxAccel);
-        m_subsystem.goToPosition(targetPosition);
+        m_subsystem.setPosition(targetPosition);
     }
 
     @Override

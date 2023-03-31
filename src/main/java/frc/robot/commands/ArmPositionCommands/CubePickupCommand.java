@@ -28,7 +28,7 @@ public class CubePickupCommand extends SequentialCommandGroup {
                                 ArmConstants.cubePickupPosition.armCmdPos(),
                                 ArmConstants.cubePickupPosition.smartMotionMaxVel(),
                                 ArmConstants.cubePickupPosition.smartMotionMaxAccel()),
-                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.cubePickupPosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.cubePickupPosition.elevatorCmdPos()),
                         new MoveWristCommand(wristSubsystem, ArmConstants.cubePickupPosition.wristCmdPos())),
                 new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
     }

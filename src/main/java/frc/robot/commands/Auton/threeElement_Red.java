@@ -43,16 +43,20 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-//                                new WaitUntilCommand(() -> (RobotContainer.getTimeOfFlightSubsystem()
-//                                                                .getRange()
-//                                                        < 75)
-//                                                && (RobotContainer.getTimeOfFlightSubsystem()
-//                                                                .getRange()
-//                                                        > 32))
-//                                        .andThen(() -> System.out.println("********** TOF sensor <75 "
-//                                                + RobotContainer.getTimeOfFlightSubsystem()
-//                                                        .getRange()))
-//                                        .withTimeout(2.5),
+                                //                                new WaitUntilCommand(() ->
+                                // (RobotContainer.getTimeOfFlightSubsystem()
+                                //                                                                .getRange()
+                                //                                                        < 75)
+                                //                                                &&
+                                // (RobotContainer.getTimeOfFlightSubsystem()
+                                //                                                                .getRange()
+                                //                                                        > 32))
+                                //                                        .andThen(() -> System.out.println("**********
+                                // TOF sensor <75 "
+                                //                                                +
+                                // RobotContainer.getTimeOfFlightSubsystem()
+                                //                                                        .getRange()))
+                                //                                        .withTimeout(2.5),
                                 new WaitCommand(1.85),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
@@ -74,15 +78,14 @@ public class threeElement_Red extends SequentialCommandGroup {
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
                 new WaitCommand(0.5),
-                new InstantCommand(
-                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
-                new InstantCommand(() ->
-                        RobotContainer.getGripperSubsystem().setSwap(false)),
+                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
+                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
                 new HomeCommand(
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem(),
-                        RobotContainer.getGripperSubsystem())
+                        RobotContainer.getGripperSubsystem(),
+                        RobotContainer.getBucketSubsystem())
                 //                ,
                 //                new ParallelCommandGroup(
                 //                        new DriveFollowPath("threeElementRed_2", 1, 0.5, false),

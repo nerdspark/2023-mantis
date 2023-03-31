@@ -10,8 +10,8 @@ import frc.robot.Constants.ArmConstants;
 public class GripperSubsystem extends SubsystemBase {
     private final CANSparkMax leftGripperMotor;
     private final CANSparkMax rightGripperMotor;
-    private SparkMaxPIDController leftGripperMotorPIDController, rightGripperMotorPIDController;
-    private RelativeEncoder leftGripperMotorEncoder, rightGripperMotorEncoder;
+    private final SparkMaxPIDController leftGripperMotorPIDController, rightGripperMotorPIDController;
+    private final RelativeEncoder leftGripperMotorEncoder, rightGripperMotorEncoder;
 
     private boolean setSwap = false;
 

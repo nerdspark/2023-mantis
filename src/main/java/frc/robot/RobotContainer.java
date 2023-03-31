@@ -228,7 +228,8 @@ public class RobotContainer {
 
         // home
         new Trigger(() -> coDriverJoystick.getPOV() > 180)
-                .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
+                .onTrue(new HomeCommand(
+                        armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem, bucketSubsystem));
 
         // bucket pickup
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
