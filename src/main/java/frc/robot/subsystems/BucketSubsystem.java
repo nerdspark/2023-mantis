@@ -21,6 +21,9 @@ public class BucketSubsystem extends SubsystemBase {
 
         leftBucketMotorEncoder = leftBucketMotor.getEncoder();
         rightBucketMotorEncoder = rightBucketMotor.getEncoder();
+
+        leftBucketMotorEncoder.setPosition(0);
+        rightBucketMotorEncoder.setPosition(0);
     }
 
     public double[] getPositions() {

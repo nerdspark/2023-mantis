@@ -7,7 +7,5 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class ShelfPickupCommand extends SequentialCommandGroup {
     public ShelfPickupCommand(
-            ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {
-
-    }
+            ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, WristSubsystem wristSubsystem) {}
 }

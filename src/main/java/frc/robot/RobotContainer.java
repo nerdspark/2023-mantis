@@ -22,15 +22,7 @@ import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
-import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
-import frc.robot.commands.ArmPositionCommands.GroundDropCommand;
-import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
-import frc.robot.commands.ArmPositionCommands.HighDropCommand;
-import frc.robot.commands.ArmPositionCommands.HomeCommand;
-import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
-import frc.robot.commands.ArmPositionCommands.MidDropCommand;
-import frc.robot.commands.ArmPositionCommands.ShelfPickupCommand;
-import frc.robot.commands.Auton.Auton_2_Cone_Red;
+import frc.robot.commands.ArmPositionCommands.*;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.ThreeElementWMarkers;
 import frc.robot.commands.Auton.line2meters;
@@ -41,16 +33,8 @@ import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToPickupTag;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
-import frc.robot.subsystems.BucketSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.PoseEstimatorSubSystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.TimeOfFlightSubsystem;
-import frc.robot.subsystems.WristSubsystem;
 import java.util.function.BooleanSupplier;
 import org.photonvision.PhotonCamera;
 
@@ -154,6 +138,12 @@ public class RobotContainer {
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
 
+        // Close the gripper the first time the item is detected
+        new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)
+                        && (timeOfFlightSubsystem.getRange() < 140)
+                        && (timeOfFlightSubsystem.getRange() > 30))
+                .whileTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
+
         // Configure the button bindings
         configureButtonBindings();
 
@@ -256,11 +246,11 @@ public class RobotContainer {
                 .onTrue(new BucketPickupCommand(
                         elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
 
-        // score mid position
+        // mid drop
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
                 .onTrue(new MidDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
-        // score high position
+        // high drop
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
                 .onTrue(new HighDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
@@ -276,6 +266,10 @@ public class RobotContainer {
         new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
                 .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
+        // cube pickup
+        new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5)
+                .onTrue(new CubePickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
+
         // Right trigger - close gripper when bucket pickup, and vice versa
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP)
                         && (driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5))
@@ -288,11 +282,6 @@ public class RobotContainer {
                 .onTrue(new SequentialCommandGroup(
                         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
                         new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.OPENED)));
-
-        // Close the gripper the first time the item is detected
-        new Trigger(() -> armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP
-                        && timeOfFlightSubsystem.getRange() < 200)
-                .toggleOnTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
     }
 
     /**

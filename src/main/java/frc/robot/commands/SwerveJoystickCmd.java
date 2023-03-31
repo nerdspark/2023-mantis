@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
@@ -134,7 +135,13 @@ public class SwerveJoystickCmd extends CommandBase {
         } else {
             SmartDashboard.putString("PID turning?", "yes");
         }
-        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get()) {
+
+        boolean isArmOut = switch(RobotContainer.getArmSubsystem().getArmPositionState()) {
+            case HIGH_DROP, MID_DROP -> true;
+            default -> false;
+        };
+
+        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get() || isArmOut) {
             turningSpeed = 0;
             SmartDashboard.putString("PID turning?", "deadband");
         }
