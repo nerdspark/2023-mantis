@@ -5,7 +5,7 @@ import frc.robot.subsystems.WristSubsystem;
 
 public class MoveWristCommand extends CommandBase {
     private final WristSubsystem m_subsystem;
-    private final double targetPosition;
+    private double targetPosition;
 
     /**
      * Creates a new MoveWristCommand.
@@ -24,6 +24,10 @@ public class MoveWristCommand extends CommandBase {
 
     @Override
     public void execute() {
+        if (m_subsystem.isPositionOverridden()) {
+            this.targetPosition = m_subsystem.getOverridenPosition();
+        }
+
         m_subsystem.setPosition(targetPosition);
     }
 

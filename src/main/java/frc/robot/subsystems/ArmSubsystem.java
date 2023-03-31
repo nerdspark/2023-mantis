@@ -16,6 +16,7 @@ public class ArmSubsystem extends SubsystemBase {
         HOME,
         GROUND_PICKUP,
         BUCKET_PICKUP,
+        CUBE_PICKUP,
         SHELF_PICKUP,
         GROUND_DROP,
         MID_DROP,

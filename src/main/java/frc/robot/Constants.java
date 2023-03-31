@@ -216,13 +216,15 @@ public final class Constants {
         public static final ArmPositionData bucketPickupPosition =
                 new ArmPositionData(0.0, 0.0, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
         public static final ArmPositionData groundPickupPosition =
-                new ArmPositionData(13.0, 135.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
+                new ArmPositionData(13.0, 150.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
         public static final ArmPositionData shelfPickupPosition =
                 new ArmPositionData(0.0, 85.0, 0.0, 0.1, 3.0, 3.0, -7.0, -7.0, 5500.0, 9000.0);
+        public static final ArmPositionData cubePickupPosition =
+                new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(0.0, 75.0, 18.9, 0.1, 3.0, 3.0, -15.0, 5.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -3.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(0.0, 80.0, 2.0, 0.1, 3.0, 3.0, -15.0, -7.0, 5500.0, 9000.0);
+                new ArmPositionData(0.0, 94.0, 2.0, 0.1, 3.0, 3.0, -15.0, -7.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
