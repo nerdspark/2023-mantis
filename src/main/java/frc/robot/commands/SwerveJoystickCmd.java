@@ -81,8 +81,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get())
         // + (xSpdFunction.get()*xSpdFunction.get())), OIConstants.driverPower/2)) *
         // DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
-        double prevJoyMagnitude = joystickMagnitude;
-        double prevDriveAngle = driveAngle;
+
         driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
         joystickMagnitude = Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get())
                 ? Math.abs(ySpdFunction.get())
@@ -127,7 +126,8 @@ public class SwerveJoystickCmd extends CommandBase {
                                 + ((prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())
                                         * (prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())))
                         > OIConstants.kDeadbandSpeed
-                && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)) {
+                && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)
+                && (Math.abs(currentAngle - targetAngle) < 5*Math.PI/180)) {
             turningSpeed = 0;
             driveAngle = prevDriveAngle;
             SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
@@ -197,8 +197,6 @@ public class SwerveJoystickCmd extends CommandBase {
         //     SmartDashboard.putString("in drive deadband", "yes");
         // } else {
         //     SmartDashboard.putString("in drive deadband", "no");
-
-        }
 
         // turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) >
         // OIConstants.kDeadbandSteer ? turningSpeed : 0.0;

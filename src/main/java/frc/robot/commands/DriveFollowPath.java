@@ -4,15 +4,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.RobotContainer;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-
-import java.util.List;
-
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.controller.PIDController;

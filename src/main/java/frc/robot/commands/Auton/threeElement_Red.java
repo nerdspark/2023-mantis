@@ -45,7 +45,8 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()))),
-                new WaitUntilCommand(() -> RobotContainer.getTimeOfFlightSubsystem().getRange() < 200),
+                new WaitUntilCommand(
+                        () -> RobotContainer.getTimeOfFlightSubsystem().getRange() < 200),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
                 new WaitCommand(0.2),
@@ -77,7 +78,8 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()))),
-                new WaitUntilCommand(() -> RobotContainer.getTimeOfFlightSubsystem().getRange() < 200),
+                new WaitUntilCommand(
+                        () -> RobotContainer.getTimeOfFlightSubsystem().getRange() < 200),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
                 new WaitCommand(0.2),

@@ -369,10 +369,10 @@ public final class Constants {
         public static final double TRANSLATION_TOLERANCE = 0.1; // Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE = 1;
 
-        public static final double MAX_VELOCITY = 3;
-        public static final double MAX_ACCELARATION = 2;
-        public static final double MAX_VELOCITY_ROTATION = 1000;
-        public static final double MAX_ACCELARATION_ROTATION = 1000;
+        public static final double MAX_VELOCITY = 3; //3
+        public static final double MAX_ACCELARATION = 2; //2
+        public static final double MAX_VELOCITY_ROTATION = 1000; //8
+        public static final double MAX_ACCELARATION_ROTATION = 1000; //8
 
         public static final double kPXController = 2.5d;
         public static final double kIXController = 0d;
@@ -381,15 +381,15 @@ public final class Constants {
         public static final double kIYController = 0d;
         public static final double kDYController = 0d;
         public static final double kPThetaController = -DriveConstants.kPTargetTurning;
-        public static final double kIThetaController = 0d;
+        public static final double kIThetaController = 0d;                                              
         public static final double kDThetaController = 0d;
     }
 
     public enum OffsetFromTargetAprTag {
-        LEFT(0, 0.7452, -10),
-        CENTER(0, 0.181, 0),
-        RIGHT(0, -0.379, 10),
-        PICKUPRED(0.5, 0.5, 0),
+        LEFT(0.0762, 0.7452, -10),
+        CENTER(0.0762, 0.2826, 0),
+        RIGHT(0.0762, -0.379, 10),
+        PICKUPRED(0, 0, 30),
         PICKUPBLUE(0.5, 0.5, 0);
 
         public final double xOffset;

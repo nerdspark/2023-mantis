@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kBlueAllianceWallRightSide;
 import static edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition.kRedAllianceWallRightSide;
 
-import java.util.function.Supplier;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -20,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.VisionConstants;
+import java.util.function.Supplier;
 
 /**
  * Pose estimator that uses odometry and AprilTags with PhotonVision.
@@ -32,126 +31,125 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
     // This in turn means the particualr component will have a stronger influence
     // on the final pose estimate.
 
-  /**
-   * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
-   * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
-   */
-  private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
+    /**
+     * Standard deviations of model states. Increase these numbers to trust your model's state estimates less. This
+     * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then meters.
+     */
+    private static final Vector<N3> stateStdDevs = VecBuilder.fill(0.1, 0.1, 0.1);
 
-  /**
-   * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
-   * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
-   */
-  private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
+    /**
+     * Standard deviations of the vision measurements. Increase these numbers to trust global measurements from vision
+     * less. This matrix is in the form [x, y, theta]ᵀ, with units in meters and radians.
+     */
+    private static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(1.5, 1.5, 1.5);
 
-  private final Supplier<Rotation2d> rotationSupplier;
-  private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
-  private final SwerveDrivePoseEstimator poseEstimator;
-  private final Field2d field2d = new Field2d();
-  private final PhotonVisionRunnable photonEstimator = new PhotonVisionRunnable();
-  private final Notifier photonNotifier = new Notifier(photonEstimator);
+    private final Supplier<Rotation2d> rotationSupplier;
+    private final Supplier<SwerveModulePosition[]> modulePositionSupplier;
+    private final SwerveDrivePoseEstimator poseEstimator;
+    private final Field2d field2d = new Field2d();
+    private final PhotonVisionRunnable photonEstimator = new PhotonVisionRunnable();
+    private final Notifier photonNotifier = new Notifier(photonEstimator);
 
-  private OriginPosition originPosition = kBlueAllianceWallRightSide;
-  private boolean sawTag = false;
+    private OriginPosition originPosition = kBlueAllianceWallRightSide;
+    private boolean sawTag = false;
 
-  public PoseEstimatorSubSystem(
-      Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
-    
-    this.rotationSupplier = rotationSupplier;
-    this.modulePositionSupplier = modulePositionSupplier;
+    public PoseEstimatorSubSystem(
+            Supplier<Rotation2d> rotationSupplier, Supplier<SwerveModulePosition[]> modulePositionSupplier) {
 
-    poseEstimator =  new SwerveDrivePoseEstimator(
-        DriveConstants.kDriveKinematics,
-        rotationSupplier.get(),
-        modulePositionSupplier.get(),
-        new Pose2d(),
-        stateStdDevs,
-        visionMeasurementStdDevs);
-    
-    // Start PhotonVision thread
-    photonNotifier.setName("PhotonVisionRunnable");
-    photonNotifier.startPeriodic(0.02);
-  }
+        this.rotationSupplier = rotationSupplier;
+        this.modulePositionSupplier = modulePositionSupplier;
 
-  public void addDashboardWidgets(ShuffleboardTab tab) {
-    tab.add("Field", field2d).withPosition(0, 0).withSize(6, 4);
-    tab.addString("Pose", this::getFomattedPose).withPosition(6, 2).withSize(2, 1);
-  }
+        poseEstimator = new SwerveDrivePoseEstimator(
+                DriveConstants.kDriveKinematics,
+                rotationSupplier.get(),
+                modulePositionSupplier.get(),
+                new Pose2d(),
+                stateStdDevs,
+                visionMeasurementStdDevs);
 
-  /**
-   * Sets the alliance. This is used to configure the origin of the AprilTag map
-   * @param alliance alliance
-   */
-  public void setAlliance(Alliance alliance) {
-    boolean allianceChanged = false;
-    switch(alliance) {
-      case Blue:
-        allianceChanged = (originPosition == kRedAllianceWallRightSide);
-        originPosition = kBlueAllianceWallRightSide;
-        break;
-      case Red:
-        allianceChanged = (originPosition == kBlueAllianceWallRightSide);
-        originPosition = kRedAllianceWallRightSide;
-        break;
-      default:
-        // No valid alliance data. Nothing we can do about it
+        // Start PhotonVision thread
+        photonNotifier.setName("PhotonVisionRunnable");
+        photonNotifier.startPeriodic(0.02);
     }
 
-    if (allianceChanged && sawTag) {
-      // The alliance changed, which changes the coordinate system.
-      // Since a tag was seen, and the tags are all relative to the coordinate system, the estimated pose
-      // needs to be transformed to the new coordinate system.
-      var newPose = flipAlliance(getCurrentPose());
-      poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
-    }
-  }
-
-  @Override
-  public void periodic() {
-    // Update pose estimator with drivetrain sensors
-    poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
-
-    var visionPose = photonEstimator.grabLatestEstimatedPose();
-    if (visionPose != null) {
-      // New pose from vision
-      sawTag = true;
-      var pose2d = visionPose.estimatedPose.toPose2d();
-      if (originPosition != kBlueAllianceWallRightSide) {
-        pose2d = flipAlliance(pose2d);
-      }
-      poseEstimator.addVisionMeasurement(pose2d, visionPose.timestampSeconds);
+    public void addDashboardWidgets(ShuffleboardTab tab) {
+        tab.add("Field", field2d).withPosition(0, 0).withSize(6, 4);
+        tab.addString("Pose", this::getFomattedPose).withPosition(6, 2).withSize(2, 1);
     }
 
-    // Set the pose on the dashboard
-    var dashboardPose = poseEstimator.getEstimatedPosition();
-    if (originPosition == kRedAllianceWallRightSide) {
-      // Flip the pose when red, since the dashboard field photo cannot be rotated
-      dashboardPose = flipAlliance(dashboardPose);
+    /**
+     * Sets the alliance. This is used to configure the origin of the AprilTag map
+     * @param alliance alliance
+     */
+    public void setAlliance(Alliance alliance) {
+        boolean allianceChanged = false;
+        switch (alliance) {
+            case Blue:
+                allianceChanged = (originPosition == kRedAllianceWallRightSide);
+                originPosition = kBlueAllianceWallRightSide;
+                break;
+            case Red:
+                allianceChanged = (originPosition == kBlueAllianceWallRightSide);
+                originPosition = kRedAllianceWallRightSide;
+                break;
+            default:
+                // No valid alliance data. Nothing we can do about it
+        }
+
+        if (allianceChanged && sawTag) {
+            // The alliance changed, which changes the coordinate system.
+            // Since a tag was seen, and the tags are all relative to the coordinate system, the estimated pose
+            // needs to be transformed to the new coordinate system.
+            var newPose = flipAlliance(getCurrentPose());
+            poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
+        }
     }
-    field2d.setRobotPose(dashboardPose);
-  }
 
-  private String getFomattedPose() {
-    var pose = getCurrentPose();
-    return String.format("(%.3f, %.3f) %.2f degrees", 
-        pose.getX(), 
-        pose.getY(),
-        pose.getRotation().getDegrees());
-  }
+    @Override
+    public void periodic() {
+        // Update pose estimator with drivetrain sensors
+        poseEstimator.update(rotationSupplier.get(), modulePositionSupplier.get());
 
-  public Pose2d getCurrentPose() {
-    return poseEstimator.getEstimatedPosition();
-  }
+        var visionPose = photonEstimator.grabLatestEstimatedPose();
+        if (visionPose != null) {
+            // New pose from vision
+            sawTag = true;
+            var pose2d = visionPose.estimatedPose.toPose2d();
+            if (originPosition != kBlueAllianceWallRightSide) {
+                pose2d = flipAlliance(pose2d);
+            }
+            poseEstimator.addVisionMeasurement(pose2d, visionPose.timestampSeconds);
+        }
 
-  /**
-   * Resets the current pose to the specified pose. This should ONLY be called
-   * when the robot's position on the field is known, like at the beginning of
-   * a match.
-   * @param newPose new pose
-   */
-  public void setCurrentPose(Pose2d newPose) {
-    poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
-  }
+        // Set the pose on the dashboard
+        var dashboardPose = poseEstimator.getEstimatedPosition();
+        if (originPosition == kRedAllianceWallRightSide) {
+            // Flip the pose when red, since the dashboard field photo cannot be rotated
+            dashboardPose = flipAlliance(dashboardPose);
+        }
+        field2d.setRobotPose(dashboardPose);
+    }
+
+    private String getFomattedPose() {
+        var pose = getCurrentPose();
+        return String.format(
+                "(%.3f, %.3f) %.2f degrees",
+                pose.getX(), pose.getY(), pose.getRotation().getDegrees());
+    }
+
+    public Pose2d getCurrentPose() {
+        return poseEstimator.getEstimatedPosition();
+    }
+
+    /**
+     * Resets the current pose to the specified pose. This should ONLY be called
+     * when the robot's position on the field is known, like at the beginning of
+     * a match.
+     * @param newPose new pose
+     */
+    public void setCurrentPose(Pose2d newPose) {
+        poseEstimator.resetPosition(rotationSupplier.get(), modulePositionSupplier.get(), newPose);
+    }
 
     /**
      * Resets the position on the field to 0,0 0-degrees, with forward being downfield. This resets
@@ -161,14 +159,13 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
         setCurrentPose(new Pose2d());
     }
 
-  /**
-   * Transforms a pose to the opposite alliance's coordinate system. (0,0) is always on the right corner of your
-   * alliance wall, so for 2023, the field elements are at different coordinates for each alliance.
-   * @param poseToFlip pose to transform to the other alliance
-   * @return pose relative to the other alliance's coordinate system
-   */
-  private Pose2d flipAlliance(Pose2d poseToFlip) {
-    return poseToFlip.relativeTo(VisionConstants.FLIPPING_POSE);
-  }
-
+    /**
+     * Transforms a pose to the opposite alliance's coordinate system. (0,0) is always on the right corner of your
+     * alliance wall, so for 2023, the field elements are at different coordinates for each alliance.
+     * @param poseToFlip pose to transform to the other alliance
+     * @return pose relative to the other alliance's coordinate system
+     */
+    private Pose2d flipAlliance(Pose2d poseToFlip) {
+        return poseToFlip.relativeTo(VisionConstants.FLIPPING_POSE);
+    }
 }

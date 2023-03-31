@@ -30,6 +30,7 @@ import frc.robot.commands.ArmPositionCommands.HomeCommand;
 import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.ArmPositionCommands.ShelfPickupCommand;
+import frc.robot.commands.Auton.Auton_2_Cone_Red;
 import frc.robot.commands.Auton.ThreeElement;
 import frc.robot.commands.Auton.ThreeElementWMarkers;
 import frc.robot.commands.Auton.line2meters;
@@ -144,11 +145,11 @@ public class RobotContainer {
                 () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn),
                 () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
 
-        armSubsystem.setDefaultCommand(new MicroAdjustCommand(
-                armSubsystem,
-                wristSubsystem,
-                () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),
-                () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)));
+        // armSubsystem.setDefaultCommand(new MicroAdjustCommand(
+        //         armSubsystem,
+        //         wristSubsystem,
+        //         () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverLeftYAxis),
+        //         () -> -coDriverJoystick.getRawAxis(OIConstants.kDriverRightYAxis)));
 
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
@@ -182,6 +183,8 @@ public class RobotContainer {
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
         chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
+        chooser.addOption("Marker Test", new Auton_2_Cone_Red(swerveSubsystem));
+
 
         chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
         chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
@@ -222,14 +225,14 @@ public class RobotContainer {
         new JoystickButton(driverJoystick, Constants.buttonY)
                 .whileTrue(new GoToPickupTag(swerveSubsystem, swerveSubsystem::getPose));
         new JoystickButton(driverJoystick, Constants.buttonA)
-                .whileTrue(new GoToTagCommand(photonCameraFront, swerveSubsystem,poseEstimator::getCurrentPose, 2, //Not used
+                .whileTrue(new GoToTagCommand(photonCameraFront, swerveSubsystem,swerveSubsystem::getPose, 2, //Not used
                         OffsetFromTargetAprTag.CENTER));
         new JoystickButton(driverJoystick, Constants.buttonB)
                 .whileTrue(new GoToTagCommand(
-                        photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 2, OffsetFromTargetAprTag.LEFT));
+                        photonCameraFront, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.LEFT));
         new JoystickButton(driverJoystick, Constants.buttonX)
                 .whileTrue(new GoToTagCommand(
-                        photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 2, OffsetFromTargetAprTag.RIGHT));
+                        photonCameraFront, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.RIGHT));
 
         // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
 
@@ -319,6 +322,10 @@ public class RobotContainer {
 
     public static GripperSubsystem getGripperSubsystem() {
         return gripperSubsystem;
+    }
+
+    public static BucketSubsystem getBucketSubsystem() {
+        return bucketSubsystem;
     }
 
     public static TimeOfFlightSubsystem getTimeOfFlightSubsystem() {
