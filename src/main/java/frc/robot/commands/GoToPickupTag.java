@@ -39,6 +39,8 @@ public class GoToPickupTag extends CommandBase {
 
     private int tagToAlign;
 
+    Pose2d centerGoalPose;
+
     // private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0),
     // Rotation2d.fromDegrees(180.0));
     // private static final Transform3d TAG_TO_GOAL =
@@ -48,6 +50,8 @@ public class GoToPickupTag extends CommandBase {
 
     private static final Transform2d TAG_TO_GOAL =
             new Transform2d(new Translation2d(1.6764, 1.2), Rotation2d.fromDegrees(180.0));
+            private static final Transform2d TAG_TO_GOAL_BLUE =
+            new Transform2d(new Translation2d(0.5, 0.5), Rotation2d.fromDegrees(180.0));
     private OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
     private Transform2d GOAL_OFFSET = null;
 
@@ -170,7 +174,16 @@ public class GoToPickupTag extends CommandBase {
 
                         // Transform the tag's pose to set our goal
                         // var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
-                        var centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
+                        
+                        if (DriverStation.getAlliance() == Alliance.Red) {
+                        centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
+                        }
+
+                        else {
+                            centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL_BLUE);
+                        }
+
+                
 
                         // offset the goal pose by offset from target to align to scoring location.
 
