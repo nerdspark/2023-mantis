@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -23,13 +21,8 @@ import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
 import frc.robot.commands.ArmPositionCommands.*;
-import frc.robot.commands.Auton.ThreeElement;
-import frc.robot.commands.Auton.ThreeElementWMarkers;
-import frc.robot.commands.Auton.line2meters;
-import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
@@ -163,17 +156,18 @@ public class RobotContainer {
 
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
-        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
-
-        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
-        chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
-        chooser.addOption(
-                "Line 2 Meters and Goto Tag",
-                new SequentialCommandGroup(
-                        new line2meters(swerveSubsystem),
-                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
-                        new DriveToPoseCommand(
-                                swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
+        //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
+        //
+        //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
+        //        chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
+        //        chooser.addOption(
+        //                "Line 2 Meters and Goto Tag",
+        //                new SequentialCommandGroup(
+        //                        new line2meters(swerveSubsystem),
+        //                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+        //                        new DriveToPoseCommand(
+        //                                swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new
+        // Rotation2d()))));
 
         Shuffleboard.getTab("Autonomous").add(chooser);
     }
