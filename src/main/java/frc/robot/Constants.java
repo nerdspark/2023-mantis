@@ -392,7 +392,7 @@ public final class Constants {
         CENTER(0.0762, 0.2826, 0),
         RIGHT(0.0762, -0.379, 10),
         PICKUPRED(0, 0, 30),
-        PICKUPBLUE(0.5, 0.5, 0);
+        PICKUPBLUE(0, 0, -30);
 
         public final double xOffset;
         public final double yOffset;
