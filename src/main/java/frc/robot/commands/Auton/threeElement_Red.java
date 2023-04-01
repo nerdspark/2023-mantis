@@ -14,19 +14,17 @@ import frc.robot.subsystems.*;
 
 /** An example command that uses an example subsystem. */
 public class threeElement_Red extends SequentialCommandGroup {
-
-    // public line2metersCommand(SwerveSubsystem swervesubsystem) {
-    // }
-
     public threeElement_Red(SwerveSubsystem swerveSubsystem) {
         addCommands(
-                new DriveFollowPath("threeElementRed_L0", 1, 0.5, true),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
-                new HighDropCommand(
-                        RobotContainer.getArmSubsystem(),
-                        RobotContainer.getElevatorSubsystem(),
-                        RobotContainer.getWristSubsystem()),
+                new ParallelCommandGroup(
+                        new DriveFollowPath("threeElementRed_L0", 1, 0.5, true),
+                        new HighDropCommand(
+                                RobotContainer.getArmSubsystem(),
+                                RobotContainer.getElevatorSubsystem(),
+                                RobotContainer.getWristSubsystem())),
+                new WaitCommand(0.1),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
                 new WaitCommand(0.2),
@@ -35,31 +33,21 @@ public class threeElement_Red extends SequentialCommandGroup {
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementRed_L1", 3, 2, true),
+                        new DriveFollowPath("threeElementRed_L1", 2.75, 2, false),
                         new SequentialCommandGroup(
-                                new WaitCommand(0.5),
+                                new WaitCommand(0.4),
                                 new GroundPickupCommand(
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-//                                new WaitUntilCommand(() -> (RobotContainer.getTimeOfFlightSubsystem()
-//                                                                .getRange()
-//                                                        < 75)
-//                                                && (RobotContainer.getTimeOfFlightSubsystem()
-//                                                                .getRange()
-//                                                        > 32))
-//                                        .andThen(() -> System.out.println("********** TOF sensor <75 "
-//                                                + RobotContainer.getTimeOfFlightSubsystem()
-//                                                        .getRange()))
-//                                        .withTimeout(2.5),
-                                new WaitCommand(1.85),
+                                new WaitCommand(2.25),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         GripperState.CLOSED),
                                 new InstantCommand(
-                                        () -> RobotContainer.getWristSubsystem().setPositionOverride(true, 22.0)),
+                                        () -> RobotContainer.getWristSubsystem().setPositionOverride(true, 24.0)),
                                 new InstantCommand(() ->
                                         RobotContainer.getGripperSubsystem().setSwap(true)),
                                 new WaitCommand(0.2),
@@ -71,65 +59,19 @@ public class threeElement_Red extends SequentialCommandGroup {
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
+                new WaitCommand(0.1),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
-                new WaitCommand(0.5),
-                new InstantCommand(
-                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
-                new InstantCommand(() ->
-                        RobotContainer.getGripperSubsystem().setSwap(false)),
-                new HomeCommand(
-                        RobotContainer.getArmSubsystem(),
-                        RobotContainer.getElevatorSubsystem(),
-                        RobotContainer.getWristSubsystem(),
-                        RobotContainer.getGripperSubsystem())
-                //                ,
-                //                new ParallelCommandGroup(
-                //                        new DriveFollowPath("threeElementRed_2", 1, 0.5, false),
-                //
-                //                new HighDropCommand(
-                //                        RobotContainer.getArmSubsystem(),
-                //                        RobotContainer.getElevatorSubsystem(),
-                //                        RobotContainer.getWristSubsystem()),
-                //                new MoveGripperCommand(
-                //                        RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(),
-                // GripperState.OPENED),
-                //                new WaitCommand(0.2),
-                //                new InstantCommand(() ->
-                // RobotContainer.getWristSubsystem().setPositionOverride(false)),
-                //                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
-                //                new ParallelCommandGroup(
-                //                                                new DriveFollowPath("threeElementRed_3", 1, 0.5,
-                // false),
-                //                        new SequentialCommandGroup(
-                //                                new WaitCommand(1),
-                //                                new MidDropCommand(
-                //                                        RobotContainer.getArmSubsystem(),
-                //                                        RobotContainer.getElevatorSubsystem(),
-                //                                        RobotContainer.getWristSubsystem()))),
-                //                new GroundPickupCommand(
-                //                        RobotContainer.getElevatorSubsystem(),
-                //                        RobotContainer.getWristSubsystem(),
-                //                        RobotContainer.getArmSubsystem(),
-                //                        RobotContainer.getGripperSubsystem()),
-                //                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(true,
-                // 22.0)),
-                //                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(true)),
-                //                new WaitUntilCommand(() -> (RobotContainer.getTimeOfFlightSubsystem().getRange() <
-                // 140) && (RobotContainer.getTimeOfFlightSubsystem().getRange() > 0)),
-                //                new MoveGripperCommand(
-                //                        RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(),
-                // GripperState.CLOSED),
-                //                new WaitCommand(0.2),
-                //                new ParallelCommandGroup(
-                //                         new DriveFollowPath("threeElementRed_4", 1, 0.5, false),
-                //                        new MidDropCommand(
-                //                                RobotContainer.getArmSubsystem(),
-                //                                RobotContainer.getElevatorSubsystem(),
-                //                                RobotContainer.getWristSubsystem())),
-                //                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
-                //                new InstantCommand(() ->
-                // RobotContainer.getWristSubsystem().setPositionOverride(false))
-                );
+                new WaitCommand(0.6),
+                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
+                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
+                new ParallelCommandGroup(
+                        new BucketPickupCommand(
+                                RobotContainer.getElevatorSubsystem(),
+                                RobotContainer.getWristSubsystem(),
+                                RobotContainer.getBucketSubsystem(),
+                                RobotContainer.getArmSubsystem(),
+                                RobotContainer.getGripperSubsystem()),
+                        new WaitCommand(0.25).andThen(new DriveFollowPath("threeElementRed_L2", 5, 3, false, false))));
     }
 }

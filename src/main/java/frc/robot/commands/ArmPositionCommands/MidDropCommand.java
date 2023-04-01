@@ -22,7 +22,7 @@ public class MidDropCommand extends SequentialCommandGroup {
                         ArmConstants.midDropPosition.smartMotionMaxVel(),
                         ArmConstants.midDropPosition.smartMotionMaxAccel()),
                 new ParallelCommandGroup(
-                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.midDropPosition.inclinatorCmdPos()),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.midDropPosition.elevatorCmdPos()),
                         new MoveWristCommand(wristSubsystem, ArmConstants.midDropPosition.wristCmdPos())));
     }
 }

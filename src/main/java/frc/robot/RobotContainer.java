@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -23,14 +21,13 @@ import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
 import frc.robot.commands.ArmPositionCommands.*;
-import frc.robot.commands.Auton.ThreeElement;
-import frc.robot.commands.Auton.ThreeElementWMarkers;
-import frc.robot.commands.Auton.line2meters;
-import frc.robot.commands.Auton.line2metersCommand;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
+<<<<<<< HEAD
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.GoToPickupTag;
+=======
+>>>>>>> 08b40ee6108dfa2d31ebeac2db5dcc488bf5c012
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
@@ -172,6 +169,7 @@ public class RobotContainer {
 
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
+<<<<<<< HEAD
         chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         chooser.addOption("Marker Test", new Auton_2_Cone_Red(swerveSubsystem));
 
@@ -185,6 +183,20 @@ public class RobotContainer {
                         new GoToTagCommand(photonCameraFront, swerveSubsystem, poseEstimator::getCurrentPose, 1),
                         new DriveToPoseCommand(
                                 swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
+=======
+        //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
+        //
+        //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
+        //        chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
+        //        chooser.addOption(
+        //                "Line 2 Meters and Goto Tag",
+        //                new SequentialCommandGroup(
+        //                        new line2meters(swerveSubsystem),
+        //                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+        //                        new DriveToPoseCommand(
+        //                                swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new
+        // Rotation2d()))));
+>>>>>>> 08b40ee6108dfa2d31ebeac2db5dcc488bf5c012
 
         Shuffleboard.getTab("Autonomous").add(chooser);
     }
@@ -239,7 +251,8 @@ public class RobotContainer {
 
         // home
         new Trigger(() -> coDriverJoystick.getPOV() > 180)
-                .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
+                .onTrue(new HomeCommand(
+                        armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem, bucketSubsystem));
 
         // bucket pickup
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
