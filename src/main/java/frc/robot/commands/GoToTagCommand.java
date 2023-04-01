@@ -24,7 +24,6 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class GoToTagCommand extends CommandBase {
 
-        
     private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
             new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
     private static final TrapezoidProfile.Constraints Y_CONSTRAINTS =

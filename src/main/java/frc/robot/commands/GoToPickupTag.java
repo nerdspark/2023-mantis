@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -15,13 +16,12 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ScheduleCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -40,10 +40,10 @@ public class GoToPickupTag extends CommandBase {
     private int tagToAlign;
 
     Pose2d centerGoalPose;
-
+    Pose3d cameraPose;
 
     private static final Transform2d TAG_TO_GOAL =
-            new Transform2d(new Translation2d(1.6764, 1.2), Rotation2d.fromDegrees(180.0));
+            new Transform2d(new Translation2d(1.905, 1.29), Rotation2d.fromDegrees(180.0));
     private static final Transform2d TAG_TO_GOAL_BLUE =
             new Transform2d(new Translation2d(0.5, 0.5), Rotation2d.fromDegrees(180.0));
     private OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
@@ -81,7 +81,7 @@ public class GoToPickupTag extends CommandBase {
         yController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
         omegaController.setTolerance(VisionConstants.ROTATION_TOLERANCE);
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
-
+        
         if (DriverStation.getAlliance() == Alliance.Red) {
             tagToAlign = 5;
             photonCamera = RobotContainer.photonCamera;
@@ -103,7 +103,8 @@ public class GoToPickupTag extends CommandBase {
         SmartDashboard.putNumber("GoToPickup TagChaseInit robotPose.X", robotPose.getX());
         SmartDashboard.putNumber("GoToPickup TagChaseInit robotPose.Y", robotPose.getY());
         SmartDashboard.putNumber(
-                "GoToPickup TagChaseInit robotPose.Angle", robotPose.getRotation().getRadians());
+                "GoToPickup TagChaseInit robotPose.Angle",
+                robotPose.getRotation().getRadians());
 
         omegaController.reset(robotPose.getRotation().getRadians());
         xController.reset(robotPose.getX());
@@ -124,6 +125,9 @@ public class GoToPickupTag extends CommandBase {
 
     @Override
     public void execute() {
+        SmartDashboard.putNumber("TagToAlign", tagToAlign);
+        SmartDashboard.putString("PHotoncamera", photonCamera.getName());
+
 
         var robotPose2d = poseProvider.get();
 
@@ -159,21 +163,22 @@ public class GoToPickupTag extends CommandBase {
                         lastTarget = target;
 
                         // Transform the robot's pose to find the camera's pose
-                        var cameraPose =
-                                robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
-
+                            if(DriverStation.getAlliance() == Alliance.Red) {
+                               cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
+                            }
+                            else {
+                                cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT_BACK.inverse());
+                            }
                         // Trasnform the camera's pose to the target's pose
                         var camToTarget = target.getBestCameraToTarget();
                         var targetPose = cameraPose.transformBy(camToTarget);
 
                         // Transform the tag's pose to set our goal
                         // var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
-                        
+
                         if (DriverStation.getAlliance() == Alliance.Red) {
                             centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
-                        }
-
-                        else {
+                        } else {
                             centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL_BLUE);
                         }
 
@@ -236,9 +241,15 @@ public class GoToPickupTag extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         drivetrainSubsystem.stopModules();
-        if(targetReached) {
-                CommandScheduler.getInstance().schedule(new BucketPickupCommand(RobotContainer.getElevatorSubsystem(), RobotContainer.getWristSubsystem(), RobotContainer.getBucketSubsystem(), RobotContainer.getArmSubsystem(), RobotContainer.getGripperSubsystem()));
-        }
+        // if (targetReached) {
+        //     CommandScheduler.getInstance()
+        //             .schedule(new BucketPickupCommand(
+        //                     RobotContainer.getElevatorSubsystem(),
+        //                     RobotContainer.getWristSubsystem(),
+        //                     RobotContainer.getBucketSubsystem(),
+        //                     RobotContainer.getArmSubsystem(),
+        //                     RobotContainer.getGripperSubsystem()));
+        // }
     }
 
     // // Returns true when the command should end.

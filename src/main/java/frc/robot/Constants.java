@@ -7,7 +7,6 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -348,12 +347,20 @@ public final class Constants {
         /**
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
-        public static final Transform2d CAMERA_TO_ROBOT =
-                new Transform2d(new Translation2d(0.051, 0.2), new Rotation2d(0.0));
+        // public static final Transform2d CAMERA_TO_ROBOT =
+        //         new Transform2d(new Translation2d(-0.381, 0), new Rotation2d(0.0));
+        // public static final Transform2d CAMERA_TO_ROBOT_BACK =
+        //         new Transform2d(new Translation2d(0,0), new Rotation2d(0.0));
+
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+                new Transform3d(new Translation3d(-0.381, 0, -0.381), new Rotation3d(0, 0, 0));
+
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_BACK =
+                new Transform3d(new Translation3d(0.2794, 0.0762, -0.33), new Rotation3d(0, 15, 0));
 
         /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
-        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-                new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
+        // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+        //         new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
         // 2, 16.5 8 inch
 
         public static final double FIELD_LENGTH_METERS = 16.54175;
@@ -383,7 +390,7 @@ public final class Constants {
         public static final double kIYController = 0d;
         public static final double kDYController = 0d;
         public static final double kPThetaController = -DriveConstants.kPTargetTurning;
-        public static final double kIThetaController = 0d;                                              
+        public static final double kIThetaController = 0d;
         public static final double kDThetaController = 0d;
     }
 
@@ -391,8 +398,8 @@ public final class Constants {
         LEFT(0.0762, 0.7452, -10),
         CENTER(0.0762, 0.2826, 0),
         RIGHT(0.0762, -0.379, 10),
-        PICKUPRED(0, 0, 30),
-        PICKUPBLUE(0, 0, -30);
+        PICKUPRED(0, 0, 10),
+        PICKUPBLUE(0, 0, 0);
 
         public final double xOffset;
         public final double yOffset;

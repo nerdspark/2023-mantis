@@ -74,7 +74,6 @@ public class threeElement_Blue extends SequentialCommandGroup {
                                 RobotContainer.getWristSubsystem(),
                                 RobotContainer.getGripperSubsystem(),
                                 RobotContainer.getBucketSubsystem()),
-                        new DriveFollowPath("threeElementBlue_L2", 5, 4, false))
-                );
+                        new DriveFollowPath("threeElementBlue_L2", 5, 4, false)));
     }
 }

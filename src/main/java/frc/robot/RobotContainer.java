@@ -16,8 +16,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OffsetFromTargetAprTag;
-import frc.robot.commands.AprTagCommand;
-import frc.robot.commands.GoToPickupTag;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
@@ -25,6 +23,7 @@ import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.*;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
+import frc.robot.commands.GoToPickupTag;
 import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
@@ -80,16 +79,18 @@ public class RobotContainer {
 
     // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
     public static final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
-    public static final PhotonCamera photonCameraBack = new PhotonCamera(Constants.VisionConstants.aprTagCameraBackName);
+    public static final PhotonCamera photonCameraBack =
+            new PhotonCamera(Constants.VisionConstants.aprTagCameraBackName);
 
     // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
     // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-//     private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(photonCamera, swerveSubsystem);
+    //     private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(photonCamera,
+    // swerveSubsystem);
     // private final ChaseTagCommand chaseTagCommand = new
     // ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
-//     private final AprTagCommand aprTagCommand =
-//             new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
+    //     private final AprTagCommand aprTagCommand =
+    //             new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
 
     // Vision
 
@@ -198,9 +199,8 @@ public class RobotContainer {
         //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new
         // Rotation2d().fromDegrees(90))));
         // Go to April Tag and Stop - Button Y
-        new JoystickButton(driverJoystick, Constants.buttonY)
-                .whileTrue(new GoToPickupTag(
-                        swerveSubsystem, swerveSubsystem::getPose));
+        new JoystickButton(driverJoystick, Constants.leftBumper)
+                .whileTrue(new GoToPickupTag(swerveSubsystem, swerveSubsystem::getPose));
         new JoystickButton(driverJoystick, Constants.buttonA)
                 .whileTrue(new GoToTagCommand(
                         photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.CENTER));
