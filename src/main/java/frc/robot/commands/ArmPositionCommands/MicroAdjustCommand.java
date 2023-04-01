@@ -69,7 +69,7 @@ public class MicroAdjustCommand extends CommandBase {
 
         if (Math.abs(leftJoystickY.get()) > 0.05) {
             wristSubsystem.setPosition(
-                    currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
+                    -currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
         } else {
             wristSubsystem.setPosition(currentWristPositionState);
         }

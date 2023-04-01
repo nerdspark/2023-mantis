@@ -21,6 +21,7 @@ import frc.robot.commands.GoToPickupTag;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
+import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.*;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
@@ -123,6 +124,7 @@ public class RobotContainer {
 
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
+        new MoveWristCommand(wristSubsystem, Constants.ArmConstants.homePosition.wristCmdPos()).execute();
 
         // Close the gripper the first time the item is detected
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)

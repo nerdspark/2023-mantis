@@ -154,9 +154,9 @@ public final class Constants {
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
-        public static final double kPTargetTurning = -2.6d;
+        public static final double kPTargetTurning = -2.4d;
         public static final double kITargetTurning = 0d;
-        public static final double kDTargetTurning = -0.0d;
+        public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
@@ -283,7 +283,7 @@ public final class Constants {
         public static final int kDriverRotYAxis = 1;
         public static final int kDriverFieldOrientedButtonIdx = 2;
 
-        public static final double kDeadbandSteer = 0.1d;
+        public static final double kDeadbandSteer = 0.07d;
         public static final double kDeadbandDrive = 0.05d;
         public static final double kDeadbandSpeed = 0.01d;
 
@@ -319,9 +319,9 @@ public final class Constants {
         public static final int kDriverCancelTurn = 7; // back button
         public static final int kDriverTopSpeed = 5; // left bumper
 
-        public static final double targetTurnGainScheduleSpeed = 40;
+        public static final double targetTurnGainScheduleSpeed = 2;
 
-        public static final double joystickTurningGain = -8;
+        public static final double joystickTurningGain = -3;
     }
 
     public static class VisionConstants {
