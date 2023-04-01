@@ -41,16 +41,10 @@ public class GoToPickupTag extends CommandBase {
 
     Pose2d centerGoalPose;
 
-    // private static final Transform2d TAG_TO_GOAL = new Transform2d(new Translation2d(0.5, 0),
-    // Rotation2d.fromDegrees(180.0));
-    // private static final Transform3d TAG_TO_GOAL =
-    //     new Transform3d(
-    //         new Translation3d(1, 0.0, 0.0),
-    //         new Rotation3d(0.0, 0.0, Math.PI));
 
     private static final Transform2d TAG_TO_GOAL =
             new Transform2d(new Translation2d(1.6764, 1.2), Rotation2d.fromDegrees(180.0));
-            private static final Transform2d TAG_TO_GOAL_BLUE =
+    private static final Transform2d TAG_TO_GOAL_BLUE =
             new Transform2d(new Translation2d(0.5, 0.5), Rotation2d.fromDegrees(180.0));
     private OffsetFromTargetAprTag offsetFromTarget = OffsetFromTargetAprTag.CENTER;
     private Transform2d GOAL_OFFSET = null;
@@ -89,8 +83,8 @@ public class GoToPickupTag extends CommandBase {
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
 
         if (DriverStation.getAlliance() == Alliance.Red) {
-            tagToAlign = 8;
-            photonCamera = RobotContainer.photonCameraFront;
+            tagToAlign = 5;
+            photonCamera = RobotContainer.photonCamera;
             offsetFromTarget = OffsetFromTargetAprTag.PICKUPRED;
         } else {
             tagToAlign = 4;
@@ -119,7 +113,7 @@ public class GoToPickupTag extends CommandBase {
 
         if (DriverStation.getAlliance() == Alliance.Red) {
             tagToAlign = 5;
-            photonCamera = RobotContainer.photonCameraFront;
+            photonCamera = RobotContainer.photonCamera;
             offsetFromTarget = OffsetFromTargetAprTag.PICKUPRED;
         } else {
             tagToAlign = 4;
@@ -176,7 +170,7 @@ public class GoToPickupTag extends CommandBase {
                         // var goalPose = targetPose.transformBy(TAG_TO_GOAL).toPose2d();
                         
                         if (DriverStation.getAlliance() == Alliance.Red) {
-                        centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
+                            centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL);
                         }
 
                         else {
