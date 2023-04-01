@@ -27,7 +27,7 @@ public class BucketSubsystem extends SubsystemBase {
     }
 
     public double[] getPositions() {
-        return new double[]{leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition()};
+        return new double[] {leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition()};
     }
 
     // Neither method uses the position parameter

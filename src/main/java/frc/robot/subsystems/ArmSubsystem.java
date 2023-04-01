@@ -76,6 +76,6 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double[] getPositions() {
-        return new double[]{armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
+        return new double[] {armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
     }
 }

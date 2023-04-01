@@ -62,8 +62,7 @@ public class MicroAdjustCommand extends CommandBase {
         }
 
         if (Math.abs(rightJoystickY.get()) > 0.05) {
-            armSubsystem.setPosition(
-                    currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
+            armSubsystem.setPosition(currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
         } else {
             armSubsystem.setPosition(currentArmPositionState);
         }
