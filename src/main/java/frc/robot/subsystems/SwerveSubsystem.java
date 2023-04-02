@@ -109,6 +109,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumberArray("Gyro Velocity", this.getGyroVelocityXYZ());
+
         odometer.update(getRotation2d(), new SwerveModulePosition[] {
             frontLeft.getSwerveModulePosition(),
             frontRight.getSwerveModulePosition(),
@@ -151,6 +153,9 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.enableBrakeMode(enable);
         backLeft.enableBrakeMode(enable);
         backRight.enableBrakeMode(enable);
+    }
+    public double getRoll() {
+        return gyro.getRoll();
     }
 
     public void driveSwerveDrive(ChassisSpeeds chassisSpeeds) {

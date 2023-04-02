@@ -15,16 +15,15 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.OffsetFromTargetAprTag;
+import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
 import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.*;
+import frc.robot.commands.Auton.RedSideCharge;
 import frc.robot.commands.Auton.threeElement_Blue;
 import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.commands.GoToPickupTag;
-import frc.robot.commands.GoToTagCommand;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
@@ -161,6 +160,7 @@ public class RobotContainer {
 
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
+        chooser.addOption("Red Side Charge", new RedSideCharge());
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         //
         //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
@@ -199,17 +199,22 @@ public class RobotContainer {
         //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new
         // Rotation2d().fromDegrees(90))));
         // Go to April Tag and Stop - Button Y
-        new JoystickButton(driverJoystick, Constants.leftBumper)
-                .whileTrue(new GoToPickupTag(swerveSubsystem, swerveSubsystem::getPose));
-        new JoystickButton(driverJoystick, Constants.buttonA)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.CENTER));
-        new JoystickButton(driverJoystick, Constants.buttonB)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.LEFT));
-        new JoystickButton(driverJoystick, Constants.buttonX)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.RIGHT));
+        //        new JoystickButton(driverJoystick, Constants.buttonY)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 4,
+        // OffsetFromTargetAprTag.CENTER));
+        //        new JoystickButton(driverJoystick, Constants.buttonA)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.CENTER));
+        //        new JoystickButton(driverJoystick, Constants.buttonB)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.LEFT));
+        //        new JoystickButton(driverJoystick, Constants.buttonX)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.RIGHT));
 
         // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
 
