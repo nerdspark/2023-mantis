@@ -19,7 +19,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementRed_L0", 1, 0.5, true),
+                        new DriveFollowPath("RedFluurb_0", 1, 0.5, true),
                         new HighDropCommand(
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
@@ -33,7 +33,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementRed_L1", 2.75, 2, false),
+                        new DriveFollowPath("RedFluurb_1", 2.75, 2, false),
                         new SequentialCommandGroup(
                                 new WaitCommand(0.4),
                                 new GroundPickupCommand(
@@ -41,7 +41,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-                                new WaitCommand(2.25),
+                                new WaitCommand(2.1),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
@@ -55,7 +55,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem()))),
-                new HighDropCommand(
+                new MidDropCommand(
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
@@ -72,6 +72,6 @@ public class threeElement_Red extends SequentialCommandGroup {
                                 RobotContainer.getBucketSubsystem(),
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getGripperSubsystem()),
-                        new WaitCommand(0.25).andThen(new DriveFollowPath("threeElementRed_L2", 5, 3, false, false))));
+                        new WaitCommand(0.25).andThen(new DriveFollowPath("RedFluurb_2", 3, 1.75, false, true))));
     }
 }
