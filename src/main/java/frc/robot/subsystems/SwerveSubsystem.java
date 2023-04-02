@@ -109,7 +109,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumberArray("Gyro Velocity", this.getGyroVelocityXYZ());
+        // SmartDashboard.putNumberArray("Gyro Velocity", this.getGyroVelocityXYZ());
 
         odometer.update(getRotation2d(), new SwerveModulePosition[] {
             frontLeft.getSwerveModulePosition(),
@@ -121,13 +121,13 @@ public class SwerveSubsystem extends SubsystemBase {
         // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
         // backRight.getState());
 
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putNumber(
-                "Rotation2d", odometer.getPoseMeters().getRotation().getDegrees());
-        SmartDashboard.putString(
-                "Robot Location (broken)", getPose().getTranslation().toString());
-        SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
-        SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
+        // SmartDashboard.putNumber("Robot Heading", getHeading());
+        // SmartDashboard.putNumber(
+        //         "Rotation2d", odometer.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putString(
+        //         "Robot Location (broken)", getPose().getTranslation().toString());
+        // SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
+        // SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
         frontLeft.outputStatsSmartDashboard();
         backLeft.outputStatsSmartDashboard();
         frontRight.outputStatsSmartDashboard();

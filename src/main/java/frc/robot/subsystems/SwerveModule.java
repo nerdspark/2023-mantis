@@ -61,35 +61,35 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        SmartDashboard.putNumber(
-                "pod " + driveMotor.getDeviceID() + " drive pos",
-                driveMotor.getSelectedSensorPosition() * ModuleConstants.kDriveTicks2Meters);
+        // SmartDashboard.putNumber(
+        //         "pod " + driveMotor.getDeviceID() + " drive pos",
+        //         driveMotor.getSelectedSensorPosition() * ModuleConstants.kDriveTicks2Meters);
         return driveMotor.getSelectedSensorPosition() * ModuleConstants.kDriveTicks2Meters;
     }
 
     public double getTurningPosition() {
-        SmartDashboard.putNumber(
-                "pod " + turningMotor.getDeviceID() + " turn pos",
-                turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurnTicks2Radians);
+        // SmartDashboard.putNumber(
+        //         "pod " + turningMotor.getDeviceID() + " turn pos",
+        //         turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurnTicks2Radians);
         return turningMotor.getSelectedSensorPosition() * ModuleConstants.kTurnTicks2Radians;
     }
 
     public double getDriveVelocity() {
-        SmartDashboard.putNumber(
-                "pod " + driveMotor.getDeviceID() + " drive vel",
-                driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond);
+        // SmartDashboard.putNumber(
+        //         "pod " + driveMotor.getDeviceID() + " drive vel",
+        //         driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond);
         return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond;
     }
 
     public double getTurningVelocity() {
-        SmartDashboard.putNumber(
-                "pod " + turningMotor.getDeviceID() + " turn vel",
-                turningMotor.getSelectedSensorVelocity() * ModuleConstants.kTurnTicks2RadiansPerSecond);
+        // SmartDashboard.putNumber(
+        //         "pod " + turningMotor.getDeviceID() + " turn vel",
+        //         turningMotor.getSelectedSensorVelocity() * ModuleConstants.kTurnTicks2RadiansPerSecond);
         return turningMotor.getSelectedSensorVelocity() * ModuleConstants.kTurnTicks2RadiansPerSecond;
     }
 
     public double getPIDTurningMotor() {
-        SmartDashboard.putNumber("PID output", turningMotor.getMotorOutputPercent());
+        // SmartDashboard.putNumber("PID output", turningMotor.getMotorOutputPercent());
         return turningMotor.getMotorOutputPercent();
     }
 
@@ -214,14 +214,14 @@ public class SwerveModule {
                 new Rotation2d(
                         target)); // (Math.abs(state.speedMetersPerSecond)/state.speedMetersPerSecond)*Math.abs(Math.pow(state.speedMetersPerSecond, OIConstants.driverPower)), new Rotation2d(target));
 
-        SmartDashboard.putNumber(
-                "driveMotorSet" + driveMotor.getDeviceID(),
-                state.speedMetersPerSecond
-                        / DriveConstants.kPhysicalMaxSpeedMetersPerSecond
-                        * DriveConstants.kFalconMaxSetSpeed);
-        SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
+        // SmartDashboard.putNumber(
+        //         "driveMotorSet" + driveMotor.getDeviceID(),
+        //         state.speedMetersPerSecond
+        //                 / DriveConstants.kPhysicalMaxSpeedMetersPerSecond
+        //                 * DriveConstants.kFalconMaxSetSpeed);
+        // SmartDashboard.putNumber("turnMotorSet" + turningMotor.getDeviceID(), target);
         if (false) { // (Math.abs(state.speedMetersPerSecond) > DriveConstants.driveSpeedConvertMode) {
-            SmartDashboard.putString("drive mode", "velocity");
+            // SmartDashboard.putString("drive mode", "velocity");
             driveMotor.set(
                     TalonFXControlMode.Velocity,
                     state.speedMetersPerSecond
@@ -229,7 +229,7 @@ public class SwerveModule {
                             * DriveConstants.kFalconMaxSetSpeed
                             * (backward ? -1 : 1));
         } else {
-            SmartDashboard.putString("drive mode", "VBUS");
+            // SmartDashboard.putString("drive mode", "VBUS");
             driveMotor.set(
                     TalonFXControlMode.PercentOutput,
                     state.speedMetersPerSecond
@@ -242,7 +242,7 @@ public class SwerveModule {
                 TalonFXControlMode.Position,
                 target / ModuleConstants.kTurnTicks2Radians); // turningPidController.calculate(getTurningPosition(),
         // state.angle.getRadians()));
-        SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
+        // SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
     }
 
     public void stop() {

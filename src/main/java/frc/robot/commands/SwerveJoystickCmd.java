@@ -129,10 +129,10 @@ public class SwerveJoystickCmd extends CommandBase {
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
-        SmartDashboard.putNumber("prevdrivetrainposeX", prevDrivetrainPose.getX());
-        SmartDashboard.putNumber("prevdrivetrainposeY", prevDrivetrainPose.getY());
-        SmartDashboard.putNumber("currdrivetrainposeX", currentDrivetrainPose.getX());
-        SmartDashboard.putNumber("currdrivetrainposeY", currentDrivetrainPose.getY());
+        // SmartDashboard.putNumber("prevdrivetrainposeX", prevDrivetrainPose.getX());
+        // SmartDashboard.putNumber("prevdrivetrainposeY", prevDrivetrainPose.getY());
+        // SmartDashboard.putNumber("currdrivetrainposeX", currentDrivetrainPose.getX());
+        // SmartDashboard.putNumber("currdrivetrainposeY", currentDrivetrainPose.getY());
         if (Math.sqrt(((prevDrivetrainPose3.getX() - currentDrivetrainPose.getX())
                                         * (prevDrivetrainPose3.getX() - currentDrivetrainPose.getX()))
                                 + ((prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())
@@ -142,14 +142,14 @@ public class SwerveJoystickCmd extends CommandBase {
                 && Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 3) {
             //                        turningSpeed = 0;
             //            driveAngle = prevDriveAngle;
-            SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
+            // SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
         } else {
-            SmartDashboard.putString("PID turning?", "yes");
+            // SmartDashboard.putString("PID turning?", "yes");
         }
 
         if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get()) {
             turningSpeed = 0;
-            SmartDashboard.putString("PID turning?", "deadband");
+            // SmartDashboard.putString("PID turning?", "deadband");
         }
 
         // if (Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 10
@@ -175,9 +175,9 @@ public class SwerveJoystickCmd extends CommandBase {
         if (joystickMagnitude < OIConstants.kDeadbandDrive) {
             driveAngle = prevDriveAngle;
             driveSpeed = 0;
-            SmartDashboard.putString("joymagnitude deadband?", "on");
+            // SmartDashboard.putString("joymagnitude deadband?", "on");
         } else {
-            SmartDashboard.putString("joymagnitude deadband?", "off");
+            // SmartDashboard.putString("joymagnitude deadband?", "off");
         }
         double xSpeed = (Math.cos(driveAngle) * driveSpeed);
         double ySpeed = (Math.sin(driveAngle) * driveSpeed);
@@ -197,7 +197,7 @@ public class SwerveJoystickCmd extends CommandBase {
         if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
             targetAngle = currentAngle;
             turningSpeed = -turningTargX.get() * Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
-            SmartDashboard.putString("PID turning?", "joystickturning");
+            // SmartDashboard.putString("PID turning?", "joystickturning");
         }
 
         // 2. Apply deadband
@@ -218,10 +218,10 @@ public class SwerveJoystickCmd extends CommandBase {
         turningSpeed *= // = turningLimiter.calculate(turningSpeed) *
                 DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         if ((xSpeed * xSpeed) + (ySpeed * ySpeed) > OIConstants.targetTurnGainScheduleSpeed) {
-            SmartDashboard.putString("targetTurnGain", "fastGain");
+            // SmartDashboard.putString("targetTurnGain", "fastGain");
             turningSpeed = turningSpeed * 1;
         } else {
-            SmartDashboard.putString("targetTurnGain", "slowGain");
+            // SmartDashboard.putString("targetTurnGain", "slowGain");
         }
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
