@@ -144,7 +144,7 @@ public class SwerveModule {
 
     public void resetEncoders() {
         driveMotor.setSelectedSensorPosition(0);
-        // turningMotor.setSelectedSensorPosition(getCANCoderRad() / ModuleConstants.kTurnTicks2Radians);
+        turningMotor.setSelectedSensorPosition(getCANCoderRad() / ModuleConstants.kTurnTicks2Radians);
         // SmartDashboard.putNumber("pod " + CANCoder.getDeviceID() + "getCANCoderRad", getCANCoderRad());
         // turningMotor.config_kP(1, DriveConstants.kPTurningMotor);
         // turningMotor.config_kI(1, DriveConstants.kITurningMotor);
