@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
@@ -114,7 +113,8 @@ public class RobotContainer {
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger),
                 () -> driverJoystick.getRawButton(Constants.start),
                 () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn),
-                () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
+                () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed),
+                () -> driverJoystick.getRawButton(OIConstants.kDriverRightBumper)));
 
         armSubsystem.setDefaultCommand(new MicroAdjustCommand(
                 armSubsystem,

@@ -18,7 +18,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
-    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed;
+    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed, rightBumper;
     private final Supplier<Integer> DPAD;
     private final Supplier<Double> leftTrigger;
     private final Supplier<Double> rightTrigger;
@@ -47,7 +47,8 @@ public class SwerveJoystickCmd extends CommandBase {
             Supplier<Double> rightTrigger,
             Supplier<Boolean> resetGyroButton,
             Supplier<Boolean> cancelTurn,
-            Supplier<Boolean> topSpeed) {
+            Supplier<Boolean> topSpeed,
+            Supplier<Boolean> rightBumper) {
         this.swerveSubsystem = swerveSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
@@ -58,6 +59,7 @@ public class SwerveJoystickCmd extends CommandBase {
         this.leftTrigger = leftTrigger;
         this.cancelTurn = cancelTurn;
         this.topSpeed = topSpeed;
+        this.rightBumper = rightBumper;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.resetGyroButton = resetGyroButton;
         this.speedLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -80,7 +82,6 @@ public class SwerveJoystickCmd extends CommandBase {
     @Override
     public void execute() {
 
-    
         // 1. Get real-time joystick inputs
         // double driveSpeed =
         // speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get())
@@ -237,7 +238,11 @@ public class SwerveJoystickCmd extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+        if (rightBumper.get()) {
+            swerveSubsystem.setWheelsToX();
+        } else {
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
     }
 
     @Override
