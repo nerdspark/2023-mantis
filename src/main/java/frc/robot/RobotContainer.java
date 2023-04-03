@@ -20,9 +20,7 @@ import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
 import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.*;
-import frc.robot.commands.Auton.RedSideCharge;
-import frc.robot.commands.Auton.threeElement_Blue;
-import frc.robot.commands.Auton.threeElement_Red;
+import frc.robot.commands.Auton.*;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
@@ -128,7 +126,7 @@ public class RobotContainer {
 
         // Close the gripper the first time the item is detected
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)
-                        && (timeOfFlightSubsystem.getRange() < 140)
+                        && (timeOfFlightSubsystem.getRange() < 100)
                         && (timeOfFlightSubsystem.getRange() > 30))
                 .whileTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
 
@@ -157,10 +155,11 @@ public class RobotContainer {
         // AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
         //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new
         // GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
-
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
         chooser.addOption("Red Side Charge", new RedSideCharge());
+        chooser.addOption("Red Side Path", new RedSidePath());
+        chooser.addOption("Blue Side Path", new BlueSidePath());
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         //
         //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
