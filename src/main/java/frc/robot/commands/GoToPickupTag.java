@@ -1,6 +1,5 @@
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -15,13 +14,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -81,7 +78,7 @@ public class GoToPickupTag extends CommandBase {
         yController.setTolerance(VisionConstants.TRANSLATION_TOLERANCE);
         omegaController.setTolerance(VisionConstants.ROTATION_TOLERANCE);
         omegaController.enableContinuousInput(-Math.PI, Math.PI);
-        
+
         if (DriverStation.getAlliance() == Alliance.Red) {
             tagToAlign = 5;
             photonCamera = RobotContainer.photonCamera;
@@ -128,7 +125,6 @@ public class GoToPickupTag extends CommandBase {
         SmartDashboard.putNumber("TagToAlign", tagToAlign);
         SmartDashboard.putString("PHotoncamera", photonCamera.getName());
 
-
         var robotPose2d = poseProvider.get();
 
         var robotPose = new Pose3d(
@@ -163,12 +159,13 @@ public class GoToPickupTag extends CommandBase {
                         lastTarget = target;
 
                         // Transform the robot's pose to find the camera's pose
-                            if(DriverStation.getAlliance() == Alliance.Red) {
-                               cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
-                            }
-                            else {
-                                cameraPose = robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT_BACK.inverse());
-                            }
+                        if (DriverStation.getAlliance() == Alliance.Red) {
+                            cameraPose =
+                                    robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
+                        } else {
+                            cameraPose = robotPose.transformBy(
+                                    Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT_BACK.inverse());
+                        }
                         // Trasnform the camera's pose to the target's pose
                         var camToTarget = target.getBestCameraToTarget();
                         var targetPose = cameraPose.transformBy(camToTarget);
@@ -181,8 +178,6 @@ public class GoToPickupTag extends CommandBase {
                         } else {
                             centerGoalPose = targetPose.toPose2d().transformBy(TAG_TO_GOAL_BLUE);
                         }
-
-                
 
                         // offset the goal pose by offset from target to align to scoring location.
 

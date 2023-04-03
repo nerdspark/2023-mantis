@@ -364,6 +364,7 @@ public final class Constants {
         // 2, 16.5 8 inch
 
         public static final double FIELD_LENGTH_METERS = 16.54175;
+
         public static final double FIELD_WIDTH_METERS = 8.0137;
 
         // Pose on the opposite side of the field. Use with `relativeTo` to flip a pose to the opposite alliance
@@ -378,10 +379,10 @@ public final class Constants {
         public static final double TRANSLATION_TOLERANCE = 0.1; // Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE = 1;
 
-        public static final double MAX_VELOCITY = 3; //3
-        public static final double MAX_ACCELARATION = 2; //2
-        public static final double MAX_VELOCITY_ROTATION = 1000; //8
-        public static final double MAX_ACCELARATION_ROTATION = 1000; //8
+        public static final double MAX_VELOCITY = 3; // 3
+        public static final double MAX_ACCELARATION = 2; // 2
+        public static final double MAX_VELOCITY_ROTATION = 1000; // 8
+        public static final double MAX_ACCELARATION_ROTATION = 1000; // 8
 
         public static final double kPXController = 2.5d;
         public static final double kIXController = 0d;
