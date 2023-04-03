@@ -55,7 +55,7 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem()))),
-                new MidDropCommand(
+                new HighDropCommand(
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),

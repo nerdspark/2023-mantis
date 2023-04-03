@@ -36,9 +36,7 @@ public class RedSideCharge extends SequentialCommandGroup {
                                 RobotContainer.getBucketSubsystem(),
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getGripperSubsystem()),
-                        new DriveFollowPath("RedSideCharge_1", 1, 1, false)
-                ),
-                new BalanceCommand(RobotContainer.getSwerveSubsystem(), false)
-        );
+                        new DriveFollowPath("RedSideCharge_1", 1, 1, false)),
+                new BalanceCommand(RobotContainer.getSwerveSubsystem(), false));
     }
 }
