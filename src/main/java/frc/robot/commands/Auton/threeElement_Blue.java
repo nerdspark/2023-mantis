@@ -16,12 +16,12 @@ import frc.robot.subsystems.*;
 public class threeElement_Blue extends SequentialCommandGroup {
     public threeElement_Blue(SwerveSubsystem swerveSubsystem) {
         addCommands(
+                new MoveGripperCommand(
+                        RobotContainer.getGripperSubsystem(),
+                        RobotContainer.getArmSubsystem(),
+                        GripperState.CLOSED),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementBlue_L0", 1, 0.5, true),
-                        new MoveGripperCommand(
-                                RobotContainer.getGripperSubsystem(),
-                                RobotContainer.getArmSubsystem(),
-                                GripperState.CLOSED),
+                        new DriveFollowPath("BlueFluurb_0", 1, 0.5, true),
                         new HighDropCommand(
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
@@ -35,7 +35,7 @@ public class threeElement_Blue extends SequentialCommandGroup {
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("threeElementBlue_L1", 3, 2, false),
+                        new DriveFollowPath("BlueFluurb_1", 2.75, 2, false),
                         new SequentialCommandGroup(
                                 new WaitCommand(0.4),
                                 new GroundPickupCommand(
@@ -43,7 +43,7 @@ public class threeElement_Blue extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-                                new WaitCommand(1.75),
+                                new WaitCommand(2.1),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
@@ -68,12 +68,12 @@ public class threeElement_Blue extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
                 new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
                 new ParallelCommandGroup(
-                        new HomeCommand(
-                                RobotContainer.getArmSubsystem(),
+                        new BucketPickupCommand(
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem(),
-                                RobotContainer.getGripperSubsystem(),
-                                RobotContainer.getBucketSubsystem()),
-                        new DriveFollowPath("threeElementBlue_L2", 5, 4, false)));
+                                RobotContainer.getBucketSubsystem(),
+                                RobotContainer.getArmSubsystem(),
+                                RobotContainer.getGripperSubsystem()),
+                        new WaitCommand(0.25).andThen(new DriveFollowPath("BlueFluurb_2", 3, 1.75, false, true))));
     }
 }
