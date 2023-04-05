@@ -37,7 +37,7 @@ public class BalanceCommand extends CommandBase {
             return;
         }
 
-        double speed = 0.28;
+        double speed = 0.3;
 
         if ((Math.abs(prevRoll - roll) > 0.5 || done && Math.abs(roll) < 5)) {
             if (Math.abs(roll) > 5) return;
