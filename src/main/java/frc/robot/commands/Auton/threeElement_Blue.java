@@ -12,7 +12,6 @@ import frc.robot.commands.ArmPositionCommands.*;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.subsystems.*;
 
-/** An example command that uses an example subsystem. */
 public class threeElement_Blue extends SequentialCommandGroup {
     public threeElement_Blue(SwerveSubsystem swerveSubsystem) {
         addCommands(

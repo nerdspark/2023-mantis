@@ -17,7 +17,7 @@ public class BlueSidePath extends SequentialCommandGroup {
                         RobotContainer.getArmSubsystem(),
                         MoveGripperCommand.GripperState.CLOSED),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("RedFluurb_0", 1, 0.5, true),
+                        new DriveFollowPath("BlueSidePath_0", 1, 0.5, true),
                         new HighDropCommand(
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
@@ -57,6 +57,7 @@ public class BlueSidePath extends SequentialCommandGroup {
                         RobotContainer.getGripperSubsystem(),
                         RobotContainer.getArmSubsystem(),
                         MoveGripperCommand.GripperState.OPENED),
+                new WaitCommand(0.45),
                 new ParallelCommandGroup(
                         new DriveFollowPath("BlueSidePath_2", 1, 3, false),
                         new InstantCommand(
