@@ -29,7 +29,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double position) {
-        System.out.println("ElevatorSubsystem: " + position);
         elevatorMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
     }
 

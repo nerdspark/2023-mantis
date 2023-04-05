@@ -26,7 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmPosition armPosition = ArmPosition.HOME;
 
     public void setArmPositionState(ArmPosition state) {
-        System.out.println("changed state");
         this.armPosition = state;
     }
 
@@ -58,9 +57,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         armMotor1Encoder.setPosition(0);
         armMotor2Encoder.setPosition(0);
-
-        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + armMotor1Encoder.getPosition()
-                + " Encoder 2 position: " + armMotor2Encoder.getPosition());
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {

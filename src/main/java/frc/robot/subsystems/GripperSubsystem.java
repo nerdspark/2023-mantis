@@ -40,7 +40,6 @@ public class GripperSubsystem extends SubsystemBase {
 
     public void setLeftPosition(double position) {
         if (setSwap) {
-            System.out.println("right gripper swap");
             rightGripperMotorPIDController.setReference(position, CANSparkMax.ControlType.kPosition);
             return;
         }
@@ -49,7 +48,6 @@ public class GripperSubsystem extends SubsystemBase {
 
     public void setRightPosition(double position) {
         if (setSwap) {
-            System.out.println("left gripper swap");
             leftGripperMotorPIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
             return;
         }
