@@ -222,9 +222,9 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-4.0, 85.0, 18.9, 0.1, 3.0, 3.0, -15.0, -3.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 85.0, 18.9, 0.1, 3.0, 3.0, -15.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(-4.0, 89.0, 2.0, 0.1, 3.0, 3.0, -15.0, -7.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 89.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =

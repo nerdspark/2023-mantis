@@ -5,7 +5,9 @@
 package frc.robot.commands.Auton;
 
 import edu.wpi.first.wpilibj2.command.*;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
 import frc.robot.commands.ArmPositionCommands.*;
@@ -25,7 +27,8 @@ public class threeElement_Blue extends SequentialCommandGroup {
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem())),
-                new WaitCommand(0.1),
+                new WaitCommand(0.3),
+                new MoveArmCommand(RobotContainer.getArmSubsystem(), 87.0, Constants.ArmConstants.highDropPosition.smartMotionMaxVel(), Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
                 new WaitCommand(0.2),

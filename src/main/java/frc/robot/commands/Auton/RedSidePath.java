@@ -5,7 +5,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.*;
@@ -24,7 +26,8 @@ public class RedSidePath extends SequentialCommandGroup {
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem())),
-                new WaitCommand(0.1),
+                new WaitCommand(0.3),
+                new MoveArmCommand(RobotContainer.getArmSubsystem(), 87.0, Constants.ArmConstants.highDropPosition.smartMotionMaxVel(), Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(),
                         RobotContainer.getArmSubsystem(),
@@ -62,6 +65,7 @@ public class RedSidePath extends SequentialCommandGroup {
                         RobotContainer.getGripperSubsystem(),
                         RobotContainer.getArmSubsystem(),
                         MoveGripperCommand.GripperState.OPENED),
+                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedSidePath_3", 2, 3, false),
                         new WaitCommand(0.3)
