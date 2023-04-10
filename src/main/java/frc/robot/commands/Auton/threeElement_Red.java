@@ -27,7 +27,11 @@ public class threeElement_Red extends SequentialCommandGroup {
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem())),
                 new WaitCommand(0.3),
-                new MoveArmCommand(RobotContainer.getArmSubsystem(), 87.0, Constants.ArmConstants.highDropPosition.smartMotionMaxVel(), Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
+                new MoveArmCommand(
+                        RobotContainer.getArmSubsystem(),
+                        87.0,
+                        Constants.ArmConstants.highDropPosition.smartMotionMaxVel(),
+                        Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
                 new WaitCommand(0.2),

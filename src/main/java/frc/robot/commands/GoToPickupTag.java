@@ -102,10 +102,10 @@ public class GoToPickupTag extends CommandBase {
         SmartDashboard.putNumber(
                 "GoToPickup TagChaseInit robotPose.Angle",
                 robotPose.getRotation().getRadians());
-
-        omegaController.reset(robotPose.getRotation().getRadians());
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
+        omegaController.reset(
+                robotPose.getRotation().getRadians(), drivetrainSubsystem.getChassisSpeeds().omegaRadiansPerSecond);
+        xController.reset(robotPose.getX(), drivetrainSubsystem.getChassisSpeeds().vxMetersPerSecond);
+        yController.reset(robotPose.getY(), drivetrainSubsystem.getChassisSpeeds().vyMetersPerSecond);
 
         targetReached = false;
 

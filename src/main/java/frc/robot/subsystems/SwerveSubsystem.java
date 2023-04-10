@@ -187,19 +187,15 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         this.setModuleStates(this.kinematics.toSwerveModuleStates(chassisSpeeds));
-        
     }
 
-    public SwerveModuleState[] getModuleStates(){
+    public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
-            this.frontLeft.getState(),
-            this.frontRight.getState(),
-            this.backLeft.getState(),
-            this.backRight.getState()           
+            this.frontLeft.getState(), this.frontRight.getState(), this.backLeft.getState(), this.backRight.getState()
         };
     }
 
-    public ChassisSpeeds getChassisSpeeds(){
+    public ChassisSpeeds getChassisSpeeds() {
         return this.kinematics.toChassisSpeeds(getModuleStates());
     }
 

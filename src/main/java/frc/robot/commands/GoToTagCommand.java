@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -106,9 +107,10 @@ public class GoToTagCommand extends CommandBase {
         SmartDashboard.putNumber(
                 "TagChaseInit robotPose.Angle", robotPose.getRotation().getRadians());
 
-        omegaController.reset(robotPose.getRotation().getRadians());
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
+        omegaController.reset(
+                robotPose.getRotation().getRadians(), drivetrainSubsystem.getChassisSpeeds().omegaRadiansPerSecond);
+        xController.reset(robotPose.getX(), drivetrainSubsystem.getChassisSpeeds().vxMetersPerSecond);
+        yController.reset(robotPose.getY(), drivetrainSubsystem.getChassisSpeeds().vyMetersPerSecond);
 
         targetReached = false;
     }
@@ -137,6 +139,7 @@ public class GoToTagCommand extends CommandBase {
             Optional<PhotonTrackedTarget> targetOpt = null;
             // if(targetFound == false) {
             targetOpt = photonRes.getTargets().stream()
+                    .filter(t -> t.getFiducialId() == tagToAlign)
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .5 && t.getPoseAmbiguity() != -1)
                     .findFirst();
             // }
@@ -211,7 +214,8 @@ public class GoToTagCommand extends CommandBase {
                     xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-            drivetrainSubsystem.setModuleStates(moduleStates);
+            SwerveDriveKinematics.desaturateWheelSpeeds(
+                    moduleStates, chassisSpeeds, tagToAlign, tagToAlign, tagToAlign);
         }
     }
 
