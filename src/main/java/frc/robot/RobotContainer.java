@@ -4,8 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,14 +27,9 @@ import frc.robot.commands.Auton.*;
 import frc.robot.commands.SwerveJoystickCmd;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 import org.photonvision.PhotonCamera;
-import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import java.util.Map;
-
-
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -89,7 +86,7 @@ public class RobotContainer {
 
     // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
     private final PoseEstimatorSubSystem poseEstimator =
-    new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
+            new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
     // private final ChaseTagCommand chaseTagCommand = new
     // ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
     //     private final AprTagCommand aprTagCommand =
@@ -183,25 +180,26 @@ public class RobotContainer {
         Shuffleboard.getTab("Autonomous").add(chooser);
 
         configureDashboard();
- 
     }
 
     private void configureDashboard() {
         /**** Driver tab ****/
-        var driverTab = Shuffleboard.getTab("Driver");      
-    
-        driverTab.add(new HttpCamera(VisionConstants.aprTagCameraName, "https://Photonvision.local:1181"))
-            .withWidget(BuiltInWidgets.kCameraStream)
-            .withProperties(Map.of("showCrosshair", true, "showControls", false, "rotation", "QUARTER_CCW"))
-            .withSize(4, 6).withPosition(0, 0);
-    
+        var driverTab = Shuffleboard.getTab("Driver");
+
+        driverTab
+                .add(new HttpCamera(VisionConstants.aprTagCameraName, "https://Photonvision.local:1181"))
+                .withWidget(BuiltInWidgets.kCameraStream)
+                .withProperties(Map.of("showCrosshair", true, "showControls", false, "rotation", "QUARTER_CCW"))
+                .withSize(4, 6)
+                .withPosition(0, 0);
+
         /**** Vision tab ****/
         final var visionTab = Shuffleboard.getTab("Vision");
-    
+
         // Pose estimation
         poseEstimator.addDashboardWidgets(visionTab);
     }
-    
+
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
      * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary

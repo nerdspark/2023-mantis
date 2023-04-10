@@ -59,7 +59,6 @@ public class PoseEstimatorSubSystem extends SubsystemBase {
         this.rotationSupplier = rotationSupplier;
         this.modulePositionSupplier = modulePositionSupplier;
 
-        
         poseEstimator = new SwerveDrivePoseEstimator(
                 DriveConstants.kDriveKinematics,
                 rotationSupplier.get(),
