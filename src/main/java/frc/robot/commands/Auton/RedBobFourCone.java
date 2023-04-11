@@ -16,7 +16,7 @@ public class RedBobFourCone extends SequentialCommandGroup {
         addCommands(
                 new InstantCommand(() -> RobotContainer.getGripperSubsystem().setLeftPosition(-10)),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("RedBobFourCone_1", 3, 2, true),
+                        new DriveFollowPath("RedBobFourCone_1", 3, 2.5, true),
                         new SequentialCommandGroup(
                                 new WaitCommand(0.25),
                                 new GroundPickupCommand(
@@ -46,7 +46,7 @@ public class RedBobFourCone extends SequentialCommandGroup {
                         MoveGripperCommand.GripperState.OPENED),
                 new WaitCommand(0.5),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("RedBobFourCone_2", 3, 2, false),
+                        new DriveFollowPath("RedBobFourCone_2", 3, 2.5, false),
                         new SequentialCommandGroup(
                                 new WaitCommand(1.0),
                                 new GroundPickupCommand(
@@ -73,10 +73,12 @@ public class RedBobFourCone extends SequentialCommandGroup {
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         MoveGripperCommand.GripperState.OPENED))),
-                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false, 24.0)),
-                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
+                new InstantCommand(
+                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
+                new InstantCommand(() ->
+                        RobotContainer.getGripperSubsystem().setSwap(false)),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("RedBobFourCone_3", 3, 2, false),
+                        new DriveFollowPath("RedBobFourCone_3", 3, 2.5, false),
                         new WaitCommand(0.5)
                                 .andThen(new BucketPickupCommand(
                                         RobotContainer.getElevatorSubsystem(),
