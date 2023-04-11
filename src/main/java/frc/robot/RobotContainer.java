@@ -163,7 +163,7 @@ public class RobotContainer {
         chooser.addOption("Red Side Charge", new RedSideCharge());
         chooser.addOption("Red Side Path", new RedSidePath());
         chooser.addOption("Blue Side Path", new BlueSidePath());
-        chooser.addOption("BlueBob", new BlueBobFourCone());
+//        chooser.addOption("BlueBob", new BlueBobFourCone());
         chooser.addOption("RedBob", new RedBobFourCone());
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         //
