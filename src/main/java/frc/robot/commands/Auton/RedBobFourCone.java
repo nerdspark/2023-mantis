@@ -38,10 +38,8 @@ public class RedBobFourCone extends SequentialCommandGroup {
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem()))),
-                new InstantCommand(
-                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
-                new InstantCommand(() ->
-                        RobotContainer.getGripperSubsystem().setSwap(false)),
+                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
+                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(),
                         RobotContainer.getArmSubsystem(),
@@ -75,10 +73,8 @@ public class RedBobFourCone extends SequentialCommandGroup {
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         MoveGripperCommand.GripperState.OPENED))),
-                new InstantCommand(
-                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false, 24.0)),
-                new InstantCommand(() ->
-                        RobotContainer.getGripperSubsystem().setSwap(false)),
+                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false, 24.0)),
+                new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedBobFourCone_3", 3, 2, false),
                         new WaitCommand(0.5)

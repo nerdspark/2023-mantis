@@ -1,30 +1,30 @@
-//package frc.robot.commands;
+// package frc.robot.commands;
 //
-//import edu.wpi.first.math.controller.ProfiledPIDController;
-//import edu.wpi.first.math.geometry.Pose2d;
-//import edu.wpi.first.math.geometry.Pose3d;
-//import edu.wpi.first.math.geometry.Rotation2d;
-//import edu.wpi.first.math.geometry.Rotation3d;
-//import edu.wpi.first.math.geometry.Transform2d;
-//import edu.wpi.first.math.geometry.Translation2d;
-//import edu.wpi.first.math.kinematics.ChassisSpeeds;
-//import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.trajectory.TrapezoidProfile;
-//import edu.wpi.first.wpilibj.DriverStation;
-//import edu.wpi.first.wpilibj.DriverStation.Alliance;
-//import edu.wpi.first.wpilibj2.command.CommandBase;
-//import frc.robot.Constants;
-//import frc.robot.Constants.DriveConstants;
-//import frc.robot.Constants.OffsetFromTargetAprTag;
-//import frc.robot.Constants.VisionConstants;
-//import frc.robot.RobotContainer;
-//import frc.robot.subsystems.SwerveSubsystem;
-//import java.util.Optional;
-//import java.util.function.Supplier;
-//import org.photonvision.PhotonCamera;
-//import org.photonvision.targeting.PhotonTrackedTarget;
+// import edu.wpi.first.math.controller.ProfiledPIDController;
+// import edu.wpi.first.math.geometry.Pose2d;
+// import edu.wpi.first.math.geometry.Pose3d;
+// import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.math.geometry.Rotation3d;
+// import edu.wpi.first.math.geometry.Transform2d;
+// import edu.wpi.first.math.geometry.Translation2d;
+// import edu.wpi.first.math.kinematics.ChassisSpeeds;
+// import edu.wpi.first.math.kinematics.SwerveModuleState;
+// import edu.wpi.first.math.trajectory.TrapezoidProfile;
+// import edu.wpi.first.wpilibj.DriverStation;
+// import edu.wpi.first.wpilibj.DriverStation.Alliance;
+// import edu.wpi.first.wpilibj2.command.CommandBase;
+// import frc.robot.Constants;
+// import frc.robot.Constants.DriveConstants;
+// import frc.robot.Constants.OffsetFromTargetAprTag;
+// import frc.robot.Constants.VisionConstants;
+// import frc.robot.RobotContainer;
+// import frc.robot.subsystems.SwerveSubsystem;
+// import java.util.Optional;
+// import java.util.function.Supplier;
+// import org.photonvision.PhotonCamera;
+// import org.photonvision.targeting.PhotonTrackedTarget;
 //
-//public class GoToPickupTag extends CommandBase {
+// public class GoToPickupTag extends CommandBase {
 //
 //    private static final TrapezoidProfile.Constraints X_CONSTRAINTS =
 //            new TrapezoidProfile.Constraints(VisionConstants.MAX_VELOCITY, VisionConstants.MAX_ACCELARATION);
@@ -50,9 +50,11 @@
 //    private final Supplier<Pose2d> poseProvider;
 //
 //    private final ProfiledPIDController xController = new ProfiledPIDController(
-//            VisionConstants.kPXController, VisionConstants.kIXController, VisionConstants.kIXController, X_CONSTRAINTS);
+//            VisionConstants.kPXController, VisionConstants.kIXController, VisionConstants.kIXController,
+// X_CONSTRAINTS);
 //    private final ProfiledPIDController yController = new ProfiledPIDController(
-//            VisionConstants.kPYController, VisionConstants.kIYController, VisionConstants.kDYController, Y_CONSTRAINTS);
+//            VisionConstants.kPYController, VisionConstants.kIYController, VisionConstants.kDYController,
+// Y_CONSTRAINTS);
 //    private final ProfiledPIDController omegaController = new ProfiledPIDController(
 //            VisionConstants.kPThetaController,
 //            VisionConstants.kIThetaController,
@@ -160,7 +162,8 @@
 //                        // Transform the robot's pose to find the camera's pose
 //                        if (DriverStation.getAlliance() == Alliance.Red) {
 //                            cameraPose =
-//                                    robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
+//
+// robotPose.transformBy(Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT.inverse());
 //                        } else {
 //                            cameraPose = robotPose.transformBy(
 //                                    Constants.VisionConstants.APRILTAG_CAMERA_TO_ROBOT_BACK.inverse());
@@ -268,4 +271,4 @@
 //                && (Math.abs(poseDifference.getY()) <= VisionConstants.TRANSLATION_TOLERANCE)
 //                && (Math.abs(poseDifference.getRotation().getDegrees()) <= VisionConstants.ROTATION_TOLERANCE);
 //    }
-//}
+// }
