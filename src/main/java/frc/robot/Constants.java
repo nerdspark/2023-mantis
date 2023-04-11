@@ -334,10 +334,14 @@ public final class Constants {
         // from center.
         public static final String aprTagCameraName = "OV5647";
         public static final String aprTagCameraBackName = "OV5649";
-        public static final String coneCameraName = "USB_Web_Camera";
+
+        public static final double GRID_APR_TAG_HEIGHT = Units.inchesToMeters(18.22);
+        public static final double PICKUP_APR_TAG_HEIGHT = Units.inchesToMeters(27.38);
+
+        public static final double CAMERA_HEIGHT_METERS = 0.168;
 
         // For color pipelines
-        public static final double CAMERA_HEIGHT_METERS = 0.168;
+
         public static final double CONE_HEIGHT_METERS = 0.32;
         public static final double CAMERA_PITCH_RADIANS = 0;
 
