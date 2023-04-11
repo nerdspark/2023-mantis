@@ -10,20 +10,33 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TimeOfFlightSubsystem extends SubsystemBase {
     TimeOfFlight timeOfFlight;
-    //    MedianFilter filter = new MedianFilter(5);
+
+    private double[] lastValues = new double[10];
 
     public TimeOfFlightSubsystem() {
         this.timeOfFlight = new TimeOfFlight(15);
-        timeOfFlight.setRangingMode(RangingMode.Short, 24);
+        timeOfFlight.setRangingMode(RangingMode.Long, 24);
     }
 
     @Override
     public void periodic() {
-        //        SmartDashboard.putNumber("TOF Reading with mean", filter.calculate(timeOfFlight.getRange()));
-        //        SmartDashboard.putNumber("TOF Reading without mean", timeOfFlight.getRange());
+        double range = timeOfFlight.getRange();
+        for (int i = 0; i < lastValues.length - 1; i++) {
+            lastValues[i] = lastValues[i + 1];
+        }
+        lastValues[lastValues.length - 1] = range;
     }
 
     public double getRange() {
         return timeOfFlight.getRange();
+    }
+
+    public boolean lastValuesWithinBounds(double lowerBound, double upperBound) {
+        for (double value : lastValues) {
+            if (value < lowerBound || value > upperBound) {
+                return false;
+            }
+        }
+        return true;
     }
 }

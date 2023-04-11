@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -47,6 +49,9 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         SmartDashboard.putNumber("Timer", Timer.getMatchTime());
+        if (!DriverStation.isFMSAttached()) {
+            PathPlannerServer.startServer(6969);
+        }
     }
 
     /** This function is called once each time the robot enters Disabled mode. */
