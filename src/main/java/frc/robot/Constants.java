@@ -295,11 +295,11 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3.65;
+        public static final double driverEPower = 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
-        public static final double driverBaseSpeed = 0.0;
+        public static final double driverBaseSpeed = 0.05;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
