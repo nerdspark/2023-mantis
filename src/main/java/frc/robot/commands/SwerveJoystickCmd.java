@@ -94,8 +94,8 @@ public class SwerveJoystickCmd extends CommandBase {
                         * xSpdFunction.get()); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
         double driveSpeed = ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
-                                * Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
-                        + OIConstants.driverBaseSpeed)
+                                * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
+                        + OIConstants.driverBaseSpeed))
                 * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
         // double xSpeed =
