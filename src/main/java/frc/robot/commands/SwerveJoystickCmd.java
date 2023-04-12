@@ -72,7 +72,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // zeroHeading();
         swerveSubsystem.enableBrakeMode(true);
         //        targetAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
-        targetAngle = -(swerveSubsystem.getHeading() + 180) * Math.PI / 180;
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;
         //        }
@@ -88,8 +88,10 @@ public class SwerveJoystickCmd extends CommandBase {
         // DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
-        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
-        joystickMagnitude = (ySpdFunction.get()*ySpdFunction.get())+(xSpdFunction.get()*xSpdFunction.get());//Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
+        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get()) + Math.PI;
+        joystickMagnitude = (ySpdFunction.get() * ySpdFunction.get())
+                + (xSpdFunction.get()
+                        * xSpdFunction.get()); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
                 * Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
@@ -105,7 +107,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // (xSpdFunction.get()*xSpdFunction.get()))) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
-        double currentAngle = -(swerveSubsystem.getHeading() + 180) * Math.PI / 180;
+        double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
         double turningSpeed = 0;
 
         boolean isArmOut =
@@ -214,8 +216,8 @@ public class SwerveJoystickCmd extends CommandBase {
         // OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
-        turningSpeed = turningLimiter.calculate(turningSpeed) *
-                DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        turningSpeed =
+                turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
             // SmartDashboard.putString("targetTurnGain", "fastGain");
             turningSpeed = turningSpeed * 0.5;
@@ -256,7 +258,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
-        targetAngle = -(swerveSubsystem.getHeading() + 180) * Math.PI / 180;
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
 
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;
