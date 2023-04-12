@@ -156,7 +156,7 @@ public final class Constants {
         public static final double kPTargetTurning = -2.4d;
         public static final double kITargetTurning = 0d;
         public static final double kDTargetTurning = -0d;
-        public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
+        public static final double kTargetTurningDeadband = 05 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
         public static final double kPTurningMotor = 0.1d;
@@ -288,18 +288,18 @@ public final class Constants {
 
         public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.2;
+        public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 2.4;
+        public static final double driverEPower = 2;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
-        public static final double driverBaseSpeed = 0.05;
+        public static final double driverBaseSpeed = 0.15;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;

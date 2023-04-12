@@ -149,7 +149,7 @@ public class SwerveJoystickCmd extends CommandBase {
             // SmartDashboard.putString("PID turning?", "yes");
         }
 
-        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get()) {
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) && joystickMagnitude < 0.1) || cancelTurn.get()) {
             turningSpeed = 0;
             // SmartDashboard.putString("PID turning?", "deadband");
         }
