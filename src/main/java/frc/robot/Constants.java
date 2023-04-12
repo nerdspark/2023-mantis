@@ -288,18 +288,18 @@ public final class Constants {
 
         public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.5;
+        public static final double driverMultiplier = 0.2;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 2;
+        public static final double driverEPower = 2.3;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
-        public static final double driverBaseSpeed = 0.15;
+        public static final double driverBaseSpeed = 0.08;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
