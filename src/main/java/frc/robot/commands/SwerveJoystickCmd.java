@@ -72,7 +72,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // zeroHeading();
         swerveSubsystem.enableBrakeMode(true);
         //        targetAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
-        targetAngle = Math.PI;
+        targetAngle = -(swerveSubsystem.getHeading() + 180) * Math.PI / 180;
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;
         //        }
@@ -256,7 +256,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
-        targetAngle = Math.PI;
+        targetAngle = -(swerveSubsystem.getHeading() + 180) * Math.PI / 180;
 
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;
