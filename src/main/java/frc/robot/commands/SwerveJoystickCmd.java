@@ -88,7 +88,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
-        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get()) + Math.PI;
+        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
         joystickMagnitude = (ySpdFunction.get() * ySpdFunction.get())
                 + (xSpdFunction.get()
                         * xSpdFunction.get()); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
