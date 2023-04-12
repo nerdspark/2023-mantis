@@ -142,14 +142,14 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond * 0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3;
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
@@ -295,7 +295,7 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3;
+        public static final double driverEPower = 2.3;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
@@ -318,7 +318,7 @@ public final class Constants {
         public static final int kDriverCancelTurn = 7; // back button
         public static final int kDriverTopSpeed = 5; // left bumper
 
-        public static final double targetTurnGainScheduleSpeed = 2;
+        public static final double targetTurnGainScheduleSpeed = 0.9;
 
         public static final double joystickTurningGain = -3;
     }

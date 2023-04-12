@@ -89,7 +89,7 @@ public class SwerveJoystickCmd extends CommandBase {
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
         driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get()) + Math.PI;
-        joystickMagnitude = Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
+        joystickMagnitude = (ySpdFunction.get()*ySpdFunction.get())+(xSpdFunction.get()*xSpdFunction.get())//Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
         double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
                 * Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
@@ -214,11 +214,11 @@ public class SwerveJoystickCmd extends CommandBase {
         // OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
-        turningSpeed *= // = turningLimiter.calculate(turningSpeed) *
+        turningSpeed = turningLimiter.calculate(turningSpeed) *
                 DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        if ((xSpeed * xSpeed) + (ySpeed * ySpeed) > OIConstants.targetTurnGainScheduleSpeed) {
+        if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
             // SmartDashboard.putString("targetTurnGain", "fastGain");
-            turningSpeed = turningSpeed * 1;
+            turningSpeed = turningSpeed * 0.5;
         } else {
             // SmartDashboard.putString("targetTurnGain", "slowGain");
         }
