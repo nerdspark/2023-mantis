@@ -42,6 +42,6 @@ public class MoveWristCommand extends CommandBase {
                 + Math.abs(position - targetPosition));
 
         // todo: don't math.abs everything
-        return Math.abs(Math.abs(position) - Math.abs(targetPosition)) < 2;
+        return true;
     }
 }

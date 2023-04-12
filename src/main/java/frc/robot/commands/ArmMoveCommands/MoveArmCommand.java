@@ -49,7 +49,7 @@ public class MoveArmCommand extends CommandBase {
         //                + " Difference: "
         //                + Math.abs(positions[0] - targetPosition));
 
-        return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 5
-                && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 5);
+        return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 7
+                && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 7);
     }
 }
