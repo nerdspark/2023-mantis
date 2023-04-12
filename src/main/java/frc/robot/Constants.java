@@ -283,7 +283,7 @@ public final class Constants {
         public static final int kDriverFieldOrientedButtonIdx = 2;
 
         public static final double kDeadbandSteer = 0.07d;
-        public static final double kDeadbandDrive = 0.02d;
+        public static final double kDeadbandDrive = 0.03d;
         public static final double kDeadbandSpeed = 0.01d;
 
         public static final double joystickMagnitudeChange = 0.001d;
@@ -295,7 +295,7 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 2.3;
+        public static final double driverEPower = 1.5;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
