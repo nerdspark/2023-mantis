@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TimeOfFlightSubsystem extends SubsystemBase {
@@ -25,6 +26,8 @@ public class TimeOfFlightSubsystem extends SubsystemBase {
             lastValues[i] = lastValues[i + 1];
         }
         lastValues[lastValues.length - 1] = range;
+        SmartDashboard.putNumber("Time of Flight", range);
+        SmartDashboard.putBoolean("Time of Flight within bounds", lastValuesWithinBounds(10, 650));
     }
 
     public double getRange() {

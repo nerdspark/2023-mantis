@@ -127,7 +127,7 @@ public class RobotContainer {
 
         // Close the gripper the first time the item is detected
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)
-                        && (timeOfFlightSubsystem.lastValuesWithinBounds(10, 650)))
+                        && (timeOfFlightSubsystem.lastValuesWithinBounds(10, 400)) && timeOfFlightSubsystem.getRange() < 180)
                 .whileTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
 
         // Configure the button bindings
