@@ -94,8 +94,8 @@ public class SwerveJoystickCmd extends CommandBase {
                         * xSpdFunction.get()); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
         double driveSpeed = ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
-                                * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
-                        + OIConstants.driverBaseSpeed))
+                        * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
+                                + OIConstants.driverBaseSpeed))
                 * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
         // double xSpeed =
@@ -149,7 +149,8 @@ public class SwerveJoystickCmd extends CommandBase {
             // SmartDashboard.putString("PID turning?", "yes");
         }
 
-        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) && joystickMagnitude < 0.1) || cancelTurn.get()) {
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) && joystickMagnitude < 0.1)
+                || cancelTurn.get()) {
             turningSpeed = 0;
             // SmartDashboard.putString("PID turning?", "deadband");
         }
@@ -217,11 +218,10 @@ public class SwerveJoystickCmd extends CommandBase {
         // OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
-        turningSpeed =
-                turningLimiter.calculate(turningSpeed) * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        turningSpeed = turningSpeed * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
             // SmartDashboard.putString("targetTurnGain", "fastGain");
-            turningSpeed = turningSpeed * 0.5;
+            turningSpeed = turningSpeed * 0.75;
         } else {
             // SmartDashboard.putString("targetTurnGain", "slowGain");
         }

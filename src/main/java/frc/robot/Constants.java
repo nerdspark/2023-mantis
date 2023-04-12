@@ -142,7 +142,7 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.7;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1;
@@ -156,7 +156,7 @@ public final class Constants {
         public static final double kPTargetTurning = -2.4d;
         public static final double kITargetTurning = 0d;
         public static final double kDTargetTurning = -0d;
-        public static final double kTargetTurningDeadband = 05 * Math.PI / 180;
+        public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
         public static final double kPTurningMotor = 0.1d;
@@ -321,7 +321,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -3;
+        public static final double joystickTurningGain = -10;
     }
 
     public static class VisionConstants {

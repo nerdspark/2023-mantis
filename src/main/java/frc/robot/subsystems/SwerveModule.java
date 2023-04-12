@@ -175,7 +175,7 @@ public class SwerveModule {
         // turningMotor.selectProfileSlot(0, 0);
         // driveMotor.configClosedloopRamp(DriveConstants.kRampRateDriveMotor);
         // turningMotor.configClosedloopRamp(DriveConstants.kRampRateTurningMotor);
-
+        turningMotor.setNeutralMode(NeutralMode.Brake);
     }
 
     public SwerveModuleState getState() {
@@ -238,9 +238,13 @@ public class SwerveModule {
                             * (backward ? -1 : 1)
                             / DriveConstants.kFalconMaxSetSpeed);
         }
-        turningMotor.set(
-                TalonFXControlMode.Position,
-                target / ModuleConstants.kTurnTicks2Radians); // turningPidController.calculate(getTurningPosition(),
+        if (Math.abs(target - current) > 1 * Math.PI / 180) {
+            turningMotor.set(
+                    TalonFXControlMode.Position,
+                    target
+                            / ModuleConstants
+                                    .kTurnTicks2Radians); // turningPidController.calculate(getTurningPosition(),
+        } else turningMotor.set(TalonFXControlMode.PercentOutput, 0);
         // state.angle.getRadians()));
         // SmartDashboard.putString("Swerve[" + CANCoder.getDeviceID() + "] state", state.toString());
     }
