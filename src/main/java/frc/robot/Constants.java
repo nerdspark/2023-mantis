@@ -214,7 +214,7 @@ public final class Constants {
         public static final int WristMotorID = 10; // motion profiling
 
         public static final ArmPositionData bucketPickupPosition =
-                new ArmPositionData(0.0, 0.0, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
         public static final ArmPositionData groundPickupPosition =
                 new ArmPositionData(13.0, 150.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
         public static final ArmPositionData shelfPickupPosition =
@@ -228,7 +228,7 @@ public final class Constants {
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
-                new ArmPositionData(0.0, 0.0, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
 
         public record ArmPositionData(
                 double wristCmdPos,
