@@ -199,7 +199,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
         if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
             targetAngle = currentAngle;
-            turningSpeed = -turningTargX.get() * Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
+            turningSpeed = -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
             // SmartDashboard.putString("PID turning?", "joystickturning");
         }
 
