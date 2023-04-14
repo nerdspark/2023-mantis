@@ -12,9 +12,6 @@ import frc.robot.Constants.VisionConstants;
 
 public class LimeLightSubSystem extends SubsystemBase {
 
-    private static double fovX = 54.0;
-    private static double fovY = 41.0;
-
     public NetworkTable defaultTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LIMELIGHT_NAME);
     public NetworkTableEntry tx = defaultTable.getEntry("tx");
     public NetworkTableEntry ty = defaultTable.getEntry("ty");
