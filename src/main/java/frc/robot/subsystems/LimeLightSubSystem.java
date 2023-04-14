@@ -1,157 +1,87 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.Constants.VisionConstants;
 
 public class LimeLightSubSystem extends SubsystemBase {
 
-    private NetworkTable limelightNetworkTable;
-    private double currentTimestamp;
-    private double lastAllianceUpdate;
-    private Alliance currentAlliance;
-    private String limelightHostname;
+    private static double fovX = 54.0;
+    private static double fovY = 41.0;
 
-    private double activePipelineId;
-    private boolean enabled = false;
-    private boolean driverMode;
+    public NetworkTable defaultTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LIMELIGHT_NAME);
+    public NetworkTableEntry tx = defaultTable.getEntry("tx");
+    public NetworkTableEntry ty = defaultTable.getEntry("ty");
+    public NetworkTableEntry tv = defaultTable.getEntry("tv");
+    public NetworkTableEntry tp = defaultTable.getEntry("pipeline");
+    public NetworkTableEntry ledMode = defaultTable.getEntry("ledMode");
 
-    public LimeLightSubSystem(String hostname) {
-        limelightHostname = hostname;
-        limelightNetworkTable = NetworkTableInstance.getDefault().getTable(limelightHostname);
-        currentTimestamp = 0.0;
-        lastAllianceUpdate = Double.NEGATIVE_INFINITY;
-        currentAlliance = Alliance.Invalid;
-    }
+    public double p;
+    public double x;
+    public double y;
+    public double v;
+    public double led;
 
-    public double getValidTargetUpdateTimestamp() {
-        return limelightNetworkTable.getEntry("tv").getLastChange();
-    }
+    /** Creates a new Limelight. */
+    public LimeLightSubSystem() {
 
-    public boolean hasLimelightUpdatedRecently() {
-        return getValidTargetUpdateTimestamp() / 1000000 > currentTimestamp - 1.0;
-    }
-
-    public Alliance getCurrentAlliance() {
-        return currentAlliance;
-    }
-
-    /**
-     * Update the limelight pose relative to the center of the drive base on the floor.
-     * @param metersForwardOfCenter meters forward or backward of the centerline (where the cross member bar is). Forward is positive.
-     * @param metersLeftOrRight meters left or right of the middle of the robot (the centerline between the left and right wheel sets). Right is positive.
-     * @param metersUpOrDown meters up or down. Negative means the limelight has clipped into the floor, so don't use negative values for this.
-     * @param yaw rotation of the limelight relative to forwards on the robot being 0. In Degrees.
-     * @param pitch whether the limelight is angled up or down. In Degrees.
-     * @param roll limelight skew. Let's try to mount the limelight so this is always 0. In Degrees.
-     */
-    public void updateLimelightPose(
-            double metersForwardOfCenter,
-            double metersLeftOrRight,
-            double metersUpOrDown,
-            double yaw,
-            double pitch,
-            double roll) {
-        LimelightHelpers.setCameraPose_RobotSpace(
-                limelightHostname, metersForwardOfCenter, metersLeftOrRight, metersUpOrDown, yaw, pitch, roll);
-    }
-
-    public double getAprilTagId() {
-        return LimelightHelpers.getFiducialID(limelightHostname);
-    }
-
-    public double getTargetTx() { // Yaw
-        return LimelightHelpers.getTX(limelightHostname);
-    }
-
-    public double getTargetTy() { // Pitch?
-        return LimelightHelpers.getTY(limelightHostname);
-    }
-
-    public double getTargetTa() { // Area percentage
-        return LimelightHelpers.getTA(limelightHostname);
-    }
-
-    /**
-     * Get robot pose based on apriltags
-     * @return
-     */
-    public Pose2d getBotPose() {
-        switch (currentAlliance) {
-            case Blue:
-                return LimelightHelpers.getBotPose2d_wpiBlue(limelightHostname);
-            case Red:
-                return LimelightHelpers.getBotPose2d_wpiRed(limelightHostname);
-            default:
-            case Invalid:
-                DriverStation.reportError("VisionSubystem.java: Could not get bot pose. Invalid Alliance.", true);
-                return null;
-        }
+        setPipeline(0);
     }
 
     @Override
     public void periodic() {
-        outputToSmartDashboard();
-        currentTimestamp = Timer.getFPGATimestamp();
-        // Check alliance every 5 seconds, hopesfully this will update in disabled. If not it's on the dashboard so we
-        // can thumbs-down.
-        if (lastAllianceUpdate + 2.5 < currentTimestamp) {
-            currentAlliance = DriverStation.getAlliance();
-            lastAllianceUpdate = currentTimestamp;
-        }
 
-        // Flush NetworkTable to send LED mode and pipeline updates immediately
-        var shouldFlush = (limelightNetworkTable.getEntry("ledMode").getDouble(0.0) != (enabled ? 0.0 : 1.0)
-                || limelightNetworkTable.getEntry("pipeline").getDouble(0.0) != activePipelineId);
-
-        limelightNetworkTable.getEntry("ledMode").setDouble(enabled ? 0.0 : 1.0);
-        limelightNetworkTable.getEntry("camMode").setDouble(driverMode ? 1.0 : 0.0);
-        limelightNetworkTable.getEntry("pipeline").setDouble(activePipelineId);
-
-        if (shouldFlush) {
-            NetworkTableInstance.getDefault().flush();
-        }
+        p = tp.getDouble(-1.0);
+        x = tx.getDouble(0.0);
+        y = ty.getDouble(0.0);
+        v = tv.getDouble(-1.0);
+        led = ledMode.getDouble(-1.0);
+        // This method will be called once per scheduler run
     }
 
-    public boolean hasAprilTagTarget() {
-        return LimelightHelpers.getFiducialID(limelightHostname) != -1 && LimelightHelpers.getTV(limelightHostname);
+    public void setPipeline(int pipelineId) {
+        defaultTable.getEntry("pipeline").setInteger(pipelineId);
+        p = pipelineId;
     }
 
-    public LimelightResults getLimeLightResults() {
-
-        return LimelightHelpers.getLatestResults(limelightHostname);
+    public double getPipeline() {
+        p = tp.getDouble(-1.0);
+        return p;
     }
 
-    public void outputToSmartDashboard() {
-
-        SmartDashboard.putBoolean("Limelight Connection", hasLimelightUpdatedRecently());
-        SmartDashboard.putString("Vision Subsystem current Alliance", currentAlliance.name());
+    public double getX() {
+        x = tx.getDouble(0.0);
+        return x;
     }
 
-    public double getLastTimeStampForPose() {
-        return this.currentTimestamp
-                - (LimelightHelpers.getLatency_Pipeline(limelightHostname) / 1000)
-                - (LimelightHelpers.getLatency_Capture(limelightHostname) / 1000);
+    public double getY() {
+        y = ty.getDouble(0.0);
+        return y;
     }
 
-    public Pose3d getTargetPose3d_RobotSpace() {
-        return LimelightHelpers.getTargetPose3d_RobotSpace(limelightHostname);
+    public double getV() {
+        v = tv.getDouble(0.0);
+        return v;
     }
 
-    public Pose3d getRobotPose3d_TargetSpace() {
-        return LimelightHelpers.getBotPose3d_TargetSpace(limelightHostname);
+    public void setLedMode(int mode) {
+        this.ledMode.setNumber(mode);
+        // this.c_ledMode.setNumber(mode);
     }
 
-    public void setPipelineId(int pipelineId) {
-        activePipelineId = pipelineId;
-        LimelightHelpers.setPipelineIndex(limelightHostname, pipelineId);
+    public double getDistanceToTarget(int target) {
+        double goalHeightInches = VisionConstants.HIGH_CONE_TARGET_HEIGHT;
+
+        double angleToGoalDegrees = VisionConstants.LIMELIGHT_PITCH + getY();
+
+        double angleToGoalRadians = angleToGoalDegrees * (Math.PI / 180.0);
+
+        return (goalHeightInches - VisionConstants.LIMELIGHT_METERS_UP) / Math.tan(angleToGoalRadians);
     }
 }
