@@ -50,7 +50,7 @@ public class BlueBobFourCone extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-                                new WaitCommand(1.7),
+                                new WaitCommand(2.2),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
@@ -60,7 +60,7 @@ public class BlueBobFourCone extends SequentialCommandGroup {
                                         () -> RobotContainer.getWristSubsystem().setPositionOverride(true, 24.0)),
                                 new InstantCommand(
                                         () -> RobotContainer.getArmSubsystem().setPosition(130)),
-                                new WaitCommand(2.7),
+                                new WaitCommand(2.8),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),
@@ -68,7 +68,7 @@ public class BlueBobFourCone extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
                 new ParallelCommandGroup(
                         new DriveFollowPath("BlueBobFourCone_3", 3, 2.5, false),
-                        new WaitCommand(0.5)
+                        new WaitCommand(0.2)
                                 .andThen(new BucketPickupCommand(
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem(),
