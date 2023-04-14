@@ -142,14 +142,14 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond * 0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
@@ -214,7 +214,7 @@ public final class Constants {
         public static final int WristMotorID = 10; // motion profiling
 
         public static final ArmPositionData bucketPickupPosition =
-                new ArmPositionData(0.0, 0.0, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
         public static final ArmPositionData groundPickupPosition =
                 new ArmPositionData(13.0, 150.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
         public static final ArmPositionData shelfPickupPosition =
@@ -222,13 +222,13 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-4.0, 85.0, 18.9, 0.1, 3.0, 3.0, -15.0, 3.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(-4.0, 89.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
-                new ArmPositionData(0.0, 0.0, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
 
         public record ArmPositionData(
                 double wristCmdPos,
@@ -288,17 +288,18 @@ public final class Constants {
 
         public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.4;
+        public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3;
+        public static final double driverEPower = 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
+        public static final double driverBaseSpeed = 0.04;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
@@ -318,9 +319,9 @@ public final class Constants {
         public static final int kDriverCancelTurn = 7; // back button
         public static final int kDriverTopSpeed = 5; // left bumper
 
-        public static final double targetTurnGainScheduleSpeed = 2;
+        public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -3;
+        public static final double joystickTurningGain = -10;
     }
 
     public static class VisionConstants {

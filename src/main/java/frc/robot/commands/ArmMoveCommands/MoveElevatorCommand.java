@@ -38,6 +38,6 @@ public class MoveElevatorCommand extends CommandBase {
         //                + " Difference: " + Math.abs(position - targetPosition));
 
         // todo: don't math.abs everything
-        return (Math.abs(Math.abs(position) - Math.abs(targetPosition)) < 4);
+        return (Math.abs(Math.abs(position) - Math.abs(targetPosition)) < 7);
     }
 }
