@@ -349,6 +349,18 @@ public final class Constants {
         public static final int CUBE_PIPELINE_INDEX = 0;
         public static final int CONE_PIPELINE_INDEX = 1;
 
+        // Limelight settings
+
+        public static final double HIGH_CONE_TARGET_HEIGHT = Units.inchesToMeters(44);
+
+        public static final String LIMELIGHT_NAME = "limelight-9312";
+        public static final double LIMELIGHT_METERS_FORWARD_OF_CENTER = Units.inchesToMeters(14);
+        public static final double LIMELIGHT_METERS_SIDEWAYS = Units.inchesToMeters(0);
+        public static final double LIMELIGHT_METERS_UP = Units.inchesToMeters(10);
+        public static final double LIMELIGHT_YAW = Units.inchesToMeters(0);
+        public static final double LIMELIGHT_PITCH = Units.inchesToMeters(20);
+        public static final double LIMELIGHT_ROLL = Units.inchesToMeters(0);
+
         /**
          * Physical location of the camera on the robot, relative to the center of the robot.
          */

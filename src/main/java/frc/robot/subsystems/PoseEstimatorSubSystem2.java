@@ -65,8 +65,8 @@ public class PoseEstimatorSubSystem2 extends SubsystemBase {
         // Update pose estimator with drivetrain sensors
         poseEstimator.update(drivetrainSubsystem.getRotation2d(), drivetrainSubsystem.getModulePositions());
 
-        var visionPose = limeLightSubSystem.getBotPose();
-        poseEstimator.addVisionMeasurement(visionPose, limeLightSubSystem.getLastTimeStampForPose());
+        // var visionPose = limeLightSubSystem.getBotPose();
+        // poseEstimator.addVisionMeasurement(visionPose, limeLightSubSystem.getLastTimeStampForPose());
 
         Pose2d dashboardPose = getCurrentPose();
         if (originPosition == OriginPosition.kRedAllianceWallRightSide) {
