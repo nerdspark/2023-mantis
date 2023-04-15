@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
@@ -31,7 +30,6 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.LimeLightSubSystem;
-import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TimeOfFlightSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -112,7 +110,8 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-                swerveSubsystem, limeLightSubsystem,
+                swerveSubsystem,
+                limeLightSubsystem,
                 () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
                 () -> -driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),
@@ -138,7 +137,8 @@ public class RobotContainer {
 
         // Close the gripper the first time the item is detected
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)
-                        && (timeOfFlightSubsystem.lastValuesWithinBounds(10, 400)) && timeOfFlightSubsystem.getRange() < 180)
+                        && (timeOfFlightSubsystem.lastValuesWithinBounds(10, 400))
+                        && timeOfFlightSubsystem.getRange() < 180)
                 .whileTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
 
         // Configure the button bindings

@@ -1,15 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
@@ -30,7 +28,8 @@ public class SwerveJoystickCmd extends CommandBase {
     private final SlewRateLimiter speedLimiter, turningLimiter;
     private final PIDController targetTurnController = new PIDController(
             DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
-    private final PIDController LimeLightController = new PIDController(LimeLightConstants.kP, LimeLightConstants.kI, LimeLightConstants.kD);
+    private final PIDController LimeLightController =
+            new PIDController(LimeLightConstants.kP, LimeLightConstants.kI, LimeLightConstants.kD);
     private final SlewRateLimiter LimeLightLimiter = new SlewRateLimiter(LimeLightConstants.maxAccel);
     private double targetAngle;
     private double driveAngle = 0;
@@ -191,12 +190,21 @@ public class SwerveJoystickCmd extends CommandBase {
         } else {
             // SmartDashboard.putString("joymagnitude deadband?", "off");
         }
-        double xSpeed;
-        if (topSpeed.get()) {
-            xSpeed = LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0));
-        } else {xSpeed = (Math.cos(driveAngle) * driveSpeed);}
-        
-        double ySpeed = (Math.sin(driveAngle) * driveSpeed);
+        double ySpeed;
+        if (!topSpeed.get() && limeLightSubSystem.getX() != 0) {
+            ySpeed = LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0));
+            SmartDashboard.putString("limelightalign", "on");
+            SmartDashboard.putNumber("limeLightSubSystem.getX()", limeLightSubSystem.getX());
+            SmartDashboard.putNumber("ySpeed", ySpeed);
+        } else {
+            ySpeed = (Math.sin(driveAngle) * driveSpeed);
+            SmartDashboard.putString("limelightalign", "off");
+            SmartDashboard.putNumber("limeLightSubSystem.getX()", limeLightSubSystem.getX());
+            SmartDashboard.putNumber("ySpeed", ySpeed);
+            LimeLightLimiter.reset(ySpeed);
+        }
+
+        double xSpeed = (Math.cos(driveAngle) * driveSpeed);
         // if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer ||
         // (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
         //     targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
@@ -212,7 +220,8 @@ public class SwerveJoystickCmd extends CommandBase {
 
         if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
             targetAngle = currentAngle;
-            turningSpeed = -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
+            turningSpeed =
+                    -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
             // SmartDashboard.putString("PID turning?", "joystickturning");
         }
 

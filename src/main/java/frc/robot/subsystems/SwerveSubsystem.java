@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -10,6 +14,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -294,5 +301,42 @@ public class SwerveSubsystem extends SubsystemBase {
         double[] xyz = new double[3];
         gyro.getRawGyro(xyz);
         return xyz;
+    }
+
+    public Command followTrajectoryCommand(String trajName, double maxVel, double maxAccel, boolean isFirstPath) {
+        PathPlannerTrajectory traj = PathPlanner.loadPath(trajName, maxVel, maxAccel);
+        return followTrajectoryCommand(traj, isFirstPath, false);
+    }
+
+    public Command followTrajectoryCommand(
+            PathPlannerTrajectory traj, boolean isFirstPath, boolean shouldMirrorAlliance) {
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    if (isFirstPath) {
+                        this.resetOdometry(traj.getInitialHolonomicPose());
+                    }
+                }),
+                new PPSwerveControllerCommand(
+                        traj,
+                        this::getPose,
+                        this.kinematics,
+                        // X PID controller
+                        new PIDController(
+                                Constants.AutoConstants.kPXController,
+                                Constants.AutoConstants.kIXController,
+                                Constants.AutoConstants.kDXController),
+                        // Y PID controller
+                        new PIDController(
+                                Constants.AutoConstants.kPYController,
+                                Constants.AutoConstants.kIYController,
+                                Constants.AutoConstants.kDYController),
+                        // Rotation PID controller
+                        new PIDController(
+                                Constants.AutoConstants.kPThetaController,
+                                Constants.AutoConstants.kIThetaController,
+                                Constants.AutoConstants.kDThetaController),
+                        this::setModuleStates,
+                        shouldMirrorAlliance,
+                        this));
     }
 }

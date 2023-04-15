@@ -33,13 +33,14 @@ public final class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
     }
+
     public static class LimeLightConstants {
-        public static final String hostname = "asdf";
-        public static final double kP = 1;
+        //        public static final String hostname = "asdf";
+        public static final double kP = -3;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double maxAccel = 1;
-        public static final double maxVel = 3;
+        public static final double maxAccel = 2;
+        //        public static final double maxVel = 3;
 
     }
 
@@ -154,7 +155,7 @@ public final class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 3.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1;
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 3;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond * 0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
@@ -362,7 +363,7 @@ public final class Constants {
 
         public static final double HIGH_CONE_TARGET_HEIGHT = Units.inchesToMeters(44);
 
-        public static final String LIMELIGHT_NAME = "limelight-9312";
+        public static final String LIMELIGHT_NAME = "limelight";
         public static final double LIMELIGHT_METERS_FORWARD_OF_CENTER = Units.inchesToMeters(14);
         public static final double LIMELIGHT_METERS_SIDEWAYS = Units.inchesToMeters(0);
         public static final double LIMELIGHT_METERS_UP = Units.inchesToMeters(10);

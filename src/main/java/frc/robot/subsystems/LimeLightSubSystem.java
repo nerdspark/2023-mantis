@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
@@ -39,6 +40,7 @@ public class LimeLightSubSystem extends SubsystemBase {
         y = ty.getDouble(0.0);
         v = tv.getDouble(-1.0);
         led = ledMode.getDouble(-1.0);
+        SmartDashboard.putNumber("tx", tx.getDouble(0.0));
         // This method will be called once per scheduler run
     }
 
