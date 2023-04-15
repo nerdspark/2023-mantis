@@ -193,7 +193,7 @@ public class SwerveJoystickCmd extends CommandBase {
         }
         double xSpeed;
         if (topSpeed.get()) {
-            xSpeed = LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getTargetTx(), 0));
+            xSpeed = LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0));
         } else {xSpeed = (Math.cos(driveAngle) * driveSpeed);}
         
         double ySpeed = (Math.sin(driveAngle) * driveSpeed);

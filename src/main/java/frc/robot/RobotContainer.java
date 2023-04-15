@@ -56,7 +56,7 @@ public class RobotContainer {
     private static final XboxController cont2 = new XboxController(Constants.controllerPort2);
 
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public static final LimeLightSubSystem limeLightSubsystem = new LimeLightSubSystem(LimeLightConstants.hostname);
+    public static final LimeLightSubSystem limeLightSubsystem = new LimeLightSubSystem();
 
     public static final ArmSubsystem armSubsystem = new ArmSubsystem();
     public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
