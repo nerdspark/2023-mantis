@@ -4,9 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -151,20 +151,20 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.2;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond * 0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
-        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 15;
+        public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
-        public static final double kPTargetTurning = -2.6d;
+        public static final double kPTargetTurning = -2.4d;
         public static final double kITargetTurning = 0d;
-        public static final double kDTargetTurning = -0.0d;
+        public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
@@ -223,24 +223,26 @@ public final class Constants {
         public static final int WristMotorID = 10; // motion profiling
 
         public static final ArmPositionData bucketPickupPosition =
-                new ArmPositionData(0.0, 0.0, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
         public static final ArmPositionData groundPickupPosition =
-                new ArmPositionData(13.0, 135.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
+                new ArmPositionData(13.0, 150.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
         public static final ArmPositionData shelfPickupPosition =
                 new ArmPositionData(0.0, 85.0, 0.0, 0.1, 3.0, 3.0, -7.0, -7.0, 5500.0, 9000.0);
+        public static final ArmPositionData cubePickupPosition =
+                new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(0.0, 75.0, 18.9, 0.1, 3.0, 3.0, -15.0, 5.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(0.0, 80.0, 2.0, 0.1, 3.0, 3.0, -15.0, -7.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
-                new ArmPositionData(0.0, 0.0, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0.5, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
 
         public record ArmPositionData(
                 double wristCmdPos,
                 double armCmdPos,
-                double inclinatorCmdPos,
+                double elevatorCmdPos,
                 double bucketCmdPos,
                 double leftGripperCloseCmdPos,
                 double rightGripperCloseCmdPos,
@@ -289,23 +291,24 @@ public final class Constants {
         public static final int kDriverRotYAxis = 1;
         public static final int kDriverFieldOrientedButtonIdx = 2;
 
-        public static final double kDeadbandSteer = 0.1d;
+        public static final double kDeadbandSteer = 0.07d;
         public static final double kDeadbandDrive = 0.05d;
         public static final double kDeadbandSpeed = 0.01d;
 
         public static final double joystickMagnitudeChange = 0.001d;
 
-        public static final double driverMultiplier = 0.4;
+        public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
         public static final double driverPower = 3.5; // 2.5 faster but clicks
         public static final double driverBaseSpeedMetersPerSecond = 00;
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3;
+        public static final double driverEPower = 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
+        public static final double driverBaseSpeed = 0.04;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
@@ -325,9 +328,9 @@ public final class Constants {
         public static final int kDriverCancelTurn = 7; // back button
         public static final int kDriverTopSpeed = 5; // left bumper
 
-        public static final double targetTurnGainScheduleSpeed = 40;
+        public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -8;
+        public static final double joystickTurningGain = -10;
     }
 
     public static class VisionConstants {
@@ -340,35 +343,72 @@ public final class Constants {
         // meter up
         // from center.
         public static final String aprTagCameraName = "OV5647";
-        public static final String coneCameraName = "USB_Web_Camera";
+        public static final String aprTagCameraBackName = "OV5649";
+
+        public static final double GRID_APR_TAG_HEIGHT = Units.inchesToMeters(18.22);
+        public static final double PICKUP_APR_TAG_HEIGHT = Units.inchesToMeters(27.38);
+
+        public static final double CAMERA_HEIGHT_METERS = 0.168;
 
         // For color pipelines
-        public static final double CAMERA_HEIGHT_METERS = 0.168;
+
         public static final double CONE_HEIGHT_METERS = 0.32;
         public static final double CAMERA_PITCH_RADIANS = 0;
 
         public static final int CUBE_PIPELINE_INDEX = 0;
         public static final int CONE_PIPELINE_INDEX = 1;
 
+        // Limelight settings
+
+        public static final double HIGH_CONE_TARGET_HEIGHT = Units.inchesToMeters(44);
+
+        public static final String LIMELIGHT_NAME = "limelight-9312";
+        public static final double LIMELIGHT_METERS_FORWARD_OF_CENTER = Units.inchesToMeters(14);
+        public static final double LIMELIGHT_METERS_SIDEWAYS = Units.inchesToMeters(0);
+        public static final double LIMELIGHT_METERS_UP = Units.inchesToMeters(10);
+        public static final double LIMELIGHT_YAW = Units.inchesToMeters(0);
+        public static final double LIMELIGHT_PITCH = Units.inchesToMeters(20);
+        public static final double LIMELIGHT_ROLL = Units.inchesToMeters(0);
+
         /**
          * Physical location of the camera on the robot, relative to the center of the robot.
          */
-        public static final Transform2d CAMERA_TO_ROBOT =
-                new Transform2d(new Translation2d(0.051, 0.2), new Rotation2d(0.0));
+        // public static final Transform2d CAMERA_TO_ROBOT =
+        //         new Transform2d(new Translation2d(-0.381, 0), new Rotation2d(0.0));
+        // public static final Transform2d CAMERA_TO_ROBOT_BACK =
+        //         new Transform2d(new Translation2d(0,0), new Rotation2d(0.0));
+
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+                new Transform3d(new Translation3d(-0.381, 0, -0.381), new Rotation3d(0, 0, 0));
+
+        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT_BACK =
+                new Transform3d(new Translation3d(0.2794, 0.0762, -0.33), new Rotation3d(0, 15, 0));
 
         /** Physical location of the apriltag camera on the robot, relative to the center of the robot. */
-        public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
-                new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
+        // public static final Transform3d APRILTAG_CAMERA_TO_ROBOT =
+        //         new Transform3d(new Translation3d(0.051, 0.2, -0.42), new Rotation3d(0.0, 0.0, -0.1));
         // 2, 16.5 8 inch
+
+        public static final double FIELD_LENGTH_METERS = 16.54175;
+
+        public static final double FIELD_WIDTH_METERS = 8.0137;
+
+        // Pose on the opposite side of the field. Use with `relativeTo` to flip a pose to the opposite alliance
+        public static final Pose2d FLIPPING_POSE =
+                new Pose2d(new Translation2d(FIELD_LENGTH_METERS, FIELD_WIDTH_METERS), new Rotation2d(Math.PI));
+
+        /** Minimum target ambiguity. Targets with higher ambiguity will be discarded */
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+
         // Vision Drive Constants
 
         public static final double TRANSLATION_TOLERANCE = 0.1; // Changed from 0.05 3/26/23
         public static final double ROTATION_TOLERANCE = 1;
 
-        public static final double MAX_VELOCITY = 3;
-        public static final double MAX_ACCELARATION = 2;
-        public static final double MAX_VELOCITY_ROTATION = 1000;
-        public static final double MAX_ACCELARATION_ROTATION = 1000;
+        public static final double MAX_VELOCITY = 3; // 3
+        public static final double MAX_ACCELARATION = 2; // 2
+        public static final double MAX_VELOCITY_ROTATION = 1000; // 8
+        public static final double MAX_ACCELARATION_ROTATION = 1000; // 8
 
         public static final double kPXController = 2.5d;
         public static final double kIXController = 0d;
@@ -382,9 +422,11 @@ public final class Constants {
     }
 
     public enum OffsetFromTargetAprTag {
-        LEFT(0, 0.7452, -10),
-        CENTER(0, 0.181, 0),
-        RIGHT(0, -0.379, 10);
+        LEFT(0.0762, 0.7452, -10),
+        CENTER(0.0762, 0.2826, 0),
+        RIGHT(0.0762, -0.379, 10),
+        PICKUPRED(0, 0, 10),
+        PICKUPBLUE(0, 0, 0);
 
         public final double xOffset;
         public final double yOffset;

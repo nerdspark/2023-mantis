@@ -4,8 +4,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+// import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -18,29 +17,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.OffsetFromTargetAprTag;
-import frc.robot.commands.AprTagCommand;
 import frc.robot.commands.ArmMoveCommands.MoveBucketCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
-import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
-import frc.robot.commands.ArmPositionCommands.GroundDropCommand;
-import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
-import frc.robot.commands.ArmPositionCommands.HighDropCommand;
-import frc.robot.commands.ArmPositionCommands.HomeCommand;
-import frc.robot.commands.ArmPositionCommands.MicroAdjustCommand;
-import frc.robot.commands.ArmPositionCommands.MidDropCommand;
-import frc.robot.commands.ArmPositionCommands.ShelfPickupCommand;
-import frc.robot.commands.Auton.ThreeElement;
-import frc.robot.commands.Auton.ThreeElementWMarkers;
-import frc.robot.commands.Auton.line2meters;
-import frc.robot.commands.Auton.line2metersCommand;
-import frc.robot.commands.Auton.threeElement_Blue;
-import frc.robot.commands.Auton.threeElement_Red;
-import frc.robot.commands.DriveToPoseCommand;
-import frc.robot.commands.GoToTagCommand;
+import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
+import frc.robot.commands.ArmPositionCommands.*;
+import frc.robot.commands.Auton.*;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
@@ -52,7 +36,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TimeOfFlightSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import java.util.function.BooleanSupplier;
-import org.photonvision.PhotonCamera;
+// import org.photonvision.PhotonCamera;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -102,16 +86,19 @@ public class RobotContainer {
     // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
 
     // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
-    private final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+    //    public static final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
+    //    public static final PhotonCamera photonCameraBack =
+    //            new PhotonCamera(Constants.VisionConstants.aprTagCameraBackName);
 
     // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
 
     // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-    private final PoseEstimatorSubSystem poseEstimator = new PoseEstimatorSubSystem(photonCamera, swerveSubsystem);
+    //    private final PoseEstimatorSubSystem poseEstimator =
+    //            new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
     // private final ChaseTagCommand chaseTagCommand = new
     // ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
-    private final AprTagCommand aprTagCommand =
-            new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
+    //     private final AprTagCommand aprTagCommand =
+    //             new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
 
     // Vision
 
@@ -136,7 +123,8 @@ public class RobotContainer {
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger),
                 () -> driverJoystick.getRawButton(Constants.start),
                 () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn),
-                () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed)));
+                () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed),
+                () -> driverJoystick.getRawButton(OIConstants.kDriverRightBumper)));
 
         armSubsystem.setDefaultCommand(new MicroAdjustCommand(
                 armSubsystem,
@@ -146,6 +134,12 @@ public class RobotContainer {
 
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
+        new MoveWristCommand(wristSubsystem, Constants.ArmConstants.homePosition.wristCmdPos()).execute();
+
+        // Close the gripper the first time the item is detected
+        new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.CUBE_PICKUP)
+                        && (timeOfFlightSubsystem.lastValuesWithinBounds(10, 400)) && timeOfFlightSubsystem.getRange() < 180)
+                .whileTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
 
         // Configure the button bindings
         configureButtonBindings();
@@ -172,23 +166,48 @@ public class RobotContainer {
         // AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
         //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new
         // GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
-
         chooser.addOption("Three Element Red", new threeElement_Red(swerveSubsystem));
         chooser.addOption("Three Element Blue", new threeElement_Blue(swerveSubsystem));
-        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
-
-        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
-        chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
-        chooser.addOption(
-                "Line 2 Meters and Goto Tag",
-                new SequentialCommandGroup(
-                        new line2meters(swerveSubsystem),
-                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
-                        new DriveToPoseCommand(
-                                swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new Rotation2d()))));
+        chooser.addOption("Red Side Charge", new RedSideCharge());
+        chooser.addOption("Red Side Path", new RedSidePath());
+        chooser.addOption("Blue Side Path", new BlueSidePath());
+        chooser.addOption("BlueBob", new BlueBobFourCone());
+        chooser.addOption("RedBob", new RedBobFourCone());
+        //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
+        //
+        //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
+        //        chooser.addOption("Line 2 Meters Command", new line2metersCommand(swerveSubsystem));
+        //        chooser.addOption(
+        //                "Line 2 Meters and Goto Tag",
+        //                new SequentialCommandGroup(
+        //                        new line2meters(swerveSubsystem),
+        //                        new GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 1),
+        //                        new DriveToPoseCommand(
+        //                                swerveSubsystem, poseEstimator::getCurrentPose, new Pose2d(0, 0, new
+        // Rotation2d()))));
 
         Shuffleboard.getTab("Autonomous").add(chooser);
+
+        //        configureDashboard();
     }
+
+    //    private void configureDashboard() {
+    //        /**** Driver tab ****/
+    //        var driverTab = Shuffleboard.getTab("Driver");
+    //
+    //        driverTab
+    //                .add(new HttpCamera(VisionConstants.aprTagCameraName, "https://Photonvision.local:1181"))
+    //                .withWidget(BuiltInWidgets.kCameraStream)
+    //                .withProperties(Map.of("showCrosshair", true, "showControls", false, "rotation", "QUARTER_CCW"))
+    //                .withSize(4, 6)
+    //                .withPosition(0, 0);
+    //
+    //        /**** Vision tab ****/
+    //        final var visionTab = Shuffleboard.getTab("Vision");
+    //
+    //        // Pose estimation
+    //        poseEstimator.addDashboardWidgets(visionTab);
+    //    }
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -204,7 +223,7 @@ public class RobotContainer {
         SmartDashboard.putString("Config", "Button Bindings");
 
         // Print April tag info to Smart dashboard - Button A
-        new JoystickButton(driverJoystick, OIConstants.kDriverButtonA).onTrue(aprTagCommand);
+        // new JoystickButton(driverJoystick, OIConstants.kDriverButtonA).onTrue(aprTagCommand);
         // Chase Aril Tag Continuous - Button B
         // new JoystickButton(driverJoystick, Constants.buttonB).onTrue(chaseTagCommand);
         // Go to Origin -  Button X
@@ -212,18 +231,22 @@ public class RobotContainer {
         //   new DriveToPoseCommand(swerveSubsystem,poseEstimator::getCurrentPose,new Pose2d(0, 0, new
         // Rotation2d().fromDegrees(90))));
         // Go to April Tag and Stop - Button Y
-        new JoystickButton(driverJoystick, Constants.buttonY)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 4, OffsetFromTargetAprTag.CENTER));
-        new JoystickButton(driverJoystick, Constants.buttonA)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.CENTER));
-        new JoystickButton(driverJoystick, Constants.buttonB)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.LEFT));
-        new JoystickButton(driverJoystick, Constants.buttonX)
-                .whileTrue(new GoToTagCommand(
-                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2, OffsetFromTargetAprTag.RIGHT));
+        //        new JoystickButton(driverJoystick, Constants.buttonY)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 4,
+        // OffsetFromTargetAprTag.CENTER));
+        //        new JoystickButton(driverJoystick, Constants.buttonA)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.CENTER));
+        //        new JoystickButton(driverJoystick, Constants.buttonB)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.LEFT));
+        //        new JoystickButton(driverJoystick, Constants.buttonX)
+        //                .whileTrue(new GoToTagCommand(
+        //                        photonCamera, swerveSubsystem, swerveSubsystem::getPose, 2,
+        // OffsetFromTargetAprTag.RIGHT));
 
         // new JoystickButton(driverJoystick, Constants.buttonA).onTrue(new LimeLightTestCommand(limeLightSubSystem));
 
@@ -240,18 +263,19 @@ public class RobotContainer {
 
         // home
         new Trigger(() -> coDriverJoystick.getPOV() > 180)
-                .onTrue(new HomeCommand(armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem));
+                .onTrue(new HomeCommand(
+                        armSubsystem, elevatorSubsystem, wristSubsystem, gripperSubsystem, bucketSubsystem));
 
         // bucket pickup
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonA)
                 .onTrue(new BucketPickupCommand(
                         elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
 
-        // score mid position
+        // mid drop
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonX)
                 .onTrue(new MidDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
-        // score high position
+        // high drop
         new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonY)
                 .onTrue(new HighDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
@@ -267,6 +291,10 @@ public class RobotContainer {
         new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
                 .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
+        // cube pickup
+        new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5)
+                .onTrue(new CubePickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
+
         // Right trigger - close gripper when bucket pickup, and vice versa
         new Trigger(() -> (armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP)
                         && (driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5))
@@ -279,11 +307,6 @@ public class RobotContainer {
                 .onTrue(new SequentialCommandGroup(
                         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.EXTENDED),
                         new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.OPENED)));
-
-        // Close the gripper the first time the item is detected
-        new Trigger(() -> armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP
-                        && timeOfFlightSubsystem.getRange() < 200)
-                .toggleOnTrue(new MoveGripperCommand(gripperSubsystem, armSubsystem, GripperState.CLOSED));
     }
 
     /**
@@ -313,6 +336,10 @@ public class RobotContainer {
 
     public static GripperSubsystem getGripperSubsystem() {
         return gripperSubsystem;
+    }
+
+    public static BucketSubsystem getBucketSubsystem() {
+        return bucketSubsystem;
     }
 
     public static TimeOfFlightSubsystem getTimeOfFlightSubsystem() {

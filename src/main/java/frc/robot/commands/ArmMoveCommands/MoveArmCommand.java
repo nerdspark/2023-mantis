@@ -29,7 +29,7 @@ public class MoveArmCommand extends CommandBase {
     @Override
     public void execute() {
         m_subsystem.changeArmSmartMotionParameters(maxVelocity, maxAccel);
-        m_subsystem.goToPosition(targetPosition);
+        m_subsystem.setPosition(targetPosition);
     }
 
     @Override
@@ -40,16 +40,16 @@ public class MoveArmCommand extends CommandBase {
         double[] positions = m_subsystem.getPositions();
 
         // todo: don't math.abs everything
-        System.out.println("[MoveArmCommand] Left: "
-                + positions[0]
-                + " Right: "
-                + positions[1]
-                + " Target: "
-                + targetPosition
-                + " Difference: "
-                + Math.abs(positions[0] - targetPosition));
+        //        System.out.println("[MoveArmCommand] Left: "
+        //                + positions[0]
+        //                + " Right: "
+        //                + positions[1]
+        //                + " Target: "
+        //                + targetPosition
+        //                + " Difference: "
+        //                + Math.abs(positions[0] - targetPosition));
 
-        return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 5
-                && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 5);
+        return (Math.abs(Math.abs(positions[0]) - Math.abs(targetPosition)) < 7
+                && Math.abs(Math.abs(positions[1]) - Math.abs(targetPosition)) < 7);
     }
 }

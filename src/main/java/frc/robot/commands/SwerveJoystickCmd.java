@@ -8,12 +8,12 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
@@ -23,7 +23,7 @@ public class SwerveJoystickCmd extends CommandBase {
     private final SwerveSubsystem swerveSubsystem;
     private final LimeLightSubSystem limeLightSubSystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
-    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed;
+    private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed, rightBumper;
     private final Supplier<Integer> DPAD;
     private final Supplier<Double> leftTrigger;
     private final Supplier<Double> rightTrigger;
@@ -54,7 +54,8 @@ public class SwerveJoystickCmd extends CommandBase {
             Supplier<Double> rightTrigger,
             Supplier<Boolean> resetGyroButton,
             Supplier<Boolean> cancelTurn,
-            Supplier<Boolean> topSpeed) {
+            Supplier<Boolean> topSpeed,
+            Supplier<Boolean> rightBumper) {
         this.swerveSubsystem = swerveSubsystem;
         this.limeLightSubSystem = limeLightSubSystem;
         this.xSpdFunction = xSpdFunction;
@@ -66,6 +67,7 @@ public class SwerveJoystickCmd extends CommandBase {
         this.leftTrigger = leftTrigger;
         this.cancelTurn = cancelTurn;
         this.topSpeed = topSpeed;
+        this.rightBumper = rightBumper;
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.resetGyroButton = resetGyroButton;
         this.speedLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond);
@@ -77,11 +79,17 @@ public class SwerveJoystickCmd extends CommandBase {
     public void initialize() {
         // swerveSubsystem.setGains();
         // zeroHeading();
-        targetAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
+        swerveSubsystem.enableBrakeMode(true);
+        //        targetAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
+        //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+        //            targetAngle += Math.PI;
+        //        }
     }
 
     @Override
     public void execute() {
+
         // 1. Get real-time joystick inputs
         // double driveSpeed =
         // speedLimiter.calculate(OIConstants.driverMultiplier*Math.pow(Math.abs((ySpdFunction.get()*ySpdFunction.get())
@@ -90,12 +98,13 @@ public class SwerveJoystickCmd extends CommandBase {
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
         driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
-        joystickMagnitude = Math.abs(ySpdFunction.get()) > Math.abs(xSpdFunction.get())
-                ? Math.abs(ySpdFunction.get())
-                : Math.abs(xSpdFunction.get());
+        joystickMagnitude = (ySpdFunction.get() * ySpdFunction.get())
+                + (xSpdFunction.get()
+                        * xSpdFunction.get()); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
 
-        double driveSpeed = (topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
-                * Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
+        double driveSpeed = ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
+                        * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
+                                + OIConstants.driverBaseSpeed))
                 * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
         // double xSpeed =
@@ -108,8 +117,15 @@ public class SwerveJoystickCmd extends CommandBase {
         // (xSpdFunction.get()*xSpdFunction.get()))) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
-        double currentAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
+        double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
         double turningSpeed = 0;
+
+        boolean isArmOut =
+                switch (RobotContainer.getArmSubsystem().getArmPositionState()) {
+                    case HIGH_DROP, MID_DROP -> true;
+                    default -> false;
+                };
+
         prevDrivetrainPose3 = prevDrivetrainPose2;
         prevDrivetrainPose2 = prevDrivetrainPose;
         prevDrivetrainPose = currentDrivetrainPose;
@@ -119,30 +135,33 @@ public class SwerveJoystickCmd extends CommandBase {
         if (resetGyroButton.get()) {
             zeroHeading();
             swerveSubsystem.resetOdometry(new Pose2d());
-        } else if (DPAD.get() != -1) {
+        } else if (DPAD.get() != -1 && !isArmOut) {
             targetAngle = ((DPAD.get()) * Math.PI / 180d);
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
-        SmartDashboard.putNumber("prevdrivetrainposeX", prevDrivetrainPose.getX());
-        SmartDashboard.putNumber("prevdrivetrainposeY", prevDrivetrainPose.getY());
-        SmartDashboard.putNumber("currdrivetrainposeX", currentDrivetrainPose.getX());
-        SmartDashboard.putNumber("currdrivetrainposeY", currentDrivetrainPose.getY());
+        // SmartDashboard.putNumber("prevdrivetrainposeX", prevDrivetrainPose.getX());
+        // SmartDashboard.putNumber("prevdrivetrainposeY", prevDrivetrainPose.getY());
+        // SmartDashboard.putNumber("currdrivetrainposeX", currentDrivetrainPose.getX());
+        // SmartDashboard.putNumber("currdrivetrainposeY", currentDrivetrainPose.getY());
         if (Math.sqrt(((prevDrivetrainPose3.getX() - currentDrivetrainPose.getX())
                                         * (prevDrivetrainPose3.getX() - currentDrivetrainPose.getX()))
                                 + ((prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())
                                         * (prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())))
                         > OIConstants.kDeadbandSpeed
-                && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)) {
-            turningSpeed = 0;
-            driveAngle = prevDriveAngle;
-            SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
+                && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)
+                && Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 3) {
+            //                        turningSpeed = 0;
+            //            driveAngle = prevDriveAngle;
+            // SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
         } else {
-            SmartDashboard.putString("PID turning?", "yes");
+            // SmartDashboard.putString("PID turning?", "yes");
         }
-        if ((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) || cancelTurn.get()) {
+
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) && joystickMagnitude < 0.1)
+                || cancelTurn.get()) {
             turningSpeed = 0;
-            SmartDashboard.putString("PID turning?", "deadband");
+            // SmartDashboard.putString("PID turning?", "deadband");
         }
 
         // if (Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 10
@@ -168,9 +187,9 @@ public class SwerveJoystickCmd extends CommandBase {
         if (joystickMagnitude < OIConstants.kDeadbandDrive) {
             driveAngle = prevDriveAngle;
             driveSpeed = 0;
-            SmartDashboard.putString("joymagnitude deadband?", "on");
+            // SmartDashboard.putString("joymagnitude deadband?", "on");
         } else {
-            SmartDashboard.putString("joymagnitude deadband?", "off");
+            // SmartDashboard.putString("joymagnitude deadband?", "off");
         }
         double xSpeed;
         if (topSpeed.get()) {
@@ -193,8 +212,8 @@ public class SwerveJoystickCmd extends CommandBase {
 
         if (Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer) {
             targetAngle = currentAngle;
-            turningSpeed = -turningTargX.get() * Math.abs(turningTargX.get()) * OIConstants.joystickTurningGain;
-            SmartDashboard.putString("PID turning?", "joystickturning");
+            turningSpeed = -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
+            // SmartDashboard.putString("PID turning?", "joystickturning");
         }
 
         // 2. Apply deadband
@@ -208,19 +227,16 @@ public class SwerveJoystickCmd extends CommandBase {
         // } else {
         //     SmartDashboard.putString("in drive deadband", "no");
 
-        // }
-
         // turningSpeed = Math.abs(turningTargX.get()) > OIConstants.kDeadbandSteer || Math.abs(turningTargY.get()) >
         // OIConstants.kDeadbandSteer ? turningSpeed : 0.0;
 
         // 3. Make the driving smoother
-        turningSpeed *= // = turningLimiter.calculate(turningSpeed) *
-                DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
-        if ((xSpeed * xSpeed) + (ySpeed * ySpeed) > OIConstants.targetTurnGainScheduleSpeed) {
-            SmartDashboard.putString("targetTurnGain", "fastGain");
-            turningSpeed = turningSpeed * 1;
+        turningSpeed = turningSpeed * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
+        if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
+            // SmartDashboard.putString("targetTurnGain", "fastGain");
+            turningSpeed = turningSpeed * 0.75;
         } else {
-            SmartDashboard.putString("targetTurnGain", "slowGain");
+            // SmartDashboard.putString("targetTurnGain", "slowGain");
         }
         // 4. Construct desired chassis speeds
         ChassisSpeeds chassisSpeeds;
@@ -237,7 +253,11 @@ public class SwerveJoystickCmd extends CommandBase {
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
         // 6. Output each module states to wheels
-        swerveSubsystem.setModuleStates(moduleStates);
+        if (rightBumper.get()) {
+            swerveSubsystem.setWheelsToX();
+        } else {
+            swerveSubsystem.setModuleStates(moduleStates);
+        }
     }
 
     @Override
@@ -252,6 +272,10 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
-        targetAngle = 0;
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
+
+        //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
+        //            targetAngle += Math.PI;
+        //        }
     }
 }

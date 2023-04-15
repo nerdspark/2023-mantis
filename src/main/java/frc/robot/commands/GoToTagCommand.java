@@ -8,9 +8,9 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -101,14 +101,15 @@ public class GoToTagCommand extends CommandBase {
         lastTarget = null;
         var robotPose = poseProvider.get();
 
-        SmartDashboard.putNumber("TagChaseInit robotPose.X", robotPose.getX());
-        SmartDashboard.putNumber("TagChaseInit robotPose.Y", robotPose.getY());
-        SmartDashboard.putNumber(
-                "TagChaseInit robotPose.Angle", robotPose.getRotation().getRadians());
+        // SmartDashboard.putNumber("TagChaseInit robotPose.X", robotPose.getX());
+        // SmartDashboard.putNumber("TagChaseInit robotPose.Y", robotPose.getY());
+        // SmartDashboard.putNumber(
+        //         "TagChaseInit robotPose.Angle", robotPose.getRotation().getRadians());
 
-        omegaController.reset(robotPose.getRotation().getRadians());
-        xController.reset(robotPose.getX());
-        yController.reset(robotPose.getY());
+        omegaController.reset(
+                robotPose.getRotation().getRadians(), drivetrainSubsystem.getChassisSpeeds().omegaRadiansPerSecond);
+        xController.reset(robotPose.getX(), drivetrainSubsystem.getChassisSpeeds().vxMetersPerSecond);
+        yController.reset(robotPose.getY(), drivetrainSubsystem.getChassisSpeeds().vyMetersPerSecond);
 
         targetReached = false;
     }
@@ -124,12 +125,12 @@ public class GoToTagCommand extends CommandBase {
                 0.0,
                 new Rotation3d(0.0, 0.0, robotPose2d.getRotation().getRadians()));
 
-        SmartDashboard.putNumber("GoToTagCommand robotPose.X", robotPose.getX());
-        SmartDashboard.putNumber("GoToTagCommand robotPose.Y", robotPose.getY());
-        SmartDashboard.putNumber(
-                "GoToTagCommand robotPose.Angle", robotPose2d.getRotation().getRadians());
+        // SmartDashboard.putNumber("GoToTagCommand robotPose.X", robotPose.getX());
+        // SmartDashboard.putNumber("GoToTagCommand robotPose.Y", robotPose.getY());
+        // SmartDashboard.putNumber(
+        //         "GoToTagCommand robotPose.Angle", robotPose2d.getRotation().getRadians());
         var photonRes = photonCamera.getLatestResult();
-        SmartDashboard.putBoolean("Target Found?", photonRes.hasTargets());
+        // SmartDashboard.putBoolean("Target Found?", photonRes.hasTargets());
 
         if (photonRes.hasTargets()) {
             // Find the tag we want to chase
@@ -137,6 +138,7 @@ public class GoToTagCommand extends CommandBase {
             Optional<PhotonTrackedTarget> targetOpt = null;
             // if(targetFound == false) {
             targetOpt = photonRes.getTargets().stream()
+                    .filter(t -> t.getFiducialId() == tagToAlign)
                     .filter(t -> !t.equals(lastTarget) && t.getPoseAmbiguity() <= .5 && t.getPoseAmbiguity() != -1)
                     .findFirst();
             // }
@@ -170,11 +172,12 @@ public class GoToTagCommand extends CommandBase {
                         xController.setGoal(goalPose.getX());
                         yController.setGoal(goalPose.getY());
                         omegaController.setGoal(goalPose.getRotation().getRadians());
-                        SmartDashboard.putNumber("GoToTagCommand goal Pose X", goalPose.getX());
-                        SmartDashboard.putNumber("GoToTagCommand goal Pose Y", goalPose.getY());
-                        SmartDashboard.putNumber(
-                                "GoToTagCommand goal Pose Omega",
-                                goalPose.getRotation().getRadians());
+                        // omegaController.setGoal(180);
+                        // SmartDashboard.putNumber("GoToTagCommand goal Pose X", goalPose.getX());
+                        // SmartDashboard.putNumber("GoToTagCommand goal Pose Y", goalPose.getY());
+                        // SmartDashboard.putNumber(
+                        //         "GoToTagCommand goal Pose Omega",
+                        //         goalPose.getRotation().getRadians());
                     }
                 }
             }
@@ -202,15 +205,16 @@ public class GoToTagCommand extends CommandBase {
                 omegaSpeed = 0;
             }
 
-            SmartDashboard.putNumber("GoToTagCommand  X Speed", xSpeed);
-            SmartDashboard.putNumber("GoToTagCommand  Y Speed", ySpeed);
-            SmartDashboard.putNumber("GoToTagCommand Omega Speed", omegaSpeed);
+            //     SmartDashboard.putNumber("GoToTagCommand  X Speed", xSpeed);
+            //     SmartDashboard.putNumber("GoToTagCommand  Y Speed", ySpeed);
+            //     SmartDashboard.putNumber("GoToTagCommand Omega Speed", omegaSpeed);
 
             ChassisSpeeds chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, omegaSpeed, drivetrainSubsystem.getRotation2d());
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-            drivetrainSubsystem.setModuleStates(moduleStates);
+            SwerveDriveKinematics.desaturateWheelSpeeds(
+                    moduleStates, chassisSpeeds, tagToAlign, tagToAlign, tagToAlign);
         }
     }
 
@@ -231,11 +235,11 @@ public class GoToTagCommand extends CommandBase {
 
         Transform2d poseDifference = goalPose.minus(robotPose);
 
-        SmartDashboard.putNumber("GoToTagCommand poseDifferenceX", poseDifference.getX());
-        SmartDashboard.putNumber("GoToTagCommand poseDifference Y", poseDifference.getY());
-        SmartDashboard.putNumber(
-                "GoToTagCommand poseDifference Angle",
-                poseDifference.getRotation().getDegrees());
+        // SmartDashboard.putNumber("GoToTagCommand poseDifferenceX", poseDifference.getX());
+        // SmartDashboard.putNumber("GoToTagCommand poseDifference Y", poseDifference.getY());
+        // SmartDashboard.putNumber(
+        //         "GoToTagCommand poseDifference Angle",
+        //         poseDifference.getRotation().getDegrees());
 
         return (Math.abs(poseDifference.getX()) <= VisionConstants.TRANSLATION_TOLERANCE)
                 && (Math.abs(poseDifference.getY()) <= VisionConstants.TRANSLATION_TOLERANCE)

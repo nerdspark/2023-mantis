@@ -9,8 +9,8 @@ import frc.robot.Constants.ArmConstants;
 public class ElevatorSubsystem extends SubsystemBase {
     private final CANSparkMax elevatorMotor1;
     private final CANSparkMax elevatorMotor2;
-    private SparkMaxPIDController elevatorMotor1PIDController, elevatorMotor2PIDController;
-    private RelativeEncoder elevatorMotor1Encoder, elevatorMotor2Encoder;
+    private final SparkMaxPIDController elevatorMotor1PIDController, elevatorMotor2PIDController;
+    private final RelativeEncoder elevatorMotor1Encoder, elevatorMotor2Encoder;
 
     public ElevatorSubsystem() {
         elevatorMotor1 = new CANSparkMax(ArmConstants.InclinovatorMotor1ID, CANSparkMax.MotorType.kBrushless);
@@ -29,7 +29,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void setPosition(double position) {
-        System.out.println("ElevatorSubsystem: " + position);
         elevatorMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kPosition);
     }
 

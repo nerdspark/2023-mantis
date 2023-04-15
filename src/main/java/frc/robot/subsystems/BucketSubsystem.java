@@ -9,8 +9,8 @@ import frc.robot.Constants.ArmConstants;
 public class BucketSubsystem extends SubsystemBase {
     private final CANSparkMax leftBucketMotor;
     private final CANSparkMax rightBucketMotor;
-    private SparkMaxPIDController leftBucketMotorPIDController, rightBucketMotorPIDController;
-    private RelativeEncoder leftBucketMotorEncoder, rightBucketMotorEncoder;
+    private final SparkMaxPIDController leftBucketMotorPIDController, rightBucketMotorPIDController;
+    private final RelativeEncoder leftBucketMotorEncoder, rightBucketMotorEncoder;
 
     public BucketSubsystem() {
         leftBucketMotor = new CANSparkMax(ArmConstants.BucketMotorLID, CANSparkMax.MotorType.kBrushless);
@@ -21,12 +21,13 @@ public class BucketSubsystem extends SubsystemBase {
 
         leftBucketMotorEncoder = leftBucketMotor.getEncoder();
         rightBucketMotorEncoder = rightBucketMotor.getEncoder();
+
+        leftBucketMotorEncoder.setPosition(0);
+        rightBucketMotorEncoder.setPosition(0);
     }
 
     public double[] getPositions() {
-        double[] position = {leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition()};
-
-        return position;
+        return new double[] {leftBucketMotorEncoder.getPosition(), rightBucketMotorEncoder.getPosition()};
     }
 
     // Neither method uses the position parameter

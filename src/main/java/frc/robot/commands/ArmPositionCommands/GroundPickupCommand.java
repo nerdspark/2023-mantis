@@ -3,6 +3,7 @@ package frc.robot.commands.ArmPositionCommands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveElevatorCommand;
@@ -28,9 +29,10 @@ public class GroundPickupCommand extends SequentialCommandGroup {
                                 ArmConstants.groundPickupPosition.armCmdPos(),
                                 ArmConstants.groundPickupPosition.smartMotionMaxVel(),
                                 ArmConstants.groundPickupPosition.smartMotionMaxAccel()),
-                        new MoveElevatorCommand(
-                                elevatorSubsystem, ArmConstants.groundPickupPosition.inclinatorCmdPos()),
-                        new MoveWristCommand(wristSubsystem, ArmConstants.groundPickupPosition.wristCmdPos())),
+                        new MoveElevatorCommand(elevatorSubsystem, ArmConstants.groundPickupPosition.elevatorCmdPos()),
+                        new WaitCommand(0.3)
+                                .andThen(new MoveWristCommand(
+                                        wristSubsystem, ArmConstants.groundPickupPosition.wristCmdPos()))),
                 new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.OPENED));
     }
 }

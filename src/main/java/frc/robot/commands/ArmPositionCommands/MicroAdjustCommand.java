@@ -41,27 +41,35 @@ public class MicroAdjustCommand extends CommandBase {
         double currentArmPositionState = 0;
         double currentWristPositionState = 0;
 
-        ArmConstants.ArmPositionData currentArmPositionData = armSubsystem.getCurrentArmPositionData();
+        ArmPosition armPositionState = armSubsystem.getArmPositionState();
 
-        currentArmPositionState = currentArmPositionData.armCmdPos();
-        currentWristPositionState = currentArmPositionData.wristCmdPos();
-
-        if (armSubsystem.getArmPositionState() != ArmPosition.GROUND_DROP
-                || armSubsystem.getArmPositionState() != ArmPosition.MID_DROP
-                || armSubsystem.getArmPositionState() != ArmPosition.HIGH_DROP) {
-            return;
+        switch (armPositionState) {
+            case GROUND_DROP -> {
+                currentArmPositionState = ArmConstants.groundPickupPosition.armCmdPos();
+                currentWristPositionState = ArmConstants.groundPickupPosition.wristCmdPos();
+            }
+            case HIGH_DROP -> {
+                currentArmPositionState = ArmConstants.highDropPosition.armCmdPos();
+                currentWristPositionState = ArmConstants.highDropPosition.wristCmdPos();
+            }
+            case MID_DROP -> {
+                currentArmPositionState = ArmConstants.midDropPosition.armCmdPos();
+                currentWristPositionState = ArmConstants.midDropPosition.wristCmdPos();
+            }
+            default -> {
+                return;
+            }
         }
 
         if (Math.abs(rightJoystickY.get()) > 0.05) {
-            armSubsystem.goToPosition(
-                    currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
+            armSubsystem.setPosition(currentArmPositionState - rightJoystickY.get() * ArmConstants.armAdjustMultiplier);
         } else {
-            armSubsystem.goToPosition(currentArmPositionState);
+            armSubsystem.setPosition(currentArmPositionState);
         }
 
         if (Math.abs(leftJoystickY.get()) > 0.05) {
             wristSubsystem.setPosition(
-                    currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
+                    -currentWristPositionState + leftJoystickY.get() * ArmConstants.wristAdjustMultiplier);
         } else {
             wristSubsystem.setPosition(currentWristPositionState);
         }

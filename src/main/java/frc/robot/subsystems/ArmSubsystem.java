@@ -9,13 +9,14 @@ import frc.robot.Constants.ArmConstants;
 public class ArmSubsystem extends SubsystemBase {
     private final CANSparkMax armMotor1;
     private final CANSparkMax armMotor2;
-    private SparkMaxPIDController armMotor1PIDController, armMotor2PIDController;
-    private RelativeEncoder armMotor1Encoder, armMotor2Encoder;
+    private final SparkMaxPIDController armMotor1PIDController, armMotor2PIDController;
+    private final RelativeEncoder armMotor1Encoder, armMotor2Encoder;
 
     public enum ArmPosition {
         HOME,
         GROUND_PICKUP,
         BUCKET_PICKUP,
+        CUBE_PICKUP,
         SHELF_PICKUP,
         GROUND_DROP,
         MID_DROP,
@@ -25,7 +26,6 @@ public class ArmSubsystem extends SubsystemBase {
     public ArmPosition armPosition = ArmPosition.HOME;
 
     public void setArmPositionState(ArmPosition state) {
-        System.out.println("changed state");
         this.armPosition = state;
     }
 
@@ -57,9 +57,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         armMotor1Encoder.setPosition(0);
         armMotor2Encoder.setPosition(0);
-
-        System.out.println("[ArmSubsystem] " + " Encoder 1 position: " + armMotor1Encoder.getPosition()
-                + " Encoder 2 position: " + armMotor2Encoder.getPosition());
     }
 
     public void changeArmSmartMotionParameters(double maxVel, double maxAccel) {
@@ -69,14 +66,12 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor2PIDController.setSmartMotionMaxAccel(maxAccel, 0);
     }
 
-    public void goToPosition(double position) {
+    public void setPosition(double position) {
         armMotor1PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
         armMotor2PIDController.setReference(-position, CANSparkMax.ControlType.kSmartMotion);
     }
 
     public double[] getPositions() {
-        double[] position = {armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
-
-        return position;
+        return new double[] {armMotor1Encoder.getPosition(), armMotor2Encoder.getPosition()};
     }
 }

@@ -27,6 +27,8 @@ public class DriveFollowPath extends CommandBase {
 
     private final PPHolonomicDriveController swerveController;
     private final boolean resetOdometry;
+
+    private final boolean brakeMode;
     private final String pathName;
     public final Timer timer = new Timer();
 
@@ -35,14 +37,20 @@ public class DriveFollowPath extends CommandBase {
                 pathName,
                 AutoConstants.kMaxSpeedMetersPerSecond,
                 AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+                true,
                 true);
     }
 
     public DriveFollowPath(String pathName, double maxVel, double maxAccel) {
-        this(pathName, maxVel, maxAccel, true);
+        this(pathName, maxVel, maxAccel, true, true);
     }
 
     public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean resetOdometry) {
+        this(pathName, maxVel, maxAccel, resetOdometry, true);
+    }
+
+    public DriveFollowPath(String pathName, double maxVel, double maxAccel, boolean resetOdometry, boolean brakeMode) {
+        this.brakeMode = brakeMode;
         addRequirements(RobotContainer.getSwerveSubsystem());
 
         this.trajectory = PathPlanner.loadPath(pathName, maxVel, maxAccel);
@@ -80,7 +88,7 @@ public class DriveFollowPath extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        RobotContainer.getSwerveSubsystem().enableBrakeMode(true);
+        RobotContainer.getSwerveSubsystem().enableBrakeMode(this.brakeMode);
         timer.reset();
         timer.start();
         Pose2d initialPose = trajectory.getInitialHolonomicPose();

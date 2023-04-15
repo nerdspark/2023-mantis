@@ -6,36 +6,40 @@ package frc.robot.subsystems;
 
 import com.playingwithfusion.TimeOfFlight;
 import com.playingwithfusion.TimeOfFlight.RangingMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TimeOfFlightSubsystem extends SubsystemBase {
-    com.playingwithfusion.TimeOfFlight timeOfFlight;
+    TimeOfFlight timeOfFlight;
 
-    /** Creates a new ExampleSubsystem. */
+    private double[] lastValues = new double[10];
+
     public TimeOfFlightSubsystem() {
-        this.timeOfFlight = new TimeOfFlight(5);
-        timeOfFlight.setRangingMode(RangingMode.Short, 24);
+        this.timeOfFlight = new TimeOfFlight(15);
+        timeOfFlight.setRangingMode(RangingMode.Long, 24);
     }
 
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("sensor position", sensor1.getAbsolutePosition());
-        //  SmartDashboard.putNumber("Range", timeOfFlight.getRange());
-    }
-
-    // public void printSensor() {
-    // SmartDashboard.putNumber("sensor position", sensor1.getAbsolutePosition());
-    // }
-    @Override
-    public void simulationPeriodic() {
-        // This method will be called once per scheduler run during simulation
+        double range = timeOfFlight.getRange();
+        for (int i = 0; i < lastValues.length - 1; i++) {
+            lastValues[i] = lastValues[i + 1];
+        }
+        lastValues[lastValues.length - 1] = range;
+        SmartDashboard.putNumber("Time of Flight", range);
+        SmartDashboard.putBoolean("Time of Flight within bounds", lastValuesWithinBounds(10, 650));
     }
 
     public double getRange() {
         return timeOfFlight.getRange();
     }
 
-    public void closeTimeOfFlight() {
-        timeOfFlight.close();
+    public boolean lastValuesWithinBounds(double lowerBound, double upperBound) {
+        for (double value : lastValues) {
+            if (value < lowerBound || value > upperBound) {
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -8,7 +8,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -51,6 +52,8 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kBackRightDriveCANCoderReversed);
     public static boolean driveTurning = false;
     private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
+
+    private final Field2d fieldSim = new Field2d();
     private final SwerveDriveOdometry odometer =
             new SwerveDriveOdometry(DriveConstants.kDriveKinematics, new Rotation2d(0), new SwerveModulePosition[] {
                 frontLeft.getSwerveModulePosition(),
@@ -70,6 +73,8 @@ public class SwerveSubsystem extends SubsystemBase {
                     }
                 })
                 .start();
+
+        Shuffleboard.getTab("Autonomous").add(fieldSim);
     }
 
     public void zeroHeading() {
@@ -109,6 +114,8 @@ public class SwerveSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        // SmartDashboard.putNumberArray("Gyro Velocity", this.getGyroVelocityXYZ());
+
         odometer.update(getRotation2d(), new SwerveModulePosition[] {
             frontLeft.getSwerveModulePosition(),
             frontRight.getSwerveModulePosition(),
@@ -116,16 +123,19 @@ public class SwerveSubsystem extends SubsystemBase {
             backRight.getSwerveModulePosition()
         });
 
+        fieldSim.getObject("Odometer Pos").setPose(getPose());
+        fieldSim.setRobotPose(getPose());
+
         // odometer.update(getRotation2d(), frontLeft.getState(), frontRight.getState(), backLeft.getState(),
         // backRight.getState());
 
-        SmartDashboard.putNumber("Robot Heading", getHeading());
-        SmartDashboard.putNumber(
-                "Rotation2d", odometer.getPoseMeters().getRotation().getDegrees());
-        SmartDashboard.putString(
-                "Robot Location (broken)", getPose().getTranslation().toString());
-        SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
-        SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
+        // SmartDashboard.putNumber("Robot Heading", getHeading());
+        // SmartDashboard.putNumber(
+        //         "Rotation2d", odometer.getPoseMeters().getRotation().getDegrees());
+        // SmartDashboard.putString(
+        //         "Robot Location (broken)", getPose().getTranslation().toString());
+        // SmartDashboard.putNumber("X pos", odometer.getPoseMeters().getX());
+        // SmartDashboard.putNumber("Y pos", odometer.getPoseMeters().getY());
         frontLeft.outputStatsSmartDashboard();
         backLeft.outputStatsSmartDashboard();
         frontRight.outputStatsSmartDashboard();
@@ -151,6 +161,10 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.enableBrakeMode(enable);
         backLeft.enableBrakeMode(enable);
         backRight.enableBrakeMode(enable);
+    }
+
+    public double getRoll() {
+        return gyro.getRoll();
     }
 
     public void driveSwerveDrive(ChassisSpeeds chassisSpeeds) {
@@ -182,6 +196,16 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         this.setModuleStates(this.kinematics.toSwerveModuleStates(chassisSpeeds));
+    }
+
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[] {
+            this.frontLeft.getState(), this.frontRight.getState(), this.backLeft.getState(), this.backRight.getState()
+        };
+    }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        return this.kinematics.toChassisSpeeds(getModuleStates());
     }
 
     public void setModuleStates(SwerveModuleState[] desiredStates) {
