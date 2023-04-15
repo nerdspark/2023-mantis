@@ -9,7 +9,10 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
-import frc.robot.commands.ArmPositionCommands.*;
+import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
+import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
+import frc.robot.commands.ArmPositionCommands.HighDropCommand;
+import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 
 public class RedSidePath extends SequentialCommandGroup {

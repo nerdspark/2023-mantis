@@ -6,7 +6,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
-import frc.robot.commands.ArmPositionCommands.*;
+import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
+import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
+import frc.robot.commands.ArmPositionCommands.HighDropCommand;
+import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 
 public class BlueSidePath extends SequentialCommandGroup {

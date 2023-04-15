@@ -4,15 +4,21 @@
 
 package frc.robot.commands.Auton;
 
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
-import frc.robot.commands.ArmPositionCommands.*;
+import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
+import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
+import frc.robot.commands.ArmPositionCommands.HighDropCommand;
+import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
-import frc.robot.subsystems.*;
+import frc.robot.subsystems.SwerveSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class threeElement_Red extends SequentialCommandGroup {
