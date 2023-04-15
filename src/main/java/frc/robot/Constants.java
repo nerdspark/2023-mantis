@@ -33,6 +33,15 @@ public final class Constants {
     public static class OperatorConstants {
         public static final int kDriverControllerPort = 0;
     }
+    public static class LimeLightConstants {
+        public static final String hostname = "asdf";
+        public static final double kP = 1;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double maxAccel = 1;
+        public static final double maxVel = 3;
+
+    }
 
     public static final int sensor1ID = 21;
     public static final int motorr1ID = 12;

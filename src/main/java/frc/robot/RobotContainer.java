@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.OffsetFromTargetAprTag;
 import frc.robot.commands.AprTagCommand;
@@ -45,6 +46,7 @@ import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.subsystems.PoseEstimatorSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TimeOfFlightSubsystem;
@@ -70,6 +72,7 @@ public class RobotContainer {
     private static final XboxController cont2 = new XboxController(Constants.controllerPort2);
 
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
+    public static final LimeLightSubSystem limeLightSubsystem = new LimeLightSubSystem(LimeLightConstants.hostname);
 
     public static final ArmSubsystem armSubsystem = new ArmSubsystem();
     public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
@@ -122,7 +125,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         swerveSubsystem.setDefaultCommand(new SwerveJoystickCmd(
-                swerveSubsystem,
+                swerveSubsystem, limeLightSubsystem,
                 () -> -driverJoystick.getRawAxis(OIConstants.kDriverYAxis),
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverXAxis),
                 () -> -driverJoystick.getRawAxis(OIConstants.kDriverRotXAxis),

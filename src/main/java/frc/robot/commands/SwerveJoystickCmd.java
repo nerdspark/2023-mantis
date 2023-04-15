@@ -1,21 +1,27 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
 public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
+    private final LimeLightSubSystem limeLightSubSystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
     private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed;
     private final Supplier<Integer> DPAD;
@@ -24,7 +30,8 @@ public class SwerveJoystickCmd extends CommandBase {
     private final SlewRateLimiter speedLimiter, turningLimiter;
     private final PIDController targetTurnController = new PIDController(
             DriveConstants.kPTargetTurning, DriveConstants.kITargetTurning, DriveConstants.kDTargetTurning);
-
+    private final PIDController LimeLightController = new PIDController(LimeLightConstants.kP, LimeLightConstants.kI, LimeLightConstants.kD);
+    private final SlewRateLimiter LimeLightLimiter = new SlewRateLimiter(LimeLightConstants.maxAccel);
     private double targetAngle;
     private double driveAngle = 0;
     private double joystickMagnitude = 0;
@@ -36,6 +43,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public SwerveJoystickCmd(
             SwerveSubsystem swerveSubsystem,
+            LimeLightSubSystem limeLightSubSystem,
             Supplier<Double> xSpdFunction,
             Supplier<Double> ySpdFunction,
             Supplier<Double> turningTargX,
@@ -48,6 +56,7 @@ public class SwerveJoystickCmd extends CommandBase {
             Supplier<Boolean> cancelTurn,
             Supplier<Boolean> topSpeed) {
         this.swerveSubsystem = swerveSubsystem;
+        this.limeLightSubSystem = limeLightSubSystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningTargX = turningTargX;
@@ -163,7 +172,11 @@ public class SwerveJoystickCmd extends CommandBase {
         } else {
             SmartDashboard.putString("joymagnitude deadband?", "off");
         }
-        double xSpeed = (Math.cos(driveAngle) * driveSpeed);
+        double xSpeed;
+        if (topSpeed.get()) {
+            xSpeed = LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getTargetTx(), 0));
+        } else {xSpeed = (Math.cos(driveAngle) * driveSpeed);}
+        
         double ySpeed = (Math.sin(driveAngle) * driveSpeed);
         // if ((turningTargX.get()*turningTargX.get()) > OIConstants.kDeadbandSteer ||
         // (turningTargY.get()*turningTargY.get()) > OIConstants.kDeadbandSteer) {
