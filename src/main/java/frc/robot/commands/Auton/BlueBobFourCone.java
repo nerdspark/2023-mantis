@@ -67,7 +67,7 @@ public class BlueBobFourCone extends SequentialCommandGroup {
                                         MoveGripperCommand.GripperState.OPENED))),
                 new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("BlueBobFourCone_3", 3, 2.5, false),
+                        new DriveFollowPath("BlueBobFourCone_3", 3, 2, false),
                         new WaitCommand(0.2)
                                 .andThen(new BucketPickupCommand(
                                         RobotContainer.getElevatorSubsystem(),
