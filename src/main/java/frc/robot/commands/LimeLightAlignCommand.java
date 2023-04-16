@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -193,7 +194,7 @@ public class LimeLightAlignCommand extends CommandBase {
 
                 // Get the robot heading, and the robot-relative heading of the target
                 var drivetrainHeading = driveTrainSubsystem.getRotation2d();
-                var targetHeading = drivetrainHeading.plus(lastTarget.getRotation());
+                var targetHeading = new Rotation2d(0); // drivetrainHeading.plus(lastTarget.getRotation());
 
                 SmartDashboard.putNumber(
                         "LimeLightAlignCommand targetHeading",

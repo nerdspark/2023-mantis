@@ -6,10 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
@@ -42,8 +39,6 @@ public class SwerveJoystickCmd extends CommandBase {
     private Translation2d prevDrivetrainPose2 = new Translation2d();
     private Translation2d prevDrivetrainPose3 = new Translation2d();
     private boolean correcting = true;
-
-    private SendableChooser<Double> chooser;
 
     public SwerveJoystickCmd(
             SwerveSubsystem swerveSubsystem,
@@ -83,18 +78,10 @@ public class SwerveJoystickCmd extends CommandBase {
     public void initialize() {
         // swerveSubsystem.setGains();
         // zeroHeading();
-        chooser = new SendableChooser<>();
-
-        chooser.addOption("Inwards", Math.PI);
-        chooser.addOption("Outwards", 0.0);
-
-        Shuffleboard.getTab("Autonomous").add(chooser);
-
-
 
         swerveSubsystem.enableBrakeMode(true);
         //        targetAngle = -swerveSubsystem.getHeading() * Math.PI / 180;
-        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + chooser.getSelected();
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + swerveSubsystem.getAddToTargetAngle();
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;
         //        }
@@ -110,7 +97,7 @@ public class SwerveJoystickCmd extends CommandBase {
         // DriveConstants.kTeleDriveMaxSpeedMetersPerSecond + OIConstants.driverBaseSpeedMetersPerSecond;
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
-        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get());
+        driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get()) + swerveSubsystem.getAddToTargetAngle();
         joystickMagnitude = Math.sqrt((ySpdFunction.get() * ySpdFunction.get())
                 + (xSpdFunction.get()
                         * xSpdFunction.get())); // Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get()));
@@ -130,7 +117,8 @@ public class SwerveJoystickCmd extends CommandBase {
         // (xSpdFunction.get()*xSpdFunction.get()))) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // double xSpeed = (Math.cos(driveAngle)*driveSpeed);
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
-        double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + chooser.getSelected();
+        SmartDashboard.putNumber("getAddToTargetAngle", swerveSubsystem.getAddToTargetAngle());
+        double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + swerveSubsystem.getAddToTargetAngle();
         double turningSpeed = 0;
 
         boolean isArmOut =
@@ -208,15 +196,13 @@ public class SwerveJoystickCmd extends CommandBase {
         }
         double ySpeed;
         if (!topSpeed.get() && limeLightSubSystem.getX() != 0) {
-            if (Math.abs(limeLightSubSystem.getX()) > 1) {
-                ySpeed = Math.abs(LimeLightLimiter.calculate(
+            if (Math.abs(limeLightSubSystem.getX()) > 2) {
+                ySpeed = (swerveSubsystem.getAddToTargetAngle() == Math.PI? -1 : 1) * ((Math.abs(LimeLightLimiter.calculate(
                                         LimeLightController.calculate(limeLightSubSystem.getX(), 0)))
-                                < LimeLightConstants.maxVel
+                                < LimeLightConstants.maxVel)
                         ? LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0))
                         : Math.copySign(
-                                LimeLightConstants.maxVel,
-                                LimeLightLimiter.calculate(
-                                        LimeLightController.calculate(limeLightSubSystem.getX(), 0)));
+                                LimeLightConstants.maxVel, LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0))));
             } else {
                 ySpeed = 0;
             }
@@ -308,7 +294,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
-        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + chooser.getSelected();
+        targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + swerveSubsystem.getAddToTargetAngle();
 
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;

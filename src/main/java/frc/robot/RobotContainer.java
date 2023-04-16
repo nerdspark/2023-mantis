@@ -166,8 +166,8 @@ public class RobotContainer {
         // AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
         //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new
         // GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
-        chooser.addOption("2 Cone Red", new threeElement_Red(swerveSubsystem));
-        chooser.addOption("2 Cone Blue", new threeElement_Blue(swerveSubsystem));
+        chooser.addOption("2 Cone Red", new threeElement_Red(swerveSubsystem, limeLightSubsystem));
+        chooser.addOption("2 Cone Blue", new threeElement_Blue(swerveSubsystem, limeLightSubsystem));
         chooser.addOption("3 Cone Red", new RedBobFourCone());
         chooser.addOption("3 Cone Blue", new BlueBobFourCone());
         chooser.addOption("Charge Station Balance", new RedSideCharge());

@@ -4,30 +4,31 @@
 
 package frc.robot.commands.Auton;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
+import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
+import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.LimeLightSubSystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
-/** An example command that uses an example subsystem. */
 public class threeElement_Red extends SequentialCommandGroup {
-    public threeElement_Red(SwerveSubsystem swerveSubsystem) {
+    public threeElement_Red(SwerveSubsystem swerveSubsystem, LimeLightSubSystem limeLightSubSystem) {
         addCommands(
+                new InstantCommand(() -> swerveSubsystem.setAddToTargetAngle(Math.PI)),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedFluurb_0", 1, 0.5, true),
+                        new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(true, -2)),
                         new HighDropCommand(
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
@@ -38,13 +39,16 @@ public class threeElement_Red extends SequentialCommandGroup {
                         87.0,
                         Constants.ArmConstants.highDropPosition.smartMotionMaxVel(),
                         Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
-                new WaitCommand(0.2),
+                new InstantCommand(() -> {
+                    RobotContainer.getGripperSubsystem().setLeftPosition(-15);
+                    RobotContainer.getGripperSubsystem().setRightPosition(2);
+                }),
+                new WaitCommand(0.5),
                 new MidDropCommand(
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
+                new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedFluurb_1", 2.75, 2, false),
                         new SequentialCommandGroup(
@@ -68,13 +72,34 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getElevatorSubsystem(),
                                         RobotContainer.getWristSubsystem()))),
+                new InstantCommand(() -> RobotContainer.getArmSubsystem().setPosition(87)),
+                new RepeatCommand(new SwerveJoystickCmd(
+                        swerveSubsystem,
+                        limeLightSubSystem,
+                        () -> -0.3,
+                        () -> 0.0,
+                        () -> 0.0,
+                        () -> 0.0,
+                        () -> false,
+                        () -> 0,
+                        () -> 0.0,
+                        () -> 0.0,
+                        () -> false,
+                        () -> false,
+                        () -> false,
+                        () -> false)
+                        .repeatedly())
+                        .raceWith(new WaitCommand(0.6)),
                 new HighDropCommand(
                         RobotContainer.getArmSubsystem(),
                         RobotContainer.getElevatorSubsystem(),
                         RobotContainer.getWristSubsystem()),
+                new InstantCommand(() -> RobotContainer.getArmSubsystem().setPosition(84)),
                 new WaitCommand(0.1),
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.OPENED),
+                new InstantCommand(() -> {
+                    RobotContainer.getGripperSubsystem().setLeftPosition(-15);
+                    RobotContainer.getGripperSubsystem().setRightPosition(2);
+                }),
                 new WaitCommand(0.6),
                 new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(false)),
                 new InstantCommand(() -> RobotContainer.getGripperSubsystem().setSwap(false)),

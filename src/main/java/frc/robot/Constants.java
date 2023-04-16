@@ -35,13 +35,12 @@ public final class Constants {
     }
 
     public static class LimeLightConstants {
-        //        public static final String hostname = "asdf";
-        public static final double kP = -3;
+        // public static final String hostname = "asdf";
+        public static final double kP = -0.1;
         public static final double kI = 0;
         public static final double kD = 0;
-        public static final double maxAccel = 2;
-        //        public static final double maxVel = 3;
-
+        public static final double maxAccel = 3.5;
+        public static final double maxVel = 0.8;
     }
 
     public static final int sensor1ID = 21;
@@ -155,7 +154,7 @@ public final class Constants {
         public static final double kPhysicalMaxSpeedMetersPerSecond = 3.4;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
-        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 3;
+        public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 1.2;
         public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
                 kPhysicalMaxAngularSpeedRadiansPerSecond * 0.09;
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
@@ -164,9 +163,9 @@ public final class Constants {
         public static final double kFalconMaxSetSpeed = 7000d;
 
         public static final double kPTargetTurning = -2.4d;
-        public static final double kITargetTurning = 0d;
+        public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
-        public static final double kTargetTurningDeadband = 01 * Math.PI / 180;
+        public static final double kTargetTurningDeadband = 0.3 * Math.PI / 180;
 
         public static final double kRampRateTurningMotor = 0.04d;
         public static final double kPTurningMotor = 0.1d;
@@ -224,7 +223,7 @@ public final class Constants {
         public static final int WristMotorID = 10; // motion profiling
 
         public static final ArmPositionData bucketPickupPosition =
-                new ArmPositionData(0.0, 0.5, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0, 1.0, -0.07, 3.0, 3.0, -10.0, -10.0, 3500.0, 9000.0);
         public static final ArmPositionData groundPickupPosition =
                 new ArmPositionData(13.0, 150.0, 1.0, 0.05, 3.0, 3.0, 0.0, -12.0, 5500.0, 9000.0);
         public static final ArmPositionData shelfPickupPosition =
@@ -232,13 +231,13 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
+                new ArmPositionData(-6.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
                 new ArmPositionData(-4.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
-                new ArmPositionData(0.0, 0.5, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
+                new ArmPositionData(0.0, 0, 0.25, 0.07, 3.0, 3.0, -10.0, -10.0, 2500.0, 4000.0);
 
         public record ArmPositionData(
                 double wristCmdPos,
@@ -305,11 +304,11 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 2.4;
+        public static final double driverEPower = 3; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
-        public static final double driverBaseSpeed = 0.04;
+        public static final double driverBaseSpeed = 0.0;
         // triggers
         public static final int kDriverLeftTrigger = 2;
         public static final int kDriverRightTrigger = 3;
@@ -331,7 +330,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -10;
+        public static final double joystickTurningGain = -2;
     }
 
     public static class VisionConstants {
