@@ -6,7 +6,6 @@ package frc.robot;
 
 // import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,13 +26,11 @@ import frc.robot.subsystems.*;
 import frc.robot.subsystems.ArmSubsystem.ArmPosition;
 import frc.robot.subsystems.BucketSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
-import frc.robot.subsystems.LimeLightSubSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.TimeOfFlightSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import java.util.function.BooleanSupplier;
 // import org.photonvision.PhotonCamera;
 
 /**
@@ -46,15 +43,8 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    // private final CommandXboxController m_driverController =
-    //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
-
-    private static final XboxController cont = new XboxController(Constants.controllerPort);
-    private static final XboxController cont2 = new XboxController(Constants.controllerPort2);
-
     public static final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-    public static final LimeLightSubSystem limeLightSubsystem = new LimeLightSubSystem();
+    public static final LimelightSubsystem limeLightSubsystem = new LimelightSubsystem();
 
     public static final ArmSubsystem armSubsystem = new ArmSubsystem();
     public static final GripperSubsystem gripperSubsystem = new GripperSubsystem();
@@ -66,45 +56,7 @@ public class RobotContainer {
     private final Joystick driverJoystick = new Joystick(OIConstants.kDriverControllerPort);
 
     private final Joystick coDriverJoystick = new Joystick(OIConstants.kCoDriverControllerPort);
-
-    public static final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
-    BooleanSupplier hasCone;
-    BooleanSupplier hasCube;
-
-    Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
-
-    // //Arm, Gripper, Bucket
-    //   private static final ArmSubsystem armSubsystem = new ArmSubsystem();
-    // private static final GripperSubsystem gripperSubsystem = new GripperSubsystem(0, 0, false, false);
-    //   private static final BucketSubsystem bucketSubsystem = new BucketSubsystem();
-
-    // Vision
-    // private final PhotonCamera photonCameraConeVision = new PhotonCamera(Constants.VisionConstants.coneCameraName);
-
-    // private final ConeVisionSubsystem m_coneVisionSubsystem = new ConeVisionSubsystem(photonCameraConeVision);
-    //    public static final PhotonCamera photonCamera = new PhotonCamera(Constants.VisionConstants.aprTagCameraName);
-    //    public static final PhotonCamera photonCameraBack =
-    //            new PhotonCamera(Constants.VisionConstants.aprTagCameraBackName);
-
-    // private final ConeVisionCommand  coneVisionCommand= new ConeVisionCommand(m_coneVisionSubsystem);
-
-    // private final CubeVisionCommand  cubeVisionCommand= new CubeVisionCommand(m_coneVisionSubsystem);
-    //    private final PoseEstimatorSubSystem poseEstimator =
-    //            new PoseEstimatorSubSystem(swerveSubsystem::getRotation2d, swerveSubsystem::getModulePositions);
-    // private final ChaseTagCommand chaseTagCommand = new
-    // ChaseTagCommand(photonCamera,swerveSubsystem,poseEstimator::getCurrentPose, 6);
-    //     private final AprTagCommand aprTagCommand =
-    //             new AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose);
-
-    // Vision
-
-    // Limelight
-
-    // public static final LimeLightSubSystem limeLightSubSystem = new LimeLightSubSystem("limelight");
-    //  private final PoseEstimatorSubSystem2 poseEstimator2 = new
-    // PoseEstimatorSubSystem2(limeLightSubSystem,swerveSubsystem);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -144,28 +96,6 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-        // chooser.addOption("Line 2 Meters", new line2meters(swerveSubsystem));
-        // chooser.addOption("Line 2 Meters Turn", new line2metersTurn(swerveSubsystem));
-        // chooser.addOption("Three Meters Vision Test", new threeMeterVisionTest(swerveSubsystem));
-        // chooser.addOption("Three Meters Vision Test Command", new threeMeterVisionTestCommand(swerveSubsystem));
-        // chooser.addOption("Three Element Command", new threeElementCommand(swerveSubsystem));
-
-        // chooser.addOption("Five Meters Vision Test Command", new visionTest5M(swerveSubsystem, photonCamera,
-        // m_exampleSubsystem, poseEstimator));
-        // chooser.addOption("Five Meters Vision Test Command Marker", new visionTest5MMarker(swerveSubsystem,
-        // photonCamera, m_exampleSubsystem, poseEstimator));
-
-        // chooser.addOption("Two Cone Test With Vision", new twoConeWithVision(swerveSubsystem, photonCamera,
-        // m_exampleSubsystem, poseEstimator));
-        // // chooser.setDefaultOption("Five Meters With Vision", new  ParallelDeadlineGroup( new
-        // AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
-        //     new visionTest5M(swerveSubsystem)).andThen(new GoToTagCommand(photonCamera, swerveSubsystem,
-        // poseEstimator::getCurrentPose, 8)));
-
-        // chooser.setDefaultOption("Line Three Meters With Vision Deadline", new  ParallelDeadlineGroup( new
-        // AprTagCommand(photonCamera, m_exampleSubsystem, 8, poseEstimator::getCurrentPose),
-        //                                           new threeMeterVisionTest(swerveSubsystem)).andThen(new
-        // GoToTagCommand(photonCamera, swerveSubsystem, poseEstimator::getCurrentPose, 8)));
         chooser.addOption("2 Cone Red", new threeElement_Red(swerveSubsystem, limeLightSubsystem));
         chooser.addOption("2 Cone Blue", new threeElement_Blue(swerveSubsystem, limeLightSubsystem));
         chooser.addOption("3 Cone Red", new RedBobFourCone());

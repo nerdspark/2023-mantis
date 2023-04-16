@@ -10,25 +10,25 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand.GripperState;
-import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.LimeLightSubSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class threeElement_Red extends SequentialCommandGroup {
-    public threeElement_Red(SwerveSubsystem swerveSubsystem, LimeLightSubSystem limeLightSubSystem) {
+    public threeElement_Red(SwerveSubsystem swerveSubsystem, LimelightSubsystem limelightSubsystem) {
         addCommands(
                 new InstantCommand(() -> swerveSubsystem.setAddToTargetAngle(Math.PI)),
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(), RobotContainer.getArmSubsystem(), GripperState.CLOSED),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedFluurb_0", 1, 0.5, true),
-                        new InstantCommand(() -> RobotContainer.getWristSubsystem().setPositionOverride(true, -2)),
+                        new InstantCommand(
+                                () -> RobotContainer.getWristSubsystem().setPositionOverride(true, -2)),
                         new HighDropCommand(
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getElevatorSubsystem(),
@@ -74,21 +74,21 @@ public class threeElement_Red extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem()))),
                 new InstantCommand(() -> RobotContainer.getArmSubsystem().setPosition(87)),
                 new RepeatCommand(new SwerveJoystickCmd(
-                        swerveSubsystem,
-                        limeLightSubSystem,
-                        () -> -0.3,
-                        () -> 0.0,
-                        () -> 0.0,
-                        () -> 0.0,
-                        () -> false,
-                        () -> 0,
-                        () -> 0.0,
-                        () -> 0.0,
-                        () -> false,
-                        () -> false,
-                        () -> false,
-                        () -> false)
-                        .repeatedly())
+                                        swerveSubsystem,
+                                        limelightSubsystem,
+                                        () -> -0.3,
+                                        () -> 0.0,
+                                        () -> 0.0,
+                                        () -> 0.0,
+                                        () -> false,
+                                        () -> 0,
+                                        () -> 0.0,
+                                        () -> 0.0,
+                                        () -> false,
+                                        () -> false,
+                                        () -> false,
+                                        () -> false)
+                                .repeatedly())
                         .raceWith(new WaitCommand(0.6)),
                 new HighDropCommand(
                         RobotContainer.getArmSubsystem(),

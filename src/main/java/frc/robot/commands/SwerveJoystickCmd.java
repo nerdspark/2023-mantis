@@ -12,14 +12,14 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.RobotContainer;
-import frc.robot.subsystems.LimeLightSubSystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.util.function.Supplier;
 
 public class SwerveJoystickCmd extends CommandBase {
 
     private final SwerveSubsystem swerveSubsystem;
-    private final LimeLightSubSystem limeLightSubSystem;
+    private final LimelightSubsystem limeLightSubSystem;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningTargX, turningTargY;
     private final Supplier<Boolean> fieldOrientedFunction, resetGyroButton, cancelTurn, topSpeed, rightBumper;
     private final Supplier<Integer> DPAD;
@@ -42,7 +42,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     public SwerveJoystickCmd(
             SwerveSubsystem swerveSubsystem,
-            LimeLightSubSystem limeLightSubSystem,
+            LimelightSubsystem limelightSubsystem,
             Supplier<Double> xSpdFunction,
             Supplier<Double> ySpdFunction,
             Supplier<Double> turningTargX,
@@ -56,7 +56,7 @@ public class SwerveJoystickCmd extends CommandBase {
             Supplier<Boolean> topSpeed,
             Supplier<Boolean> rightBumper) {
         this.swerveSubsystem = swerveSubsystem;
-        this.limeLightSubSystem = limeLightSubSystem;
+        this.limeLightSubSystem = limelightSubsystem;
         this.xSpdFunction = xSpdFunction;
         this.ySpdFunction = ySpdFunction;
         this.turningTargX = turningTargX;
@@ -197,12 +197,16 @@ public class SwerveJoystickCmd extends CommandBase {
         double ySpeed;
         if (!topSpeed.get() && limeLightSubSystem.getX() != 0) {
             if (Math.abs(limeLightSubSystem.getX()) > 2) {
-                ySpeed = (swerveSubsystem.getAddToTargetAngle() == Math.PI? -1 : 1) * ((Math.abs(LimeLightLimiter.calculate(
-                                        LimeLightController.calculate(limeLightSubSystem.getX(), 0)))
-                                < LimeLightConstants.maxVel)
-                        ? LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0))
-                        : Math.copySign(
-                                LimeLightConstants.maxVel, LimeLightLimiter.calculate(LimeLightController.calculate(limeLightSubSystem.getX(), 0))));
+                ySpeed = (swerveSubsystem.getAddToTargetAngle() == Math.PI ? -1 : 1)
+                        * ((Math.abs(LimeLightLimiter.calculate(
+                                                LimeLightController.calculate(limeLightSubSystem.getX(), 0)))
+                                        < LimeLightConstants.maxVel)
+                                ? LimeLightLimiter.calculate(
+                                        LimeLightController.calculate(limeLightSubSystem.getX(), 0))
+                                : Math.copySign(
+                                        LimeLightConstants.maxVel,
+                                        LimeLightLimiter.calculate(
+                                                LimeLightController.calculate(limeLightSubSystem.getX(), 0))));
             } else {
                 ySpeed = 0;
             }

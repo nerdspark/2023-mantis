@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
-public class LimeLightSubSystem extends SubsystemBase {
+public class LimelightSubsystem extends SubsystemBase {
 
     public NetworkTable defaultTable = NetworkTableInstance.getDefault().getTable(VisionConstants.LIMELIGHT_NAME);
     public NetworkTableEntry tx = defaultTable.getEntry("tx");
@@ -27,7 +27,7 @@ public class LimeLightSubSystem extends SubsystemBase {
     public double led;
 
     /** Creates a new Limelight. */
-    public LimeLightSubSystem() {
+    public LimelightSubsystem() {
 
         setPipeline(0);
     }
