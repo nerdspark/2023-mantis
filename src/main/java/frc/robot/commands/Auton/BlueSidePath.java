@@ -8,35 +8,15 @@ import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
-import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 
 public class BlueSidePath extends SequentialCommandGroup {
     public BlueSidePath() {
         addCommands(
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(),
-                        RobotContainer.getArmSubsystem(),
-                        MoveGripperCommand.GripperState.CLOSED),
+                new DropPreloadedHigh("BlueSidePath_0"),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("BlueSidePath_0", 1, 0.5, true),
-                        new HighDropCommand(
-                                RobotContainer.getArmSubsystem(),
-                                RobotContainer.getElevatorSubsystem(),
-                                RobotContainer.getWristSubsystem())),
-                new WaitCommand(0.1),
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(),
-                        RobotContainer.getArmSubsystem(),
-                        MoveGripperCommand.GripperState.OPENED),
-                new WaitCommand(0.2),
-                new MidDropCommand(
-                        RobotContainer.getArmSubsystem(),
-                        RobotContainer.getElevatorSubsystem(),
-                        RobotContainer.getWristSubsystem()),
-                new ParallelCommandGroup(
-                        new DriveFollowPath("BlueSidePath_1", 1.5, 3, true),
+                        new DriveFollowPath("BlueSidePath_1", 1.5, 3, false),
                         new SequentialCommandGroup(
                                 new WaitCommand(2),
                                 new GroundPickupCommand(

@@ -32,6 +32,13 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
+
+        // only start the server if not on a field (FMS attached)
+        if (!DriverStation.isFMSAttached()) {
+            PathPlannerServer.startServer(9312);
+        }
+
+        LimelightHelpers.setPipelineIndex(Constants.VisionConstants.LIMELIGHT_NAME, 0);
     }
 
     /**
@@ -49,9 +56,6 @@ public class Robot extends TimedRobot {
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
         SmartDashboard.putNumber("Timer", Timer.getMatchTime());
-        if (!DriverStation.isFMSAttached()) {
-            PathPlannerServer.startServer(6969);
-        }
     }
 
     /** This function is called once each time the robot enters Disabled mode. */

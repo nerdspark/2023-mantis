@@ -6,43 +6,17 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
-import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmMoveCommands.MoveWristCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
-import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 
 public class RedSidePath extends SequentialCommandGroup {
     public RedSidePath() {
         addCommands(
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(),
-                        RobotContainer.getArmSubsystem(),
-                        MoveGripperCommand.GripperState.CLOSED),
-                new ParallelCommandGroup(
-                        new DriveFollowPath("RedSidePath_0", 1, 0.5, true),
-                        new HighDropCommand(
-                                RobotContainer.getArmSubsystem(),
-                                RobotContainer.getElevatorSubsystem(),
-                                RobotContainer.getWristSubsystem())),
-                new WaitCommand(0.3),
-                new MoveArmCommand(
-                        RobotContainer.getArmSubsystem(),
-                        87.0,
-                        Constants.ArmConstants.highDropPosition.smartMotionMaxVel(),
-                        Constants.ArmConstants.highDropPosition.smartMotionMaxAccel()),
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(),
-                        RobotContainer.getArmSubsystem(),
-                        MoveGripperCommand.GripperState.OPENED),
-                new WaitCommand(0.2),
-                new MidDropCommand(
-                        RobotContainer.getArmSubsystem(),
-                        RobotContainer.getElevatorSubsystem(),
-                        RobotContainer.getWristSubsystem()),
+                new DropPreloadedHigh("RedSidePath_0"),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedSidePath_1", 1.2, 1.5, false),
                         new SequentialCommandGroup(
