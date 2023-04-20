@@ -50,7 +50,7 @@ public class BlueBobFourCone extends SequentialCommandGroup {
                                         RobotContainer.getWristSubsystem(),
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()),
-                                new WaitCommand(2.25),
+                                new WaitCommand(2.35),
                                 new MoveGripperCommand(
                                         RobotContainer.getGripperSubsystem(),
                                         RobotContainer.getArmSubsystem(),

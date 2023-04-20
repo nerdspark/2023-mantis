@@ -138,7 +138,14 @@ public class SwerveJoystickCmd extends CommandBase {
             zeroHeading();
             swerveSubsystem.resetOdometry(new Pose2d());
         } else if (DPAD.get() != -1 && !isArmOut) {
-            targetAngle = ((DPAD.get()) * Math.PI / 180d);
+            double dpadangle = DPAD.get();
+            if (dpadangle == 45 || dpadangle == 315) {
+                dpadangle = 0;
+            }
+            if (dpadangle == 135 || dpadangle == 225) {
+                dpadangle = 180;
+            }
+            targetAngle = ((dpadangle) * Math.PI / 180d);
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
         turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
