@@ -40,6 +40,8 @@ public class SwerveJoystickCmd extends CommandBase {
     private Translation2d prevDrivetrainPose3 = new Translation2d();
     private boolean correcting = true;
 
+    private double turningSpeed = 0;
+
     public SwerveJoystickCmd(
             SwerveSubsystem swerveSubsystem,
             LimelightSubsystem limelightSubsystem,
@@ -119,7 +121,6 @@ public class SwerveJoystickCmd extends CommandBase {
         // double ySpeed = (Math.sin(driveAngle)*driveSpeed);
         SmartDashboard.putNumber("getAddToTargetAngle", swerveSubsystem.getAddToTargetAngle());
         double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + swerveSubsystem.getAddToTargetAngle();
-        double turningSpeed = 0;
 
         boolean isArmOut =
                 switch (RobotContainer.getArmSubsystem().getArmPositionState()) {
@@ -140,9 +141,7 @@ public class SwerveJoystickCmd extends CommandBase {
             targetAngle = ((DPAD.get()) * Math.PI / 180d);
         }
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
-        turningSpeed = Math.abs(targetTurnController.calculate(currentAngle, targetAngle)) < 6
-                ? targetTurnController.calculate(currentAngle, targetAngle)
-                : 6;
+        turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
         // SmartDashboard.putNumber("prevdrivetrainposeX", prevDrivetrainPose.getX());
         // SmartDashboard.putNumber("prevdrivetrainposeY", prevDrivetrainPose.getY());
         // SmartDashboard.putNumber("currdrivetrainposeX", currentDrivetrainPose.getX());

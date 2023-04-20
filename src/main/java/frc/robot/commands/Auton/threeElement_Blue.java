@@ -14,10 +14,11 @@ import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.ArmPositionCommands.MidDropCommand;
 import frc.robot.commands.DriveFollowPath;
 import frc.robot.commands.SwerveJoystickCmd;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 
 public class threeElement_Blue extends SequentialCommandGroup {
-    public threeElement_Blue(SwerveSubsystem swerveSubsystem) {
+    public threeElement_Blue(SwerveSubsystem swerveSubsystem, LimelightSubsystem limelightSubsystem) {
         addCommands(
                 new InstantCommand(() -> swerveSubsystem.setAddToTargetAngle(Math.PI)),
                 new DropPreloadedHigh("BlueFluurb_0"),
@@ -47,6 +48,7 @@ public class threeElement_Blue extends SequentialCommandGroup {
                 new InstantCommand(() -> RobotContainer.getArmSubsystem().setPosition(87)),
                 new RepeatCommand(new SwerveJoystickCmd(
                                         swerveSubsystem,
+                                        limelightSubsystem,
                                         () -> -0.3,
                                         () -> 0.0,
                                         () -> 0.0,
