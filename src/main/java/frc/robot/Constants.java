@@ -162,7 +162,7 @@ public final class Constants {
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
-        public static final double kPTargetTurning = -2.4d;
+        public static final double kPTargetTurning = -2.8d;
         public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 0.3 * Math.PI / 180;
@@ -229,7 +229,7 @@ public final class Constants {
         public static final ArmPositionData shelfPickupPosition =
                 new ArmPositionData(0.0, 85.0, 0.0, 0.1, 3.0, 3.0, -7.0, -7.0, 5500.0, 9000.0);
         public static final ArmPositionData cubePickupPosition =
-                new ArmPositionData(-1.0, 9.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
+                new ArmPositionData(-1.0, 7.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
                 new ArmPositionData(-6.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
