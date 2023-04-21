@@ -241,7 +241,7 @@ public class RobotContainer {
 
         new JoystickButton(coDriverJoystick, 6)
                 .and(() -> armSubsystem.getArmPositionState() == ArmPosition.BUCKET_PICKUP)
-                .whileTrue(new InstantCommand(armSubsystem::setZero))
+                .whileTrue(new InstantCommand(armSubsystem::setZero).repeatedly())
                 .onFalse(new BucketPickupCommand(
                         elevatorSubsystem, wristSubsystem, bucketSubsystem, armSubsystem, gripperSubsystem));
     }
