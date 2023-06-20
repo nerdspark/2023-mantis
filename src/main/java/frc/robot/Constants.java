@@ -35,7 +35,6 @@ public final class Constants {
     }
 
     public static class LimeLightConstants {
-        // public static final String hostname = "asdf";
         public static final double kP = -0.1;
         public static final double kI = 0;
         public static final double kD = 0;
@@ -48,18 +47,6 @@ public final class Constants {
     public static final int controllerPort = 0;
     public static final int controllerPort2 = 1;
     public static final int pigeonPort = 25;
-
-    // JoyStick buttons
-    public static final int buttonA = 1;
-    public static final int buttonB = 2;
-    public static final int buttonX = 3;
-    public static final int buttonY = 4;
-    public static final int leftBumper = 5;
-    public static final int rightBumper = 6;
-    public static final int back = 7;
-    public static final int start = 8;
-    public static final int leftStick = 9;
-    public static final int rightStick = 10;
 
     public static final class ModuleConstants {
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4); // TODO: figure out right number
@@ -327,6 +314,7 @@ public final class Constants {
         public static final int kDriverBackButton = 7;
         public static final int kDriverCancelTurn = 7; // back button
         public static final int kDriverTopSpeed = 5; // left bumper
+        public static final int kDriverStart = 8;
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 

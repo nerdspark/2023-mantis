@@ -43,7 +43,9 @@ public class SwerveJoystickCmd extends CommandBase {
     private double turningSpeed = 0;
 
     private static final boolean turningModeTarget = false; // false = normal joystickturn, true = target turning
-    private static final boolean joystickFunctionCircle = false; // true = circle, false = square (Speed function will be different based on max value of joystick or hypotenuse)
+    private static final boolean joystickFunctionCircle =
+            false; // true = circle, false = square (Speed function will be different based on max value of joystick or
+    // hypotenuse)
 
     private double prevCurrentAngle = 0;
 
@@ -96,24 +98,21 @@ public class SwerveJoystickCmd extends CommandBase {
         // save previous drive settings for drift function
         double prevJoyMagnitude = joystickMagnitude;
         double prevDriveAngle = driveAngle;
-       
+
         // save previous drivetrain translations for drift function
         prevDrivetrainPose3 = prevDrivetrainPose2;
         prevDrivetrainPose2 = prevDrivetrainPose;
         prevDrivetrainPose = currentDrivetrainPose;
         currentDrivetrainPose = swerveSubsystem.getPose().getTranslation();
 
-
         targetTurnController.enableContinuousInput(-Math.PI, Math.PI);
-        
-        
+
         // Create joystick angle and magnitude
 
         driveAngle = Math.atan2(-ySpdFunction.get(), xSpdFunction.get()) + swerveSubsystem.getRobotAngleOffset();
-        joystickMagnitude = joystickFunctionCircle 
-            ? (Math.sqrt((ySpdFunction.get() * ySpdFunction.get()) + (xSpdFunction.get() * xSpdFunction.get()))) 
-            : (Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get())));
-
+        joystickMagnitude = joystickFunctionCircle
+                ? (Math.sqrt((ySpdFunction.get() * ySpdFunction.get()) + (xSpdFunction.get() * xSpdFunction.get())))
+                : (Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get())));
 
         // Use exponential ramp, speedy button, and maximum drive speed to calculate chassis translational speed
         double driveSpeed = ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
@@ -121,34 +120,33 @@ public class SwerveJoystickCmd extends CommandBase {
                                 + OIConstants.driverBaseSpeed))
                 * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
-
         // find current gyro angle, invert, convert to radians, apply offset if Auton backwards
         SmartDashboard.putNumber("getRobotAngleOffset", swerveSubsystem.getRobotAngleOffset());
         double currentAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180 + swerveSubsystem.getRobotAngleOffset();
 
         boolean isArmOut =
-        switch (RobotContainer.getArmSubsystem().getArmPositionState()) {
-            case HIGH_DROP, MID_DROP -> true;
-            default -> false;
-        };
+                switch (RobotContainer.getArmSubsystem().getArmPositionState()) {
+                    case HIGH_DROP, MID_DROP -> true;
+                    default -> false;
+                };
 
         // reset gyro function
         if (resetGyroButton.get()) {
             zeroHeading();
             swerveSubsystem.resetOdometry(new Pose2d());
-        // DPAD will only point to cardinal directions and when arm is in
+            // DPAD will only point to cardinal directions and when arm is in
         } else if (DPAD.get() != -1 && !isArmOut) {
-            double dpadangle = 
-                switch (DPAD.get()) {
-                    case 45, 315 -> 0;
-                    case 135, 225 -> 180;
-                    default -> DPAD.get();
-                };
+            double dpadangle =
+                    switch (DPAD.get()) {
+                        case 45, 315 -> 0;
+                        case 135, 225 -> 180;
+                        default -> DPAD.get();
+                    };
             targetAngle = ((dpadangle) * Math.PI / 180d);
-        // switch between stick turning modes
+            // switch between stick turning modes
         } else if (turningModeTarget) {
-            if ((turningTargX.get() * turningTargX.get()) + (turningTargY.get() * turningTargY.get()) >
-                    (OIConstants.kDeadbandSteer * OIConstants.kDeadbandSteer)) {
+            if ((turningTargX.get() * turningTargX.get()) + (turningTargY.get() * turningTargY.get())
+                    > (OIConstants.kDeadbandSteer * OIConstants.kDeadbandSteer)) {
                 targetAngle = Math.atan2(-turningTargX.get(), turningTargY.get());
             }
         } else {
@@ -158,22 +156,20 @@ public class SwerveJoystickCmd extends CommandBase {
                 turningSpeed =
                         -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
             } else if (prevCurrentAngle != 0) {
-                targetAngle += 2*(currentAngle - prevCurrentAngle)
+                targetAngle += 2 * (currentAngle - prevCurrentAngle);
                 prevCurrentAngle = 0;
             }
         }
-        
 
         // PID turn is on if: ((not manual turn) OR DPAD is down)
-        if (((turningModeTarget || (Math.abs(turningTargX.get()) < OIConstants.kDeadbandSteer)) || 
-            DPAD != -1)) {
+        if (((turningModeTarget || (Math.abs(turningTargX.get()) < OIConstants.kDeadbandSteer)) || DPAD.get() != -1)) {
             turningSpeed = targetTurnController.calculate(currentAngle, targetAngle);
         }
 
         // turn disable if: in turn deadband and not moving but also not manual turning OR cancelturnbutton
-        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband) && 
-                joystickMagnitude < 0.1 && 
-                (turningModeTarget || (Math.abs(turningTargX.get()) < OIConstants.kDeadbandSteer)))
+        if (((Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband)
+                        && joystickMagnitude < 0.1
+                        && (turningModeTarget || (Math.abs(turningTargX.get()) < OIConstants.kDeadbandSteer)))
                 || cancelTurn.get()) {
             turningSpeed = 0;
         }
@@ -184,12 +180,12 @@ public class SwerveJoystickCmd extends CommandBase {
             driveSpeed = 0;
         }
 
-
         // create Y direction speed (field-oriented) and with LimeLight
+        double ySpeed = 0;
         if (!topSpeed.get() && limeLightSubSystem.getX() != 0) {
             // LimeLight deadband
             if (Math.abs(limeLightSubSystem.getX()) > 2) {
-                double ySpeed = (swerveSubsystem.getRobotAngleOffset() == Math.PI ? -1 : 1)
+                ySpeed = (swerveSubsystem.getRobotAngleOffset() == Math.PI ? -1 : 1)
                         * ((Math.abs(LimeLightLimiter.calculate(
                                                 LimeLightController.calculate(limeLightSubSystem.getX(), 0)))
                                         < LimeLightConstants.maxVel)
@@ -200,7 +196,7 @@ public class SwerveJoystickCmd extends CommandBase {
                                         LimeLightLimiter.calculate(
                                                 LimeLightController.calculate(limeLightSubSystem.getX(), 0))));
             } else {
-                double ySpeed = 0;
+                ySpeed = 0;
             }
             SmartDashboard.putNumber("ySpeed", ySpeed);
             SmartDashboard.putString("limelightalign", "on");
@@ -216,20 +212,16 @@ public class SwerveJoystickCmd extends CommandBase {
         // create X direction speed (robot-oriented)
         double xSpeed = (Math.cos(driveAngle) * driveSpeed);
 
-
-
         // scale turning speed, DISABLED - schedule turning gain based on traverse speed
         turningSpeed = turningSpeed * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
             turningSpeed = turningSpeed;
-        } 
-
-
+        }
 
         // turn speeds robot-oriented and into individual modules, output to swerveSubsystem
 
         ChassisSpeeds chassisSpeeds;
-        if (fieldOrientedFunction.get()) { //always true except when driver presses button #2
+        if (fieldOrientedFunction.get()) { // always true except when driver presses button #2
             // Relative to field
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
@@ -246,8 +238,6 @@ public class SwerveJoystickCmd extends CommandBase {
             swerveSubsystem.setModuleStates(moduleStates);
         }
     }
-
-
 
     @Override
     public void end(boolean interrupted) {

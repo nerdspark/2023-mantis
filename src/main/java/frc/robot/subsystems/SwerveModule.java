@@ -62,7 +62,6 @@ public class SwerveModule {
     //     return turningMotor.getSelectedSensorVelocity() * ModuleConstants.kTurnTicks2RadiansPerSecond;
     // }
 
-
     // public double getDriveAcceleration() {
     //     return driveMotor.getSelectedSensorVelocity() * ModuleConstants.kDriveTicks2MeterPerSecond;
     // }
@@ -70,7 +69,6 @@ public class SwerveModule {
     // public double getTurningAcceleration() {
     //     return turningMotor.getSelectedSensorVelocity() * ModuleConstants.kTurnTicks2RadiansPerSecond;
     // }
-
 
     public double getCANCoderRad() {
         double angle = CANCoder.getAbsolutePosition() * (CANCoderReversed ? -1.0 : 1.0);
@@ -120,7 +118,7 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState state) {
-        
+
         // short spin
 
         double target = state.angle.getRadians();
@@ -131,7 +129,7 @@ public class SwerveModule {
             target = ((target - current) % (2 * Math.PI)) + current;
         } // Makes sure -360 < error < 360
 
-        if ((target - current > Math.PI)) { 
+        if ((target - current > Math.PI)) {
             target -= (2 * Math.PI); // If error is more than 180, subtract 360
         } else if ((target - current) < -Math.PI) {
             target += (2 * Math.PI); // If error is less than -180, add 360
@@ -146,16 +144,12 @@ public class SwerveModule {
             backward = true; // If error is less than -108, add 180 and drive backwards
         }
 
-
         // set motor commands
         driveMotor.set(
                 TalonFXControlMode.PercentOutput,
-                state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * (backward ? -1 : 1)
-                );
+                state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond * (backward ? -1 : 1));
         if (Math.abs(target - current) > 1 * Math.PI / 180) {
-            turningMotor.set(
-                    TalonFXControlMode.Position,
-                    target/ ModuleConstants.kTurnTicks2Radians);
+            turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);
         } else turningMotor.set(TalonFXControlMode.PercentOutput, 0);
         // Turning motor deadband to stop jittering
     }

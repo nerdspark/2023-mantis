@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -65,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveKinematics kinematics;
 
     private final Field2d fieldSim = new Field2d();
-    private double robotAngleOffset = 0; //robot can have 'forward' set at different angles
+    private double robotAngleOffset = 0; // robot can have 'forward' set at different angles
 
     public SwerveSubsystem() {
         new Thread(() -> {
@@ -169,7 +168,6 @@ public class SwerveSubsystem extends SubsystemBase {
             new SwerveModuleState(0.0, Rotation2d.fromDegrees(-135.0))
         });
     }
-    
 
     @Override
     public void periodic() {
@@ -189,6 +187,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public void setRobotAngleOffset(double val) {
         this.robotAngleOffset = val;
+    }
+
+    public double getHeading() {
+        return Math.IEEEremainder(gyro.getYaw(), 360);
     }
 
     public double getRobotAngleOffset() {
