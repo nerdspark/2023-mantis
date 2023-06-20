@@ -185,9 +185,6 @@ public class SwerveSubsystem extends SubsystemBase {
         fieldSim.setRobotPose(getPose());
 
         SmartDashboard.putNumber("Robot Gyro Heading", getHeading());
-        // SmartDashboard.putNumber("Odometry Rotation", odometer.getPoseMeters().getRotation().getDegrees());
-        // SmartDashboard.putNumber("Odometry X pos", odometer.getPoseMeters().getX());
-        // SmartDashboard.putNumber("OdometryY pos", odometer.getPoseMeters().getY());
     }
 
     public void setRobotAngleOffset(double val) {
@@ -198,99 +195,4 @@ public class SwerveSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("getRobotAngleOffset", this.robotAngleOffset);
         return this.robotAngleOffset;
     }
-
-/* useless junk
-    public static boolean driveTurning = false;
-
-    public void drive(ChassisSpeeds chassisSpeeds) {
-        this.setModuleStates(this.kinematics.toSwerveModuleStates(chassisSpeeds));
-    }
-
-    public SwerveModuleState[] getModuleStates() {
-        return new SwerveModuleState[] {
-            this.frontLeft.getState(), this.frontRight.getState(), this.backLeft.getState(), this.backRight.getState()
-        };
-    }
-
-    public ChassisSpeeds getChassisSpeeds() {
-        return this.kinematics.toChassisSpeeds(getModuleStates());
-    }
-
-
-    // //May need to change
-    // //We have to invert the angle of gyro so that rotating the robot counter-clockwise makes angle increase
-
-    // public Rotation2d getGyroRotation(){
-    //     return Rotation2d.fromDegrees(360.0 - gyro.getYaw());
-    // }
-
-    /**
-     * Gets the raw gyro data.
-     * @return x[0], y[1], and z[2] data in degrees per second
-     *
-    public double[] getGyroVelocityXYZ() {
-        double[] xyz = new double[3];
-        gyro.getRawGyro(xyz);
-        return xyz;
-    }
-
-
-    public void driveSwerveDrive(ChassisSpeeds chassisSpeeds) {
-        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
-
-        SwerveModuleState currenStateFL = frontLeft.getState();
-        SwerveModuleState.optimize(moduleStates[0], currenStateFL.angle);
-        frontLeft.setDesiredState(moduleStates[0]);
-
-        SwerveModuleState currenStateFR = frontRight.getState();
-        SwerveModuleState.optimize(moduleStates[1], currenStateFR.angle);
-        frontRight.setDesiredState(moduleStates[1]);
-
-        SwerveModuleState currenStateBL = backLeft.getState();
-        SwerveModuleState.optimize(moduleStates[2], currenStateBL.angle);
-        backLeft.setDesiredState(moduleStates[2]);
-
-        SwerveModuleState currenStateBR = backRight.getState();
-        SwerveModuleState.optimize(moduleStates[3], currenStateBR.angle);
-        backRight.setDesiredState(moduleStates[3]);
-    }
-
-    
-        // double error0 = Math.abs(desiredStates[0].angle.getRadians() - frontLeft.getTurningPosition())%(Math.PI);
-        // error0 = error0 > 0.5*Math.PI ? error0 - Math.PI : error0;
-        // double error1 = Math.abs(desiredStates[1].angle.getRadians() - frontRight.getTurningPosition())%(Math.PI);
-        // error1 = error1 > 0.5*Math.PI ? error1 - Math.PI : error1;
-        // double error2 = Math.abs(desiredStates[2].angle.getRadians() - backLeft.getTurningPosition())%(Math.PI);
-        // error2 = error2 > 0.5*Math.PI ? error2 - Math.PI : error2;
-        // double error3 = Math.abs(desiredStates[3].angle.getRadians() - backRight.getTurningPosition())%(Math.PI);
-        // error3 = error3 > 0.5*Math.PI ? error3 - Math.PI : error3;
-        // SmartDashboard.putString("asdf", "good");
-        // if ((error0 > (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error1 >
-        // (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error2 >
-        // (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)) || (error3 >
-        // (DriveConstants.kEnterDriveTurningDeadband*Math.PI/180)))
-        // {
-        //     SmartDashboard.putNumber("desiredstates", desiredStates[0].angle.getRadians());
-            // SmartDashboard.putNumber("FLpos", frontLeft.getTurningPosition());
-        //     SmartDashboard.putString("asdf", "bad");
-        //     desiredStates[0] = new SwerveModuleState(0, desiredStates[0].angle);
-        //     desiredStates[1] = new SwerveModuleState(0, desiredStates[1].angle);
-        //     desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
-        //     desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
-        //     driveTurning = true;
-        // } else if (((error0 > (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error1 >
-        // (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error2 >
-        // (DriveConstants.kExitDriveTurningDeadband*Math.PI/180)) || (error3 >
-        // (DriveConstants.kExitDriveTurningDeadband*Math.PI/180))) && !driveTurning) {
-        //     driveTurning = true;
-        //     desiredStates[0] = new SwerveModuleState(0, desiredStates[0].angle);
-        //     desiredStates[1] = new SwerveModuleState(0, desiredStates[1].angle);
-        //     desiredStates[2] = new SwerveModuleState(0, desiredStates[2].angle);
-        //     desiredStates[3] = new SwerveModuleState(0, desiredStates[3].angle);
-        // } else {
-            driveTurning = false;
-            // }
-
-            */
 }

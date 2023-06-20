@@ -185,46 +185,6 @@ public class SwerveJoystickCmd extends CommandBase {
         }
 
 
-        // DISABLED - drift if robot moving quickly, joystick is small, AND robot angle is near target
-        if (Math.sqrt(((prevDrivetrainPose3.getX() - currentDrivetrainPose.getX())
-                                        * (prevDrivetrainPose3.getX() - currentDrivetrainPose.getX()))
-                                + ((prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())
-                                        * (prevDrivetrainPose3.getY() - currentDrivetrainPose.getY())))
-                        > OIConstants.kDeadbandSpeed
-                && (joystickMagnitude < OIConstants.kDeadbandDrive * 3)
-                && Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 3) {
-            //                        turningSpeed = 0;
-            //            driveAngle = prevDriveAngle;
-            // SmartDashboard.putString("PID turning?", "disabled - moving fastslowing down");
-        } else {
-            // SmartDashboard.putString("PID turning?", "yes");
-        }
-
-        // DISABLED - turning deadbands and correction while drifting
-        // if (Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband * 10
-        //         && (joystickMagnitude < OIConstants.kDeadbandDrive * 2) && !correcting) {
-        //     turningSpeed = 0;
-        //     driveAngle = prevDriveAngle;
-        //     SmartDashboard.putString("PID turning?", "stopped deadband");
-        // } else if (correcting) {
-        //     if (Math.abs(targetAngle - currentAngle) < DriveConstants.kTargetTurningDeadband*3) {
-        //         correcting = false;
-        //         SmartDashboard.putString("correcting?", "false");
-        //     }
-        //     SmartDashboard.putString("correcting?", "true");
-        // } else if (Math.abs(targetAngle - currentAngle) > DriveConstants.kTargetTurningDeadband * 10) {
-        //     correcting = true;
-        //     SmartDashboard.putString("correcting?", "true");
-        // }
-
-        // DISABLED - joystick change results in drift
-        // if (prevJoyMagnitude - joystickMagnitude > OIConstants.joystickMagnitudeChange) {
-        //     driveAngle = prevDriveAngle;
-        //     SmartDashboard.putString("joymagnitude test?", "on");
-        // } else {
-        // SmartDashboard.putString("joymagnitude test?", "off"); }
-
-
         // create Y direction speed (field-oriented) and with LimeLight
         if (!topSpeed.get() && limeLightSubSystem.getX() != 0) {
             // LimeLight deadband
@@ -261,11 +221,8 @@ public class SwerveJoystickCmd extends CommandBase {
         // scale turning speed, DISABLED - schedule turning gain based on traverse speed
         turningSpeed = turningSpeed * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond;
         if (joystickMagnitude > OIConstants.targetTurnGainScheduleSpeed) {
-            // SmartDashboard.putString("targetTurnGain", "fastGain");
             turningSpeed = turningSpeed;
-        } else {
-            // SmartDashboard.putString("targetTurnGain", "slowGain");
-        }
+        } 
 
 
 
