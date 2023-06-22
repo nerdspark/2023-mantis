@@ -30,9 +30,6 @@ import java.util.Map;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-    public static class OperatorConstants {
-        public static final int kDriverControllerPort = 0;
-    }
 
     public static class LimeLightConstants {
         public static final double kP = -0.1;
@@ -42,37 +39,26 @@ public final class Constants {
         public static final double maxVel = 0.8;
     }
 
-    public static final int sensor1ID = 21;
-    public static final int motorr1ID = 12;
-    public static final int controllerPort = 0;
-    public static final int controllerPort2 = 1;
     public static final int pigeonPort = 25;
 
     public static final class ModuleConstants {
-        public static final double kWheelDiameterMeters = Units.inchesToMeters(4); // TODO: figure out right number
-        // public static final double kDriveMotorGearRatio = 1d / 2048d;//TODO: figure
-        // out right number
+        public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
+
         public static final double kDriveMotorGearRatio = 1d / 6.12d;
-        // public static final double kTurningMotorGearRatio = 1d / 21.429d /
-        // 2048d;//TODO: figure out right number
-        public static final double kTurningMotorGearRatio = 1d / (150d / 7d);
         public static final double kDriveEncoderRot2Meter = kDriveMotorGearRatio * Math.PI * kWheelDiameterMeters;
-        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2d * Math.PI;
-        public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60d;
-        public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60d;
-        // public static final double kPTurning = -0.1d;
-        // public static final double kTurningEncoderRadians2Ticks = 43008 / 2 /
-        // Math.PI;//TODO: figure out right number
-        public static final double kDriveEncoderTicks2Rot = 1d / 2048d; // TODO: figure out right number
-        // public static final double kDriveTicksPer100ms2RPM = kDriveEncoderTicks2Rot *
-        // 600;
-        // public static final double kDriveTicks2RevsPerSecond = kDriveEncoderTicks2Rot
-        // * 10;
-        public static final double kTurningEncoderTicks2Rot = 1d / 2048d;
+        public static final double kDriveEncoderTicks2Rot = 1d / 2048d;
         public static final double kDriveTicks2Meters = kDriveEncoderRot2Meter * kDriveEncoderTicks2Rot;
         public static final double kDriveTicks2MeterPerSecond = kDriveEncoderTicks2Rot * 10 * kDriveEncoderRot2Meter;
+
+        // public static final double kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60d;
+
+        public static final double kTurningMotorGearRatio = 1d / (150d / 7d);
+        public static final double kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2d * Math.PI;
+        public static final double kTurningEncoderTicks2Rot = 1d / 2048d;
         public static final double kTurnTicks2Radians = kTurningEncoderRot2Rad * kTurningEncoderTicks2Rot;
         public static final double kTurnTicks2RadiansPerSecond = kTurningEncoderTicks2Rot * 10 * kTurningEncoderRot2Rad;
+
+        // public static final double kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60d;
     }
 
     public static final class DriveConstants {
@@ -110,33 +96,20 @@ public final class Constants {
         public static final boolean kFrontRightDriveEncoderReversed = false;
         public static final boolean kBackRightDriveEncoderReversed = false;
 
-        public static final int kFrontLeftDriveCANCoderPort = 23;
-        public static final int kBackLeftDriveCANCoderPort = 24;
-        public static final int kFrontRightDriveCANCoderPort = 22;
-        public static final int kBackRightDriveCANCoderPort = 21;
+        public static final int kFrontLeftCANCoderPort = 23;
+        public static final int kBackLeftCANCoderPort = 24;
+        public static final int kFrontRightCANCoderPort = 22;
+        public static final int kBackRightCANCoderPort = 21;
 
-        public static final boolean kFrontLeftDriveCANCoderReversed = true;
-        public static final boolean kBackLeftDriveCANCoderReversed = true;
-        public static final boolean kFrontRightDriveCANCoderReversed = true;
-        public static final boolean kBackRightDriveCANCoderReversed = true;
+        public static final boolean kFrontLeftCANCoderReversed = true;
+        public static final boolean kBackLeftCANCoderReversed = true;
+        public static final boolean kFrontRightCANCoderReversed = true;
+        public static final boolean kBackRightCANCoderReversed = true;
 
-        // Latest Kinmatics
-        public static final double kFrontLeftDriveCANCoderOffsetDeg = 28 + 180; // -151.8*Math.PI/180;
-        public static final double kBackLeftDriveCANCoderOffsetDeg = -127 + 180; // 53.3*Math.PI/180;
-        public static final double kFrontRightDriveCANCoderOffsetDeg = 158 + 180; // (-0.66)+(-60.4*Math.PI/180);
-        public static final double kBackRightDriveCANCoderOffsetDeg = -70 + 180; // 110.1*Math.PI/180;
-
-        // Latest Kinmatics2
-        // public static final double kFrontLeftDriveCANCoderOffsetRad = 25.1*Math.PI/180;
-        // public static final double kBackLeftDriveCANCoderOffsetRad = 94.6*Math.PI/180;
-        // public static final double kFrontRightDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        // public static final double kBackRightDriveCANCoderOffsetRad = (173.6-1%80)*Math.PI/180;
-
-        // //Old Kinematics
-        // public static final double kFrontLeftDriveCANCoderOffsetRad = -6.4+180*Math.PI/180;
-        // public static final double kBackLeftDriveCANCoderOffsetRad = -56.9*Math.PI/180;
-        // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
-        // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
+        public static final double kFrontLeftCANCoderOffsetDeg = -152;
+        public static final double kBackLeftCANCoderOffsetDeg = 53;
+        public static final double kFrontRightCANCoderOffsetDeg = -22;
+        public static final double kBackRightCANCoderOffsetDeg = 110;
 
         public static final double kPhysicalMaxSpeedMetersPerSecond = 3.5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
@@ -147,8 +120,6 @@ public final class Constants {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
-        public static final double kFalconMaxSetSpeed = 7000d;
-
         public static final double kPTargetTurning = -2.8d;
         public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
@@ -158,8 +129,6 @@ public final class Constants {
         public static final double kPTurningMotor = 0.1d;
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
-        // public static final double kMaxSpeedTurningMotor = 100;
-        public static final double kMaxAccelTurningMotor = 1;
 
         public static final double kRampRateDriveMotor = 0.05D;
         public static final double kPDriveMotor = 0.1d;
@@ -167,8 +136,6 @@ public final class Constants {
         public static final double kDDriveMotor = 2.5d;
         public static final double kFDriveMotor = 0.048d;
         public static final double kDriveMotoriZone = 0.048d;
-
-        public static final double driveSpeedConvertMode = 4000d;
     }
 
     public static final class AutoConstants {
@@ -280,18 +247,11 @@ public final class Constants {
 
         public static final double kDeadbandSteer = 0.07d;
         public static final double kDeadbandDrive = 0.05d;
-        public static final double kDeadbandSpeed = 0.01d;
-
-        public static final double joystickMagnitudeChange = 0.001d;
 
         public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
-        public static final double driverPower = 3.5; // 2.5 faster but clicks
-        public static final double driverBaseSpeedMetersPerSecond = 00;
-        public static final double triggerMultiplier = 0.1;
-        public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3; // 2.4;
+        public static final double driverEPower = 3;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;

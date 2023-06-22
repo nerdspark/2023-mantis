@@ -20,36 +20,36 @@ public class SwerveSubsystem extends SubsystemBase {
             DriveConstants.kFrontLeftTurningMotorPort,
             DriveConstants.kFrontLeftDriveEncoderReversed,
             DriveConstants.kFrontLeftTurningEncoderReversed,
-            DriveConstants.kFrontLeftDriveCANCoderPort,
-            DriveConstants.kFrontLeftDriveCANCoderOffsetDeg,
-            DriveConstants.kFrontLeftDriveCANCoderReversed);
+            DriveConstants.kFrontLeftCANCoderPort,
+            DriveConstants.kFrontLeftCANCoderOffsetDeg,
+            DriveConstants.kFrontLeftCANCoderReversed);
 
     private final SwerveModule frontRight = new SwerveModule(
             DriveConstants.kFrontRightDriveMotorPort,
             DriveConstants.kFrontRightTurningMotorPort,
             DriveConstants.kFrontRightDriveEncoderReversed,
             DriveConstants.kFrontRightTurningEncoderReversed,
-            DriveConstants.kFrontRightDriveCANCoderPort,
-            DriveConstants.kFrontRightDriveCANCoderOffsetDeg,
-            DriveConstants.kFrontRightDriveCANCoderReversed);
+            DriveConstants.kFrontRightCANCoderPort,
+            DriveConstants.kFrontRightCANCoderOffsetDeg,
+            DriveConstants.kFrontRightCANCoderReversed);
 
     private final SwerveModule backLeft = new SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
             DriveConstants.kBackLeftTurningEncoderReversed,
-            DriveConstants.kBackLeftDriveCANCoderPort,
-            DriveConstants.kBackLeftDriveCANCoderOffsetDeg,
-            DriveConstants.kBackLeftDriveCANCoderReversed);
+            DriveConstants.kBackLeftCANCoderPort,
+            DriveConstants.kBackLeftCANCoderOffsetDeg,
+            DriveConstants.kBackLeftCANCoderReversed);
 
     private final SwerveModule backRight = new SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
             DriveConstants.kBackRightTurningEncoderReversed,
-            DriveConstants.kBackRightDriveCANCoderPort,
-            DriveConstants.kBackRightDriveCANCoderOffsetDeg,
-            DriveConstants.kBackRightDriveCANCoderReversed);
+            DriveConstants.kBackRightCANCoderPort,
+            DriveConstants.kBackRightCANCoderOffsetDeg,
+            DriveConstants.kBackRightCANCoderReversed);
 
     private final WPI_Pigeon2 gyro = new WPI_Pigeon2(Constants.pigeonPort, DriveConstants.canBusName);
 
