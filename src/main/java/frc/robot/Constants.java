@@ -151,7 +151,7 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 2;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 1.8;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 4 / 3.5;
@@ -162,7 +162,7 @@ public final class Constants {
 
         public static final double kFalconMaxSetSpeed = 7000d;
 
-        public static final double kPTargetTurning = -2.8d;
+        public static final double kPTargetTurning = -1.7d;
         public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 0.3 * Math.PI / 180;
@@ -174,7 +174,7 @@ public final class Constants {
         // public static final double kMaxSpeedTurningMotor = 100;
         public static final double kMaxAccelTurningMotor = 1;
 
-        public static final double kRampRateDriveMotor = 0.05D;
+        public static final double kRampRateDriveMotor = 0.1D;
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
