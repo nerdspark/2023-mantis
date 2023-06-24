@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Constants.BalanceConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -38,10 +38,15 @@ public class BalanceCommand extends CommandBase {
             return;
         }
 
-        double speed = 0.35;
+        // double speed = 0.35;
+        double speed = BalanceConstants.balanceSpeed;
 
-        if ((Math.abs(prevRoll - roll) > 0.025 || done && Math.abs(roll) < 5)) {
-            if (Math.abs(roll) > 12) return;
+        // if ((Math.abs(prevRoll - roll) > 0.025 || done && Math.abs(roll) < 5)) {
+        //     if (Math.abs(roll) > 12) return;
+
+        if ((Math.abs(prevRoll - roll) > BalanceConstants.balanceRate
+                || done && Math.abs(roll) < BalanceConstants.balanceHold)) {
+            if (Math.abs(roll) > BalanceConstants.balanceEntry) return;
             done = true;
             drivetrainSubsystem.setWheelsToX();
             // new WaitCommand(2);

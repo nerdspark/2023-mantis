@@ -211,6 +211,13 @@ public final class Constants {
         public static final double BalanceDeadBandDeg = 6.0d;
     }
 
+    public static final class BalanceConstants {
+        public static final double balanceRate = 0.025d; // original value, 0.5
+        public static final double balanceEntry = 12.0d; // original value, 5
+        public static final double balanceHold = 12.0d; // original value, 5
+        public static final double balanceSpeed = 0.35; // original value, 0.3
+    }
+
     public static class ArmConstants {
         public static final int InclinovatorMotor1ID = 3; // position
         public static final int InclinovatorMotor2ID = 2; // slave to 3
