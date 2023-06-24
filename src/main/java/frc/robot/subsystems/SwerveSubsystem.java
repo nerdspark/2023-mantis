@@ -195,6 +195,6 @@ public class SwerveSubsystem extends SubsystemBase {
 
     public double getRobotAngleOffset() {
         SmartDashboard.putNumber("getRobotAngleOffset", this.robotAngleOffset);
-        return this.robotAngleOffset;
+        return this.robotAngleOffset + Math.PI;
     }
 }

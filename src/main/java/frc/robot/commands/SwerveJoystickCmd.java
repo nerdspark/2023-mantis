@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -232,7 +233,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-        if (rightBumper.get()) {
+        if (rightBumper.get() || DriverStation.isAutonomous()) {
             swerveSubsystem.setWheelsToX();
         } else {
             swerveSubsystem.setModuleStates(moduleStates);
@@ -252,7 +253,7 @@ public class SwerveJoystickCmd extends CommandBase {
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
         targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
-        swerveSubsystem.setRobotAngleOffset(0);
+        swerveSubsystem.setAddToTargetAngle(Math.PI);
 
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;

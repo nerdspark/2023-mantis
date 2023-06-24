@@ -111,7 +111,8 @@ public final class Constants {
         public static final double kFrontRightCANCoderOffsetDeg = -22;
         public static final double kBackRightCANCoderOffsetDeg = 110;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 2.5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 1.8;
+      
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 4 / 3.5;
@@ -120,7 +121,7 @@ public final class Constants {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
-        public static final double kPTargetTurning = -2.8d;
+        public static final double kPTargetTurning = -1.7d;
         public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 0.3 * Math.PI / 180;
@@ -130,7 +131,7 @@ public final class Constants {
         public static final double kITurningMotor = 0;
         public static final double kDTurningMotor = 0;
 
-        public static final double kRampRateDriveMotor = 0.05D;
+        public static final double kRampRateDriveMotor = 0.1D;
         public static final double kPDriveMotor = 0.1d;
         public static final double kIDriveMotor = 0.0001d;
         public static final double kDDriveMotor = 2.5d;
@@ -165,6 +166,13 @@ public final class Constants {
         public static final double BalanceDeadBandDeg = 6.0d;
     }
 
+    public static final class BalanceConstants {
+        public static final double balanceRate = 0.025d; // original value, 0.5
+        public static final double balanceEntry = 8.0d; // original value, 5
+        public static final double balanceHold = 12.0d; // original value, 5
+        public static final double balanceSpeed = 0.33d; // original value, 0.3
+    }
+
     public static class ArmConstants {
         public static final int InclinovatorMotor1ID = 3; // position
         public static final int InclinovatorMotor2ID = 2; // slave to 3
@@ -185,7 +193,7 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 7.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-3.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
                 new ArmPositionData(-3.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
@@ -251,7 +259,7 @@ public final class Constants {
         public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
 
-        public static final double driverEPower = 3;
+        public static final double driverEPower = 3.4; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
@@ -278,7 +286,8 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -7;
+        public static final double joystickTurningGain = -2;
+
     }
 
     public static class VisionConstants {
