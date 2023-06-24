@@ -111,7 +111,7 @@ public final class Constants {
         public static final double kFrontRightCANCoderOffsetDeg = -22;
         public static final double kBackRightCANCoderOffsetDeg = 110;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 2.5;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 4 / 3.5;
@@ -185,9 +185,9 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 7.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-6.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
+                new ArmPositionData(-3.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
-                new ArmPositionData(-4.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
+                new ArmPositionData(-3.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
                 new ArmPositionData(0.0, 156.0, 0.0, 0.1, -1.0, -1.0, 3.0, 3.0, 5500.0, 9000.0);
         public static final ArmPositionData homePosition =
@@ -278,7 +278,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -12;
+        public static final double joystickTurningGain = -7;
     }
 
     public static class VisionConstants {

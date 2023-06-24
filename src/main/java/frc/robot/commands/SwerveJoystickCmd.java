@@ -156,7 +156,7 @@ public class SwerveJoystickCmd extends CommandBase {
                 turningSpeed =
                         -turningTargX.get() * Math.sqrt(Math.abs(turningTargX.get())) * OIConstants.joystickTurningGain;
             } else if (prevCurrentAngle != 0) {
-                targetAngle += 2 * (currentAngle - prevCurrentAngle);
+                targetAngle += 1 * (currentAngle - prevCurrentAngle);
                 prevCurrentAngle = 0;
             }
         }
