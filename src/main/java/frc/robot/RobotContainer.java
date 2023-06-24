@@ -73,7 +73,7 @@ public class RobotContainer {
                 () -> driverJoystick.getPOV(),
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverLeftTrigger),
                 () -> driverJoystick.getRawAxis(OIConstants.kDriverRightTrigger),
-                () -> driverJoystick.getRawButton(Constants.start),
+                () -> driverJoystick.getRawButton(OIConstants.kDriverStart),
                 () -> driverJoystick.getRawButton(OIConstants.kDriverCancelTurn),
                 () -> !driverJoystick.getRawButton(OIConstants.kDriverTopSpeed),
                 () -> driverJoystick.getRawButton(OIConstants.kDriverRightBumper)));
