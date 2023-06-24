@@ -3,7 +3,10 @@ package frc.robot.commands.Auton;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ArmConstants;
+import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.HighDropCommand;
@@ -24,10 +27,22 @@ public class RedSideChargeVelO extends SequentialCommandGroup {
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem())),
                 new WaitCommand(0.1),
-                new MoveGripperCommand(
-                        RobotContainer.getGripperSubsystem(),
-                        RobotContainer.getArmSubsystem(),
-                        MoveGripperCommand.GripperState.OPENED),
+                new SequentialCommandGroup(
+                        new MoveArmCommand(
+                                RobotContainer.armSubsystem,
+                                (ArmConstants.highDropPosition.armCmdPos() + 10),
+                                ArmConstants.highDropPosition.smartMotionMaxVel(),
+                                ArmConstants.highDropPosition.smartMotionMaxAccel()),
+                        new MoveGripperCommand(
+                                RobotContainer.getGripperSubsystem(),
+                                RobotContainer.getArmSubsystem(),
+                                MoveGripperCommand.GripperState.OPENED), 
+                        new MoveArmCommand(
+                                RobotContainer.armSubsystem,
+                                ArmConstants.highDropPosition.armCmdPos(),
+                                ArmConstants.highDropPosition.smartMotionMaxVel(),
+                                ArmConstants.highDropPosition.smartMotionMaxAccel())
+                ),
                 new WaitCommand(0.2),
                 new ParallelCommandGroup(
                         new BucketPickupCommand(

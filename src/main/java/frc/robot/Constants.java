@@ -213,9 +213,9 @@ public final class Constants {
 
     public static final class BalanceConstants {
         public static final double balanceRate = 0.025d; // original value, 0.5
-        public static final double balanceEntry = 12.0d; // original value, 5
+        public static final double balanceEntry = 8.0d; // original value, 5
         public static final double balanceHold = 12.0d; // original value, 5
-        public static final double balanceSpeed = 0.35; // original value, 0.3
+        public static final double balanceSpeed = 0.33d; // original value, 0.3
     }
 
     public static class ArmConstants {
@@ -238,7 +238,7 @@ public final class Constants {
         public static final ArmPositionData cubePickupPosition =
                 new ArmPositionData(-1.0, 7.0, 3.0, 0.07, 3.0, 3.0, -10, -10, 3500, 9000);
         public static final ArmPositionData highDropPosition =
-                new ArmPositionData(-6.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
+                new ArmPositionData(-4.0, 87.0, 18.9, 0.1, 3.0, 3.0, -15.0, -4.0, 5500.0, 9000.0);
         public static final ArmPositionData midDropPosition =
                 new ArmPositionData(-4.0, 90.0, 2.0, 0.1, 3.0, 3.0, -15.0, -1.0, 5500.0, 9000.0);
         public static final ArmPositionData groundDropPosition =
@@ -311,7 +311,7 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 3; // 2.4;
+        public static final double driverEPower = 4; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
@@ -337,7 +337,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -12;
+        public static final double joystickTurningGain = -5;
     }
 
     public static class VisionConstants {
