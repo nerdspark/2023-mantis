@@ -151,7 +151,7 @@ public final class Constants {
         // public static final double kFrontRightDriveCANCoderOffsetRad = 25.1*Math.PI/180;
         // public static final double kBackRightDriveCANCoderOffsetRad = -265.4+360*Math.PI/180;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 3.5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 2;
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 4 / 3.5;
@@ -311,7 +311,7 @@ public final class Constants {
         public static final double triggerMultiplier = 0.1;
         public static final double triggerDeadband = 0.1;
 
-        public static final double driverEPower = 4; // 2.4;
+        public static final double driverEPower = 3.4; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
@@ -337,7 +337,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -5;
+        public static final double joystickTurningGain = -2;
     }
 
     public static class VisionConstants {

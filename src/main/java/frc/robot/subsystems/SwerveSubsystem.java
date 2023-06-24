@@ -300,11 +300,11 @@ public class SwerveSubsystem extends SubsystemBase {
     }
 
     public void setAddToTargetAngle(double val) {
-        this.addToTargetAngle = val;
+        this.addToTargetAngle = val + Math.PI;
     }
 
     public double getAddToTargetAngle() {
         SmartDashboard.putNumber("getAddToTargetAngle", this.addToTargetAngle);
-        return this.addToTargetAngle + Math.PI;
+        return this.addToTargetAngle;
     }
 }
