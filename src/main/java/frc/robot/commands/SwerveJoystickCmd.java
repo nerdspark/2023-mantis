@@ -253,7 +253,7 @@ public class SwerveJoystickCmd extends CommandBase {
     public void zeroHeading() {
         swerveSubsystem.zeroHeading();
         targetAngle = -(swerveSubsystem.getHeading()) * Math.PI / 180;
-        swerveSubsystem.setAddToTargetAngle(Math.PI);
+        swerveSubsystem.setRobotAngleOffset(Math.PI);
 
         //        if (DriverStation.getAlliance() == DriverStation.Alliance.Red) {
         //            targetAngle += Math.PI;

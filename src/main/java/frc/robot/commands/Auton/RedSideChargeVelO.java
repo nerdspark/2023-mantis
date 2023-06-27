@@ -3,9 +3,8 @@ package frc.robot.commands.Auton;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
@@ -36,13 +35,12 @@ public class RedSideChargeVelO extends SequentialCommandGroup {
                         new MoveGripperCommand(
                                 RobotContainer.getGripperSubsystem(),
                                 RobotContainer.getArmSubsystem(),
-                                MoveGripperCommand.GripperState.OPENED), 
+                                MoveGripperCommand.GripperState.OPENED),
                         new MoveArmCommand(
                                 RobotContainer.armSubsystem,
                                 ArmConstants.highDropPosition.armCmdPos(),
                                 ArmConstants.highDropPosition.smartMotionMaxVel(),
-                                ArmConstants.highDropPosition.smartMotionMaxAccel())
-                ),
+                                ArmConstants.highDropPosition.smartMotionMaxAccel())),
                 new WaitCommand(0.2),
                 new ParallelCommandGroup(
                         new BucketPickupCommand(

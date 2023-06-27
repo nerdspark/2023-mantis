@@ -111,8 +111,8 @@ public final class Constants {
         public static final double kFrontRightCANCoderOffsetDeg = -22;
         public static final double kBackRightCANCoderOffsetDeg = 110;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 1.8;
-      
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 2.5;
+
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
         public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond * 4 / 3.5;
@@ -121,7 +121,7 @@ public final class Constants {
         public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 100;
         public static final double kTeleDriveMaxAngularAccelerationUnitsPerSecond = 10;
 
-        public static final double kPTargetTurning = -1.7d;
+        public static final double kPTargetTurning = -1.4d;
         public static final double kITargetTurning = -0.0d;
         public static final double kDTargetTurning = -0d;
         public static final double kTargetTurningDeadband = 0.3 * Math.PI / 180;
@@ -167,10 +167,10 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double balanceRate = 0.025d; // original value, 0.5
-        public static final double balanceEntry = 8.0d; // original value, 5
-        public static final double balanceHold = 12.0d; // original value, 5
-        public static final double balanceSpeed = 0.33d; // original value, 0.3
+        public static final double balanceRate = 0.025d; // original va%lue, 0.5
+        public static final double balanceEntry = 4.0d; // original value, 5
+        public static final double balanceHold = 10.0d; // original value, 5
+        public static final double balanceSpeed = 0.3d; // original value, 0.3
     }
 
     public static class ArmConstants {
@@ -259,7 +259,7 @@ public final class Constants {
         public static final double driverMultiplier = 0.5;
         public static final double driverTopMultiplier = 1;
 
-        public static final double driverEPower = 3.4; // 2.4;
+        public static final double driverEPower = 3.6; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;
@@ -287,7 +287,6 @@ public final class Constants {
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
         public static final double joystickTurningGain = -2;
-
     }
 
     public static class VisionConstants {
