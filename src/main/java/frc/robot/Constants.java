@@ -111,7 +111,7 @@ public final class Constants {
         public static final double kFrontRightCANCoderOffsetDeg = -22;
         public static final double kBackRightCANCoderOffsetDeg = 110;
 
-        public static final double kPhysicalMaxSpeedMetersPerSecond = 2.5;
+        public static final double kPhysicalMaxSpeedMetersPerSecond = 2;
 
         public static final double kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * Math.PI;
 
@@ -256,10 +256,10 @@ public final class Constants {
         public static final double kDeadbandSteer = 0.07d;
         public static final double kDeadbandDrive = 0.05d;
 
-        public static final double driverMultiplier = 0.5;
+        public static final double driverMultiplier = 0.3;
         public static final double driverTopMultiplier = 1;
 
-        public static final double driverEPower = 3.6; // 2.4;
+        public static final double driverEPower = 3; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverTopEXPMultiplier = driverTopMultiplier * Math.pow(Math.E, -driverEPower);
         public static final double driverEXPJoyMultiplier = driverEPower;

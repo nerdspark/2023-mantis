@@ -45,7 +45,7 @@ public class SwerveJoystickCmd extends CommandBase {
 
     private static final boolean turningModeTarget = false; // false = normal joystickturn, true = target turning
     private static final boolean joystickFunctionCircle =
-            false; // true = circle, false = square (Speed function will be different based on max value of joystick or
+            true; // true = circle, false = square (Speed function will be different based on max value of joystick or
     // hypotenuse)
 
     private double prevCurrentAngle = 0;
