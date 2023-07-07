@@ -10,9 +10,12 @@ import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.DriveFollowPath;
 
+import static frc.robot.RobotContainer.swerveSubsystem;
+
 public class RedBobFourCone extends SequentialCommandGroup {
     public RedBobFourCone() {
         addCommands(
+                new InstantCommand(() -> swerveSubsystem.setRobotAngleOffset(Math.PI)),
                 new InstantCommand(() -> RobotContainer.getGripperSubsystem().setLeftPosition(-10)),
                 new ParallelCommandGroup(
                         new DriveFollowPath("RedBobFourCone_1", 3, 2.5, true),

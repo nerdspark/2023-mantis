@@ -41,6 +41,10 @@ public class BalanceCommand extends CommandBase {
         // double speed = 0.35;
         double speed = BalanceConstants.balanceSpeed;
 
+//        if (done) {
+//            speed = BalanceConstants.slowerBalanceSpeed;
+//        }
+
         // if ((Math.abs(prevRoll - roll) > 0.025 || done && Math.abs(roll) < 5)) {
         //     if (Math.abs(roll) > 12) return;
 

@@ -20,7 +20,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class threeElement_Blue extends SequentialCommandGroup {
     public threeElement_Blue(SwerveSubsystem swerveSubsystem, LimelightSubsystem limelightSubsystem) {
         addCommands(
-                new InstantCommand(() -> swerveSubsystem.setRobotAngleOffset(Math.PI)),
+                new InstantCommand(() -> swerveSubsystem.setRobotAngleOffset(0)),
                 new DropPreloadedHigh("BlueFluurb_0"),
                 new ParallelCommandGroup(
                         new DriveFollowPath("BlueFluurb_1", 2.75, 2, false),
