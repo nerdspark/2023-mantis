@@ -12,8 +12,8 @@ import frc.robot.commands.ArmPositionCommands.HighDropCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.DriveFollowPath;
 
-public class RedSideChargeVelO extends SequentialCommandGroup {
-    public RedSideChargeVelO() {
+public class RedSideCharge2 extends SequentialCommandGroup {
+    public RedSideCharge2() {
         addCommands(
                 new MoveGripperCommand(
                         RobotContainer.getGripperSubsystem(),
@@ -49,7 +49,7 @@ public class RedSideChargeVelO extends SequentialCommandGroup {
                                 RobotContainer.getBucketSubsystem(),
                                 RobotContainer.getArmSubsystem(),
                                 RobotContainer.getGripperSubsystem()),
-                        new DriveFollowPath("RedSideCharge_1VelO", 1, 1, false)),
+                        new DriveFollowPath("RedSideCharge_1", 1, 1, false)),
                 new BalanceCommand(RobotContainer.getSwerveSubsystem(), false));
     }
 }

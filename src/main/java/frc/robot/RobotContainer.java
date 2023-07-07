@@ -101,9 +101,9 @@ public class RobotContainer {
         chooser.addOption("2 Cone Blue", new threeElement_Blue(swerveSubsystem, limeLightSubsystem));
         chooser.addOption("3 Cone Red", new RedBobFourCone());
         chooser.addOption("3 Cone Blue", new BlueBobFourCone());
-        chooser.addOption("Charge Station Balance", new RedSideCharge());
+//        chooser.addOption("Charge Station Balance", new RedSideCharge());
         chooser.addOption(
-                "Balance Velocity Override", new StopRobotWait(swerveSubsystem).deadlineWith(new RedSideChargeVelO()));
+                "Charge Station Balance", new StopRobotWait(swerveSubsystem).deadlineWith(new RedSideCharge2()));
         chooser.addOption("Red Side Bump", new RedSidePath());
         chooser.addOption("Blue Side Bump", new BlueSidePath());
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
