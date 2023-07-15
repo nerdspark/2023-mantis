@@ -116,10 +116,11 @@ public class SwerveJoystickCmd extends CommandBase {
                 : (Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get())));
 
         // Use exponential ramp, speedy button, and maximum drive speed to calculate chassis translational speed
-        double driveSpeed = ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
-                        * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
-                                + OIConstants.driverBaseSpeed))
-                * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
+        double driveSpeed = joystickMagnitude * (topSpeed.get() ? OIConstants.driverTopMultiplier: OIConstants.driverMultiplier);
+        // ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
+        //                 * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
+        //                         + OIConstants.driverBaseSpeed))
+        //         * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
 
         // find current gyro angle, invert, convert to radians, apply offset if Auton backwards
         SmartDashboard.putNumber("getRobotAngleOffset", swerveSubsystem.getRobotAngleOffset());
