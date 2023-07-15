@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.LimeLightConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -116,7 +117,7 @@ public class SwerveJoystickCmd extends CommandBase {
                 : (Math.max(Math.abs(ySpdFunction.get()), Math.abs(xSpdFunction.get())));
 
         // Use exponential ramp, speedy button, and maximum drive speed to calculate chassis translational speed
-        double driveSpeed = joystickMagnitude * (topSpeed.get() ? OIConstants.driverTopMultiplier: OIConstants.driverMultiplier);
+        double driveSpeed = (joystickMagnitude * (topSpeed.get() ? OIConstants.driverTopMultiplier: OIConstants.driverMultiplier)) * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond;
         // ((topSpeed.get() ? OIConstants.driverTopEXPMultiplier : OIConstants.driverEXPMultiplier)
         //                 * (Math.pow(Math.E, joystickMagnitude * OIConstants.driverEXPJoyMultiplier)
         //                         + OIConstants.driverBaseSpeed))
