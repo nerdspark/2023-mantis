@@ -1,5 +1,7 @@
 package frc.robot.commands.Auton;
 
+import static frc.robot.RobotContainer.swerveSubsystem;
+
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -9,7 +11,6 @@ import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
 import frc.robot.commands.ArmPositionCommands.BucketPickupCommand;
 import frc.robot.commands.ArmPositionCommands.GroundPickupCommand;
 import frc.robot.commands.DriveFollowPath;
-import static frc.robot.RobotContainer.swerveSubsystem;
 
 public class BlueBobFourCone extends SequentialCommandGroup {
     public BlueBobFourCone() {
