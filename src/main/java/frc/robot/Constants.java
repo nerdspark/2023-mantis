@@ -257,8 +257,8 @@ public final class Constants {
         public static final double kDeadbandSteer = 0.07d;
         public static final double kDeadbandDrive = 0.05d;
 
-        public static final double driverMultiplier = 0.4;
-        public static final double driverTopMultiplier = 1.25;
+        public static final double driverMultiplier = 0.3;
+        public static final double driverTopMultiplier = 1;
 
         public static final double driverEPower = 3; // 2.4;
         public static final double driverEXPMultiplier = driverMultiplier * Math.pow(Math.E, -driverEPower);
@@ -287,7 +287,7 @@ public final class Constants {
 
         public static final double targetTurnGainScheduleSpeed = 0.9;
 
-        public static final double joystickTurningGain = -1;
+        public static final double joystickTurningGain = -2;
     }
 
     public static class VisionConstants {
