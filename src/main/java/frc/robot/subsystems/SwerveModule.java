@@ -4,12 +4,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.MagnetFieldStrength;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
@@ -155,7 +154,43 @@ public class SwerveModule {
         } else turningMotor.set(TalonFXControlMode.PercentOutput, 0);
         // Turning motor deadband to stop jittering
 
-        
+    }
+
+    public void setDesiredStateAuto(SwerveModuleState state) {
+
+        // short spin
+
+        double target = state.angle.getRadians();
+        double current = getTurningPosition();
+        // target - current = pod angle error
+
+        if (Math.abs(target - current) > (2 * Math.PI)) {
+            target = ((target - current) % (2 * Math.PI)) + current;
+        } // Makes sure -360 < error < 360
+
+        if ((target - current > Math.PI)) {
+            target -= (2 * Math.PI); // If error is more than 180, subtract 360
+        } else if ((target - current) < -Math.PI) {
+            target += (2 * Math.PI); // If error is less than -180, add 360
+        }
+
+        boolean backward = false;
+        if ((target - current) > Math.PI * 0.6) {
+            target -= (Math.PI);
+            backward = true; // If error is more than 108, subtract 180 and drive backwards
+        } else if ((target - current) < -Math.PI * 0.6) {
+            target += (Math.PI);
+            backward = true; // If error is less than -108, add 180 and drive backwards
+        }
+
+        // set auto motor commands
+        driveMotor.set(
+                TalonFXControlMode.PercentOutput,
+                state.speedMetersPerSecond / AutoConstants.kPhysicalMaxSpeedMetersPerSecondAuto * (backward ? -1 : 1));
+        if (Math.abs(target - current) > 1 * Math.PI / 180) {
+            turningMotor.set(TalonFXControlMode.Position, target / ModuleConstants.kTurnTicks2Radians);
+        } else turningMotor.set(TalonFXControlMode.PercentOutput, 0);
+        // Turning motor deadband to stop jittering
     }
 
     public void stop() {

@@ -140,6 +140,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
+        public static final double kPhysicalMaxSpeedMetersPerSecondAuto = 3.5d;
         public static final double kMaxSpeedMetersPerSecond = 3.0d;
         public static final double kMaxAngularSpeedRadiansPerSecond =
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;
@@ -170,7 +171,7 @@ public final class Constants {
         public static final double balanceRate = 0.025d; // original va%lue, 0.5
         public static final double balanceEntry = 12.0d; // original value, 5
         public static final double balanceHold = 5.0d; // original value, 5
-        public static final double balanceSpeed = 0.25d; // original value, 0.3
+        public static final double balanceSpeed = 0.4375d; // original value, 0.3
         public static final double slowerBalanceSpeed = 0.2d;
     }
 

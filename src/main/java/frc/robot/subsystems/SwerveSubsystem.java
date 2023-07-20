@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveSubsystem extends SubsystemBase {
@@ -155,6 +156,14 @@ public class SwerveSubsystem extends SubsystemBase {
         frontRight.setDesiredState(desiredStates[1]);
         backLeft.setDesiredState(desiredStates[2]);
         backRight.setDesiredState(desiredStates[3]);
+    }
+
+    public void setModuleStatesAuto(SwerveModuleState[] desiredStates) {
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, AutoConstants.kPhysicalMaxSpeedMetersPerSecondAuto);
+        frontLeft.setDesiredStateAuto(desiredStates[0]);
+        frontRight.setDesiredStateAuto(desiredStates[1]);
+        backLeft.setDesiredStateAuto(desiredStates[2]);
+        backRight.setDesiredStateAuto(desiredStates[3]);
     }
 
     /**

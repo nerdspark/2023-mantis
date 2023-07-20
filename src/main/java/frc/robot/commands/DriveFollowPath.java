@@ -122,7 +122,7 @@ public class DriveFollowPath extends CommandBase {
         // RobotContainer.getSwerveSubsystem().driveSwerveDrive(targetSpeeds);
 
         SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(targetSpeeds);
-        RobotContainer.getSwerveSubsystem().setModuleStates(moduleStates);
+        RobotContainer.getSwerveSubsystem().setModuleStatesAuto(moduleStates);
     }
 
     // Called once the command ends or is interrupted.
