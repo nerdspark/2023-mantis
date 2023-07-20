@@ -140,6 +140,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
+        public static final double kPhysicalMaxSpeedMetersPerSecondAuto = 4.0d;
         public static final double kMaxSpeedMetersPerSecond = 3.0d;
         public static final double kMaxAngularSpeedRadiansPerSecond =
                 DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond;

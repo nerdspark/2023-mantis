@@ -81,8 +81,10 @@ public class RobotContainer {
         armSubsystem.setDefaultCommand(new MicroAdjustCommand(
                 armSubsystem,
                 wristSubsystem,
-                () -> -coDriverJoystick.getRawAxis(Math.abs(OIConstants.kDriverLeftYAxis) > 0.1? OIConstants.kDriverLeftYAxis : 0),
-                () -> -coDriverJoystick.getRawAxis(Math.abs(OIConstants.kDriverRightYAxis) > 0.1? OIConstants.kDriverRightYAxis : 0)));
+                () -> -coDriverJoystick.getRawAxis(
+                        Math.abs(OIConstants.kDriverLeftYAxis) > 0.1 ? OIConstants.kDriverLeftYAxis : 0),
+                () -> -coDriverJoystick.getRawAxis(
+                        Math.abs(OIConstants.kDriverRightYAxis) > 0.1 ? OIConstants.kDriverRightYAxis : 0)));
 
         new MoveGripperCommand(gripperSubsystem, armSubsystem, MoveGripperCommand.GripperState.CLOSED).execute();
         new MoveBucketCommand(bucketSubsystem, MoveBucketCommand.BucketPosition.RETRACTED).execute();
@@ -214,15 +216,15 @@ public class RobotContainer {
 
         // ground drop
         // new JoystickButton(coDriverJoystick, OIConstants.kDriverButtonB)
-                // .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        // .onTrue(new GroundDropCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
         // ground pickup
         // new JoystickButton(coDriverJoystick, OIConstants.kDriverLeftBumper)
-                // .onTrue(new GroundPickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
+        // .onTrue(new GroundPickupCommand(elevatorSubsystem, wristSubsystem, armSubsystem, gripperSubsystem));
 
         // shelf pickup
         // new JoystickButton(coDriverJoystick, OIConstants.kDriverRightBumper)
-                // .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
+        // .onTrue(new ShelfPickupCommand(armSubsystem, elevatorSubsystem, wristSubsystem));
 
         // cube pickup
         new Trigger(() -> coDriverJoystick.getRawAxis(OIConstants.kDriverRightTrigger) > 0.5)
