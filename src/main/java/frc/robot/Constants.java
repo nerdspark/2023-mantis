@@ -168,10 +168,10 @@ public final class Constants {
     }
 
     public static final class BalanceConstants {
-        public static final double balanceRate = 0.025d; // original va%lue, 0.5
-        public static final double balanceEntry = 12.0d; // original value, 5
+        public static final double balanceRate = 0.03d; // original va%lue, 0.5
+        public static final double balanceEntry = 10.0d; // original value, 5
         public static final double balanceHold = 5.0d; // original value, 5
-        public static final double balanceSpeed = 0.4375d; // original value, 0.3
+        public static final double balanceSpeed = 0.23d; // original value, 0.3
         public static final double slowerBalanceSpeed = 0.2d;
     }
 

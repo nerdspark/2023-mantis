@@ -18,7 +18,7 @@ public class RedBobFourCone extends SequentialCommandGroup {
                 new InstantCommand(() -> swerveSubsystem.setRobotAngleOffset(Math.PI)),
                 new InstantCommand(() -> RobotContainer.getGripperSubsystem().setLeftPosition(-10)),
                 new ParallelCommandGroup(
-                        new DriveFollowPath("RedBobFourCone_1", 2.5, 2, true),
+                        new DriveFollowPath("RedBobFourCone_1", 3, 2, true),
                         new SequentialCommandGroup(
                                 new WaitCommand(0.25),
                                 new GroundPickupCommand(
