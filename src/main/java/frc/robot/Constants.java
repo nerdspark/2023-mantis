@@ -255,8 +255,8 @@ public final class Constants {
         public static final int kDriverRotYAxis = 1;
         public static final int kDriverFieldOrientedButtonIdx = 2;
 
-        public static final double kDeadbandSteer = 0.07d;
-        public static final double kDeadbandDrive = 0.05d;
+        public static final double kDeadbandSteer = 0.1d;
+        public static final double kDeadbandDrive = 0.08d;
 
         public static final double driverMultiplier = 0.4;
         public static final double driverTopMultiplier = 1.25;
