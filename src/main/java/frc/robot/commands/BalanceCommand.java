@@ -61,7 +61,7 @@ public class BalanceCommand extends CommandBase {
             }
             ChassisSpeeds chassisSpeeds = new ChassisSpeeds(speed, 0.0, 0.0);
             SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
-            drivetrainSubsystem.setModuleStates(moduleStates);
+            drivetrainSubsystem.setModuleStatesAuto(moduleStates);
         }
     }
 }

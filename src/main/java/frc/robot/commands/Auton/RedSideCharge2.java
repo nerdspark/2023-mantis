@@ -26,7 +26,7 @@ public class RedSideCharge2 extends SequentialCommandGroup {
                                 RobotContainer.getElevatorSubsystem(),
                                 RobotContainer.getWristSubsystem())),
                 new WaitCommand(0.1),
-                new SequentialCommandGroup( 
+                new SequentialCommandGroup(
                         new MoveArmCommand(
                                 RobotContainer.armSubsystem,
                                 (ArmConstants.highDropPosition.armCmdPos() + 10),
