@@ -109,8 +109,8 @@ public class RobotContainer {
         chooser.addOption("Red Side Bump", new RedSidePath());
         chooser.addOption("Blue Side Bump", new BlueSidePath());
 
-        // chooser.addOption("Rainbow Red Bump", new RedSideBumpRainbowRumble());
-        // chooser.addOption("Rainbow Blue Bump", new BlueSideBumpRainbowRumble());
+        chooser.addOption("Rainbow Red Bump", new RedSideBumpRainbowRumble());
+        chooser.addOption("Rainbow Blue Bump", new BlueSideBumpRainbowRumble());
 
 
 
