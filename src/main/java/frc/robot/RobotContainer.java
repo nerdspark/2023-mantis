@@ -111,11 +111,6 @@ public class RobotContainer {
 
         chooser.addOption("Rainbow Red Bump", new RedSideBumpRainbowRumble());
         chooser.addOption("Rainbow Blue Bump", new BlueSideBumpRainbowRumble());
-<<<<<<< HEAD
-
-
-=======
->>>>>>> cd2bfc5349ffed578512de77215b6d9fc272ee7e
 
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         //

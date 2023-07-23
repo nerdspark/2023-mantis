@@ -73,19 +73,6 @@ public class BlueSideBumpRainbowRumble extends SequentialCommandGroup {
                         MoveGripperCommand.GripperState.OPENED),
                 new WaitCommand(0.45),
                 new ParallelCommandGroup(
-<<<<<<< HEAD
-                        new DriveFollowPath("BlueSidePath_2", 1, 2, false),
-                        new InstantCommand(
-                                        () -> RobotContainer.getWristSubsystem().setPositionOverride(false))
-                                .andThen(new WaitCommand(0.2))
-                                .andThen(new BucketPickupCommand(
-                                        RobotContainer.getElevatorSubsystem(),
-                                        RobotContainer.getWristSubsystem(),
-                                        RobotContainer.getBucketSubsystem(),
-                                        RobotContainer.getArmSubsystem(),
-                                        RobotContainer.getGripperSubsystem()))));
-        
-=======
                         new DriveFollowPath("RedSidePath_3", 3, 2, false),
                         new WaitCommand(0.3)
                                 .andThen(new MoveWristCommand(
@@ -97,6 +84,5 @@ public class BlueSideBumpRainbowRumble extends SequentialCommandGroup {
                                                 RobotContainer.getBucketSubsystem(),
                                                 RobotContainer.getArmSubsystem(),
                                                 RobotContainer.getGripperSubsystem())))));
->>>>>>> cd2bfc5349ffed578512de77215b6d9fc272ee7e
     }
 }
