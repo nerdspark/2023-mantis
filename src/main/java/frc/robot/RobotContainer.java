@@ -108,6 +108,12 @@ public class RobotContainer {
                 "Charge Station Balance", new StopRobotWait(swerveSubsystem).deadlineWith(new RedSideCharge2()));
         chooser.addOption("Red Side Bump", new RedSidePath());
         chooser.addOption("Blue Side Bump", new BlueSidePath());
+
+        // chooser.addOption("Rainbow Red Bump", new RedSideBumpRainbowRumble());
+        // chooser.addOption("Rainbow Blue Bump", new BlueSideBumpRainbowRumble());
+
+
+
         //        chooser.addOption("Three Element with Markers", new ThreeElementWMarkers(swerveSubsystem));
         //
         //        chooser.addOption("Auto Three Element", new ThreeElement(swerveSubsystem));
