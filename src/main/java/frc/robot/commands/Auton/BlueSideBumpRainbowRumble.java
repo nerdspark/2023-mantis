@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.ArmMoveCommands.MoveArmCommand;
 import frc.robot.commands.ArmMoveCommands.MoveGripperCommand;
@@ -73,6 +73,7 @@ public class BlueSideBumpRainbowRumble extends SequentialCommandGroup {
                         MoveGripperCommand.GripperState.OPENED),
                 new WaitCommand(0.45),
                 new ParallelCommandGroup(
+<<<<<<< HEAD
                         new DriveFollowPath("BlueSidePath_2", 1, 2, false),
                         new InstantCommand(
                                         () -> RobotContainer.getWristSubsystem().setPositionOverride(false))
@@ -84,5 +85,18 @@ public class BlueSideBumpRainbowRumble extends SequentialCommandGroup {
                                         RobotContainer.getArmSubsystem(),
                                         RobotContainer.getGripperSubsystem()))));
         
+=======
+                        new DriveFollowPath("RedSidePath_3", 3, 2, false),
+                        new WaitCommand(0.3)
+                                .andThen(new MoveWristCommand(
+                                                RobotContainer.getWristSubsystem(),
+                                                Constants.ArmConstants.midDropPosition.wristCmdPos())
+                                        .andThen(new BucketPickupCommand(
+                                                RobotContainer.getElevatorSubsystem(),
+                                                RobotContainer.getWristSubsystem(),
+                                                RobotContainer.getBucketSubsystem(),
+                                                RobotContainer.getArmSubsystem(),
+                                                RobotContainer.getGripperSubsystem())))));
+>>>>>>> cd2bfc5349ffed578512de77215b6d9fc272ee7e
     }
 }
